@@ -1,0 +1,22 @@
+.collapse + .collapsible {
+    overflow: revert;
+}
+
+.block .attachments.topics .attachment {
+    line-height: 1;
+    padding: 5px 6px;
+}
+
+.block .attachments.topics .thumbnail.fa {
+    width: 1.5em;
+    text-align: center;
+    margin-right: 4px;
+}
+
+.block .attachments.topics .thumbnail.unspecified {
+    opacity: 0.35;
+}
+
+.topic-form-add {
+    margin-top: 10px;
+}

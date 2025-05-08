@@ -1,0 +1,33 @@
+<?php
+
+$assetUrl = $this->plugin('assetUrl');
+$this->headLink()->appendStylesheet($assetUrl('css/style.css', 'PageBlocks'));
+
+$translate = $this->plugin('translate');
+$searchType = $this->siteSetting('search_type', 'sitewide');
+switch ($searchType) {
+    case 'cross-site':
+        $searchAction = $this->url('site/cross-site-search', ['action' => 'results'], true);
+        break;
+    case 'sitewide':
+    default:
+        $searchAction = $this->url('site/resource', ['controller' => 'index', 'action' => 'search'], true);
+}
+$searchValue = $this->escapeHtml($this->params()->fromQuery('fulltext_search', ''));
+
+?>
+
+<section class="jumbotron-search">
+    <h1><?= $header ?></h1>
+    <?php if ($subheader): ?>
+        <p><?= $subheader ?></p>
+    <?php endif; ?>
+    
+    <form action="<?php echo $this->escapeHtml($searchAction); ?>" role="search">
+        <input type="text" name="fulltext_search" value="<?php echo $searchValue; ?>"
+            placeholder="<?php echo $translate('Search'); ?>">
+        <button type="submit" title="<?php echo $translate('Submit'); ?>"></button>
+    </form>
+    
+    <?php echo $this->hyperlink($translate('Advanced search') . '...', $this->url('site', [], true) . "/item/search", ['class' => 'advanced-search']); ?>
+</section>

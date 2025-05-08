@@ -1,0 +1,53 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var string $type
+ */
+
+$plugins = $this->getHelperPluginManager();
+$url = $plugins->get('url');
+$translate = $plugins->get('translate');
+
+$routeStatistics = $this->status()->isAdminRequest() ? 'admin/analytics/default' : 'site/analytics/default';
+?>
+
+<ul class="quick-filter-wrapper state-filter">
+    <li><span tabindex="0"><?= $translate('Quick filter') ?></span>
+    <ul class="dropdown">
+        <?php /*
+        <li><span class="quick-filter-heading"><?= $translate('Quick filter') ?></span></li>
+        */ ?>
+<?php
+switch ($type):
+    case 'site': ?>
+        <?php break;
+
+    case 'page': ?>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-page'], true) ?>"><?= $translate('View all') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-page'], ['query' => ['has_resource' => true]], true) ?>"><?= $translate('With resource') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-page'], ['query' => ['has_resource' => false]], true) ?>"><?= $translate('Without resource') ?></a></li>
+        <?php break;
+
+    case 'resource': ?>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-resource'], true) ?>"><?= $translate('View all') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-resource'], ['query' => ['resource_type' => 'items']], true) ?>"><?= $translate('By item') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-resource'], ['query' => ['resource_type' => 'item_sets']], true) ?>"><?= $translate('By item set') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-resource'], ['query' => ['resource_type' => 'media']], true) ?>"><?= $translate('By media') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-resource'], ['query' => ['resource_type' => 'site_pages']], true) ?>"><?= $translate('By page') ?></a></li>
+        <?php break;
+
+    case 'download': ?>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-download'], true) ?>"><?= $translate('View all') ?></a></li>
+        <?php break;
+
+    case 'field': ?>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-field'], ['query' => ['field' => 'referrer']], true) ?>"><?= $translate('Referrers') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-field'], ['query' => ['field' => 'query']], true)  ?>"><?= $translate('Queries') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-field'], ['query' => ['field' => 'language']], true)  ?>"><?= $translate('Languages') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-field'], ['query' => ['field' => 'accept_language']], true)  ?>"><?= $translate('Full Languages') ?></a></li>
+        <li><a href="<?= $url($routeStatistics, ['action' => 'by-field'], ['query' => ['field' => 'user_agent']], true) ?>"><?= $translate('Browsers') ?></a></li>
+        <?php break;
+endswitch; ?>
+    </ul>
+    </li>
+</ul>

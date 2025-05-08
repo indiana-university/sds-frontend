@@ -1,0 +1,737 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Rivo Zängov <eraser@eraser.ee>, 2021
+# Moon Ika, 2023
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-07 15:00-0400\n"
+"PO-Revision-Date: 2017-09-14 20:14+0000\n"
+"Last-Translator: Moon Ika, 2023\n"
+"Language-Team: Estonian (https://app.transifex.com/omeka/teams/14184/et/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: view/common/mapping-sidebar.phtml:4
+msgid "Add mapping: "
+msgstr "Lisa seostamine:"
+
+#: view/common/options-sidebar.phtml:4
+msgid "Batch edit column options:"
+msgstr "Veeru hulgimuutmise valikud:"
+
+#: view/common/options-sidebar.phtml:5
+msgid "Column options:"
+msgstr "Veeru valikud:"
+
+#: view/common/options-sidebar.phtml:7
+msgid ""
+"Highlighted options will apply to selected column headers. Reset an option "
+"to cancel changes."
+msgstr ""
+
+#: view/common/options-sidebar.phtml:11
+msgid "Use multivalue separator"
+msgstr "Kasuta mitme väärtuse eraldamist"
+
+#: view/common/options-sidebar.phtml:21
+msgid "This will override language settings in basic import settings."
+msgstr "See kirjutab üle importimise põhiseadete keele seaded."
+
+#: view/common/options-sidebar.phtml:29
+msgid "Data type"
+msgstr ""
+
+#: view/common/options-sidebar.phtml:40
+msgid "Import values as private"
+msgstr "Impordi väärtused privaatsena"
+
+#: view/csv-import/index/index.phtml:8
+msgid "Import Settings"
+msgstr "Importimise seaded"
+
+#: view/csv-import/index/index.phtml:8 view/csv-import/index/map.phtml:19
+#: view/csv-import/index/past-imports.phtml:7
+msgid "CSV Import"
+msgstr "CSV import"
+
+#: view/csv-import/index/map.phtml:9
+msgid "items"
+msgstr ""
+
+#: view/csv-import/index/map.phtml:10
+msgid "item sets"
+msgstr ""
+
+#: view/csv-import/index/map.phtml:12
+msgid "mixed resources"
+msgstr "segatud ressursid"
+
+#: view/csv-import/index/map.phtml:13
+msgid "users"
+msgstr "kasutajad"
+
+#: view/csv-import/index/map.phtml:16
+#, php-format
+msgid "Import settings for %s"
+msgstr "Impordi %s seaded"
+
+#: view/csv-import/index/map.phtml:17
+msgid "Import settings"
+msgstr "Impordi seaded"
+
+#: view/csv-import/index/map.phtml:27
+msgid "Map to Omeka S data"
+msgstr "Seosta Omeka S andmed"
+
+#: view/csv-import/index/map.phtml:29
+msgid "Basic Settings"
+msgstr "Põhiseaded"
+
+#: view/csv-import/index/map.phtml:30
+msgid "Advanced Settings"
+msgstr "Laiendatud seaded"
+
+#: view/csv-import/index/map.phtml:45
+msgid "Resource type column"
+msgstr "Ressursi liigi veerg"
+
+#: view/csv-import/index/map.phtml:49
+#: view/csv-import/mapping-sidebar/item.phtml:11
+#: view/csv-import/mapping-sidebar/media-source.phtml:7
+#: view/csv-import/mapping-sidebar/media.phtml:12
+#: view/csv-import/mapping-sidebar/resource.phtml:8
+#: view/csv-import/mapping-sidebar/user.phtml:7
+msgid "Select below"
+msgstr "Vali allpool"
+
+#: view/csv-import/index/map.phtml:59
+msgid "Batch edit options"
+msgstr "Hulgimuutmise valikud"
+
+#: view/csv-import/index/map.phtml:69
+msgid "Column"
+msgstr "Veerg"
+
+#: view/csv-import/index/map.phtml:71
+msgid "Mappings"
+msgstr "Seostamised"
+
+#: view/csv-import/index/map.phtml:80
+msgid "Select column"
+msgstr "Vali veerg"
+
+#: view/csv-import/index/map.phtml:84
+msgid "Add mapping"
+msgstr "Lisa seostamine"
+
+#: view/csv-import/index/map.phtml:97
+msgid "Remove mapping"
+msgstr "Eemalda seostamine"
+
+#: view/csv-import/index/map.phtml:109
+msgid "Multivalue"
+msgstr "Mitmikväärtus"
+
+#: view/csv-import/index/map.phtml:113
+msgid "Language:"
+msgstr "Keel:"
+
+#: view/csv-import/index/map.phtml:117
+msgid "Private values"
+msgstr "Privaatsed väärtused"
+
+#: view/csv-import/index/past-imports.phtml:7
+msgid "Past Imports"
+msgstr "Varasemad importimised"
+
+#: view/csv-import/index/past-imports.phtml:20
+msgid "Undo"
+msgstr "Tühista"
+
+#: view/csv-import/index/past-imports.phtml:24
+msgid "Action"
+msgstr "Toiming"
+
+#: view/csv-import/index/past-imports.phtml:26
+msgid "Result"
+msgstr "Tulemus"
+
+#: view/csv-import/index/past-imports.phtml:51
+#: view/csv-import/index/past-imports.phtml:86
+msgid "Job details"
+msgstr "Töö üksikasjad"
+
+#: view/csv-import/index/past-imports.phtml:63
+msgid ""
+"Problems were detected with the import. Check the job's log for details."
+msgstr ""
+"Importimisel tuvastati probleem. Detailsema info saamiseks vaata töö logi."
+
+#: view/csv-import/index/past-imports.phtml:78
+#, php-format
+msgid "Undone %s"
+msgstr "Tühistatud %s"
+
+#: view/csv-import/index/past-imports.phtml:82
+msgid "Undo in progress"
+msgstr "Tühistamine on käimas"
+
+#: view/csv-import/mapping-sidebar/item-set.phtml:3
+msgid "Item set-specific data"
+msgstr "Ühiku komplektipõhised andmed"
+
+#: view/csv-import/mapping-sidebar/item.phtml:3
+msgid "Item-specific data"
+msgstr "Ühikuspetsiifilised andmed"
+
+#: view/csv-import/mapping-sidebar/item.phtml:7
+msgid "Item set (by selected property)"
+msgstr ""
+
+#: view/csv-import/mapping-sidebar/item.phtml:14
+#: view/csv-import/mapping-sidebar/media.phtml:14
+msgid "Internal ID"
+msgstr "Sisemine ID"
+
+#: view/csv-import/mapping-sidebar/media-source.phtml:3
+#: view/csv-import/mapping-sidebar/media-source.phtml:6
+msgid "Media source"
+msgstr "Meedia allikas"
+
+#: view/csv-import/mapping-sidebar/media.phtml:3
+msgid "Media-specific data"
+msgstr "Meediaspetsiifilised andmed"
+
+#: view/csv-import/mapping-sidebar/media.phtml:7
+msgid "Item (by selected property)"
+msgstr ""
+
+#: view/csv-import/mapping-sidebar/media.phtml:8
+msgid ""
+"There must be an item identifier to create a media. This is generally "
+"\"dcterms:identifier\", but it may be an internal id."
+msgstr ""
+
+#: view/csv-import/mapping-sidebar/resource.phtml:3
+#: view/csv-import/mapping-sidebar/resource.phtml:7
+msgid "Generic data"
+msgstr "Üldised andmed"
+
+#: view/csv-import/mapping-sidebar/resource.phtml:9
+msgid "Resource template (by label)"
+msgstr "Ressursi mall (sildi järgi)"
+
+#: view/csv-import/mapping-sidebar/resource.phtml:10
+msgid "Resource class (by term)"
+msgstr "Ressursi klass (termini järgi)"
+
+#: view/csv-import/mapping-sidebar/resource.phtml:12
+msgid "Owner (by email address)"
+msgstr "Omanik (e-posti järgi)"
+
+#: view/csv-import/mapping-sidebar/resource.phtml:14
+msgid "Visibility public/private"
+msgstr "Avalikult nähtav/privaatne"
+
+#: view/csv-import/mapping-sidebar/user.phtml:3
+#: view/csv-import/mapping-sidebar/user.phtml:6
+msgid "Users info"
+msgstr "Kasutajate info"
+
+#: src/Mapping/ItemSetMapping.php:8
+msgid "Item set data"
+msgstr "Ühikute kogumi andmed"
+
+#: src/Mapping/UserMapping.php:8
+msgid "User info"
+msgstr "Kasutaja info"
+
+#: src/Mapping/ItemMapping.php:8
+msgid "Item data"
+msgstr "Ühiku andmed"
+
+#: src/Mapping/ResourceMapping.php:9
+msgid "Resource data"
+msgstr "Ressursi andmed"
+
+#: src/Mapping/ResourceMapping.php:64
+#, php-format
+msgid "\"%s\" is not a valid resource type."
+msgstr "\"%s\" pole korrektne ressursi liik."
+
+#: src/Mapping/AbstractResourceMapping.php:240
+#, php-format
+msgid "\"%s\" (%s) is not a valid item set."
+msgstr ""
+
+#: src/Mapping/AbstractResourceMapping.php:262
+#, php-format
+msgid "An item identifier is required to process action \"%s\"."
+msgstr ""
+
+#: src/Mapping/AbstractResourceMapping.php:275
+#, php-format
+msgid "\"%s\" (%s) is not a valid item identifier."
+msgstr "\"%s\" (%s) pole korrektne ühiku identifikaator."
+
+#: src/Mapping/AbstractResourceMapping.php:289
+#, php-format
+msgid "\"%s\" (%s) is not a valid resource identifier."
+msgstr "\"%s\" (%s) pole korrektne ressursi identifikaator."
+
+#: src/Mapping/AbstractResourceMapping.php:303
+#: src/Mapping/AbstractResourceMapping.php:310
+#, php-format
+msgid "\"%s\" is not a valid Resource Template name."
+msgstr "\"%s\" pole korrektne ressursi malli nimi."
+
+#: src/Mapping/AbstractResourceMapping.php:323
+#: src/Mapping/AbstractResourceMapping.php:332
+#, php-format
+msgid ""
+"\"%s\" is not a valid resource class. Resource Classes must be a Class found"
+" on the Vocabularies page."
+msgstr ""
+
+#: src/Mapping/AbstractResourceMapping.php:346
+#: src/Mapping/AbstractResourceMapping.php:353
+#, php-format
+msgid "\"%s\" is not a valid user email address."
+msgstr "\"%s\" pole korrektne e-posti aadress."
+
+#: src/Mapping/MediaMapping.php:8
+msgid "Media data"
+msgstr "Meedia andmed"
+
+#: src/Source/CsvFile.php:84
+msgid "File is not UTF-8 encoded."
+msgstr "Fail ei ole UTF-8 kodeeringus."
+
+#: src/Source/AbstractSpreadsheet.php:34
+#, php-format
+msgid ""
+"To process import of a %s file, the php extensions \"zip\" and \"xml\" are "
+"required."
+msgstr ""
+
+#: src/Source/AbstractSource.php:74
+msgid "The source is undefined."
+msgstr "Allikas on määratamata."
+
+#: src/Source/AbstractSource.php:79
+msgid "The source is empty."
+msgstr "Allikas on tühi."
+
+#: src/Source/AbstractSource.php:85
+msgid "No file to process."
+msgstr "Pole faili, mida töödelda."
+
+#: src/Source/AbstractSource.php:92
+msgid "The rows are not all the same number of columns."
+msgstr ""
+
+#: src/Job/Import.php:16
+msgid "create"
+msgstr "loo"
+
+#: src/Job/Import.php:17
+msgid "append"
+msgstr ""
+
+#: src/Job/Import.php:18
+msgid "revise"
+msgstr "vaata üle"
+
+#: src/Job/Import.php:19
+msgid "update"
+msgstr "uuenda"
+
+#: src/Job/Import.php:20
+msgid "replace"
+msgstr "asenda"
+
+#: src/Job/Import.php:21
+msgid "delete"
+msgstr "kustuta"
+
+#: src/Job/Import.php:22
+msgid "skip"
+msgstr "jäta vahele"
+
+#: src/Job/Import.php:144
+msgid "The file seems empty."
+msgstr "Fail paistab olevat tühi."
+
+#: src/Job/Import.php:153 src/Controller/IndexController.php:114
+msgid "The file is not valid."
+msgstr "See pole korrektne fail."
+
+#: src/Job/Import.php:193
+#, php-format
+msgid "The job \"Import\" was stopped: %d rows processed."
+msgstr ""
+
+#: src/Job/Import.php:204
+#, php-format
+msgid "%d empty lines were skipped."
+msgstr "%d tühja rida jäeti vahele."
+
+#: src/Job/Import.php:286 src/Job/Import.php:315
+#, php-format
+msgid ""
+"The following identifiers are not associated with a resource and were "
+"skipped: \"%s\"."
+msgstr ""
+
+#: src/Job/Import.php:413
+#, php-format
+msgid "The update mode \"%s\" is unsupported for %s currently."
+msgstr ""
+
+#: src/Job/Import.php:447
+#, php-format
+msgid "%d %s were updated (%s): %s."
+msgstr ""
+
+#: src/Job/Import.php:450
+#, php-format
+msgid "None of the %d %s were updated (%s)."
+msgstr ""
+
+#: src/Job/Import.php:483
+#, php-format
+msgid "%d %s were removed: %s."
+msgstr ""
+
+#: src/Job/Import.php:501
+#, php-format
+msgid "A media to create is not attached to an item (%s)."
+msgstr ""
+
+#: src/Job/Import.php:503
+msgid "unknown ingester"
+msgstr "tundmatu täisarv"
+
+#: src/Job/Import.php:636
+msgid "A resource type is required to import a resource."
+msgstr ""
+
+#: src/Job/Import.php:1087
+msgid "Resource type is empty."
+msgstr "Ressursi liik on tühi."
+
+#: src/Job/Import.php:1092
+#, php-format
+msgid "Resource type \"%s\" is not managed."
+msgstr ""
+
+#: src/Job/Import.php:1112
+msgid "action"
+msgstr "toiming"
+
+#: src/Job/Import.php:1119
+#, php-format
+msgid "The action \"%s\" requires a resource identifier property."
+msgstr ""
+
+#: src/Job/Import.php:1124
+#, php-format
+msgid "The action \"%s\" is not available for resource type \"%s\" currently."
+msgstr ""
+
+#: src/Job/Import.php:1132
+#, php-format
+msgid "The action \"%s\" for unidentified resources is not managed."
+msgstr ""
+
+#: src/Job/Undo.php:22
+#, php-format
+msgid "The job \"Undo\" was stopped: %d/%d resources processed."
+msgstr ""
+
+#: src/Form/MappingForm.php:87
+msgid ""
+"Assign a resource template to all imported resources. Specific mappings can "
+"override this setting."
+msgstr ""
+
+#: src/Form/MappingForm.php:110
+msgid ""
+"Assign a resource class to all imported resources. Specific mappings can "
+"override this setting."
+msgstr ""
+
+#: src/Form/MappingForm.php:131
+msgid ""
+"If not set, the default owner for new resources will be the current user."
+msgstr "Kui pole määratud, on uute ressurside vaikeomanik praegune kasutaja."
+
+#: src/Form/MappingForm.php:139 src/Form/MappingForm.php:145
+msgid "Select a user"
+msgstr "Vali kasutaja"
+
+#: src/Form/MappingForm.php:156
+msgid ""
+"Set visibility for all imported resources. Specific mappings can override "
+"this setting."
+msgstr ""
+
+#: src/Form/MappingForm.php:173
+msgid "Open/closed to additions"
+msgstr "Muutmiseks avatud/suletud"
+
+#: src/Form/MappingForm.php:174 src/Form/MappingForm.php:224
+msgid ""
+"Set whether imported item sets are open to additions. Specific mappings can "
+"override this setting."
+msgstr ""
+
+#: src/Form/MappingForm.php:177 src/Form/MappingForm.php:227
+msgid "Closed"
+msgstr "Suletud"
+
+#: src/Form/MappingForm.php:223
+msgid "Item sets open/closed to additions"
+msgstr ""
+
+#: src/Form/MappingForm.php:242
+msgid "Item sets for items"
+msgstr ""
+
+#: src/Form/MappingForm.php:261
+msgid "Sites for items"
+msgstr ""
+
+#: src/Form/MappingForm.php:271
+msgid "Multivalue separator"
+msgstr "Mitmikväärtuse eraldaja"
+
+#: src/Form/MappingForm.php:272
+msgid "The separator to use for columns with multiple values"
+msgstr ""
+
+#: src/Form/MappingForm.php:287
+msgid ""
+"Language setting to apply to all imported literal data. Individual property "
+"mappings can override the setting here."
+msgstr ""
+
+#: src/Form/MappingForm.php:310
+msgid "Create (Each row in the CSV will become a new resource)"
+msgstr ""
+
+#: src/Form/MappingForm.php:311
+msgid ""
+"Append (Add new data to the resource, based on an identifier for an existing"
+" resource)"
+msgstr ""
+
+#: src/Form/MappingForm.php:312
+msgid ""
+"Revise (Replace existing fields of the resource with data from the CSV, "
+"except if the corresponding cell in the CSV is empty)"
+msgstr ""
+
+#: src/Form/MappingForm.php:313
+msgid ""
+"Update (Replace existing fields of the resource with data from the CSV, even"
+" when the corresponding cell in the CSV is empty)"
+msgstr ""
+
+#: src/Form/MappingForm.php:314
+msgid ""
+"Replace (Remove all properties of the resource, then add new information "
+"from the CSV)"
+msgstr ""
+
+#: src/Form/MappingForm.php:315
+msgid "Delete (Delete any resources matched by the identifiers)"
+msgstr ""
+
+#: src/Form/MappingForm.php:323
+msgid ""
+"By default, an import creates new resources. Select from this dropdown to "
+"choose an alternate action for the import. For more information on each "
+"action, see <a href=\"https://omeka.org/s/docs/user-"
+"manual/modules/csvimport/#media-import-advanced-settings\" "
+"target=\"_blank\">the documentation</a>."
+msgstr ""
+
+#: src/Form/MappingForm.php:338
+msgid "Resource identifier column"
+msgstr "Ressursi identifikaatori veerg"
+
+#: src/Form/MappingForm.php:357
+msgid "Resource identifier property"
+msgstr "Ressursi identifikaatori omadus"
+
+#: src/Form/MappingForm.php:358
+msgid ""
+"Use this property, generally \"dcterms:identifier\", to identify the "
+"existing resources, so it will be possible to update them. One column of the"
+" file must map the selected property. In all cases, it is strongly "
+"recommended to add one ore more unique identifiers to all your resources."
+msgstr ""
+
+#: src/Form/MappingForm.php:378
+msgid "Action on unidentified resources"
+msgstr "Toiming tuvastamataressursside korral"
+
+#: src/Form/MappingForm.php:379
+msgid ""
+"This option determines what to do when a resource does not exist but the "
+"action applies to an existing resource (\"Append\", \"Update\", or "
+"\"Replace\"). This option is not used when the main action is \"Create\", "
+"\"Delete\" or \"Skip\"."
+msgstr ""
+
+#: src/Form/MappingForm.php:381
+msgid "Skip the row"
+msgstr "Jäta rida vahele."
+
+#: src/Form/MappingForm.php:382
+msgid "Create a new resource"
+msgstr "Loo uus ressurss"
+
+#: src/Form/MappingForm.php:396
+msgid "Number of rows to process by batch"
+msgstr ""
+
+#: src/Form/MappingForm.php:397
+msgid ""
+"By default, rows are processed by 20. In some cases, to set a value of 1 may"
+" avoid issues."
+msgstr ""
+
+#: src/Form/ImportForm.php:15
+msgid "comma"
+msgstr "koma"
+
+#: src/Form/ImportForm.php:16
+msgid "semi-colon"
+msgstr "semikoolon"
+
+#: src/Form/ImportForm.php:17
+msgid "colon"
+msgstr "koolon"
+
+#: src/Form/ImportForm.php:18
+msgid "tabulation"
+msgstr "tabeldus"
+
+#: src/Form/ImportForm.php:19
+msgid "carriage return"
+msgstr "reavahetus"
+
+#: src/Form/ImportForm.php:20
+msgid "space"
+msgstr "tühik"
+
+#: src/Form/ImportForm.php:21
+msgid "pipe"
+msgstr "püstkriips"
+
+#: src/Form/ImportForm.php:32
+msgid "double quote"
+msgstr "kahekordne jutumärk"
+
+#: src/Form/ImportForm.php:33
+msgid "single quote"
+msgstr "ühekordne jutumärk"
+
+#: src/Form/ImportForm.php:34
+msgid "hash"
+msgstr "trellid"
+
+#: src/Form/ImportForm.php:58
+msgid "Spreadsheet (csv, tsv or ods)"
+msgstr "Tööleht (csv, tsv või ods)"
+
+#: src/Form/ImportForm.php:59
+msgid ""
+"The CSV, TSV or ODS file to upload. LibreOffice is recommended for compliant"
+" formats."
+msgstr ""
+
+#: src/Form/ImportForm.php:78
+msgid "CSV column delimiter"
+msgstr "CSV veeru eraldaja"
+
+#: src/Form/ImportForm.php:79
+msgid ""
+"A single character that will be used to separate columns in the csv file."
+msgstr ""
+
+#: src/Form/ImportForm.php:93
+msgid "CSV column enclosure"
+msgstr "CSV veeru tekstitäpsusti"
+
+#: src/Form/ImportForm.php:94
+msgid ""
+"A single character that will be used to separate columns in the csv file. "
+"The enclosure can be omitted when the content does not contain the "
+"delimiter."
+msgstr ""
+
+#: src/Form/ImportForm.php:106
+msgid "Import type"
+msgstr "Importimise liik"
+
+#: src/Form/ImportForm.php:107
+msgid "The type of data being imported"
+msgstr "Mis liiki andmeid imporditakse"
+
+#: src/Form/ImportForm.php:112
+msgid "Mixed resources"
+msgstr "Segatud ressursid"
+
+#: src/Form/ImportForm.php:125
+msgid "Automap with simple labels"
+msgstr "Seosta automaatselt lihtsiltidega"
+
+#: src/Form/ImportForm.php:126
+msgid ""
+"If checked, column headings that match property labels will be mapped "
+"automatically (for example, \"Title\" to dcterms:title)."
+msgstr ""
+
+#: src/Form/ImportForm.php:141
+msgid "A note about the purpose or source of this import"
+msgstr "Märkus selle importimise eesmärgi või allika kohta"
+
+#: src/Controller/IndexController.php:97
+msgid "The format of the source cannot be detected."
+msgstr "Allika vormingut pole võimalik tuvastada."
+
+#: src/Controller/IndexController.php:121
+msgid "The file has no headers."
+msgstr "Failil pole päiseid."
+
+#: src/Controller/IndexController.php:164
+#, php-format
+msgid "Importing in background (%sjob #%d%s)"
+msgstr "Taustal importimine (%stöö nr.%d%s)"
+
+#: src/Controller/IndexController.php:177
+msgid "Invalid settings."
+msgstr "Vigased seaded."
+
+#: src/Controller/IndexController.php:193
+#, php-format
+msgid "Undo in progress in the following jobs: %s"
+msgstr ""
+
+#: config/module.config.php:184
+msgid "Omeka resource (by ID)"
+msgstr "Omeka ressurss (ID järgi)"

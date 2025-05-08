@@ -1,0 +1,35 @@
+<?php if ($textInput): ?>
+<?php echo $this->formElement($textInput); ?>
+<?php elseif ($singleSelect): ?>
+<?php echo $this->formElement($singleSelect); ?>
+<?php else: ?>
+<ul class="value-select-list" data-truncate-values="<?php echo $this->escapeHtml($facet->data('truncate_values')); ?>">
+    <?php
+    $index = 0;
+    foreach ($values as $key => $value):
+    ?>
+    <?php
+    $dataPropertyId = $facet->data('property_id');
+    $dataValue = $key;
+    if (in_array($facet->data('query_type'), ['ex', 'nex'])) {
+        $dataPropertyId = $key;
+    }
+    ?>
+    <li class="value-select-list-item" data-index="<?php echo $this->escapeHtml($index++); ?>">
+        <label>
+            <input
+                class="value"
+                type="<?php echo ('multiple_list' === $facet->data('select_type')) ? 'checkbox' : 'radio'; ?>"
+                name="<?php echo sprintf('value_%s', $facet->id()); ?>"
+                data-property-id="<?php echo $this->escapeHtml($dataPropertyId); ?>"
+                data-value="<?php echo $this->escapeHtml($dataValue); ?>">
+                <?php echo $this->escapeHtml($value); ?>
+        </label>
+    </li>
+    <?php
+    endforeach;
+    ?>
+</ul>
+<a href="#" class="value-select-list-expand" style="display: none;"><?php echo $this->translate('See more'); ?> <span class="value-select-list-hidden-count"></span></a>
+<a href="#" class="value-select-list-collapse" style="display: none;"><?php echo $this->translate('See less'); ?></a>
+<?php endif; ?>

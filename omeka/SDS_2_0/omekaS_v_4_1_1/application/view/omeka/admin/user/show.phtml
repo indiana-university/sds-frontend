@@ -1,0 +1,43 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'users show');
+?>
+
+<?php echo $this->pageTitle($user->email(), 1, $translate('Users')); ?>
+
+<div id="page-actions">
+    <?php $this->trigger('view.show.page_actions', ['resource' => $user]); ?>
+    <?php if ($user->userIsAllowed('update')): ?>
+        <a class="button" href="<?php echo $escape($user->url('edit')); ?>"><?php echo $translate('Edit user'); ?></a>
+    <?php endif; ?>
+</div>
+
+<?php $this->trigger('view.show.before'); ?>
+<dl>
+<div class="property">
+    <dt><?php echo $translate('Email'); ?></dt>
+    <dd class="value">
+        <?php echo $escape($user->email()); ?>
+    </dd>
+</div>
+<div class="property">
+    <dt><?php echo $translate('Display name'); ?></dt>
+    <dd class="value">
+        <?php echo $escape($user->name()); ?>
+    </dd>
+</div>
+<div class="property">
+    <dt><?php echo $translate('Role'); ?></dt>
+    <dd class="value">
+        <?php echo $escape($translate($user->displayRole())); ?>
+    </dd>
+</div>
+<div class="property">
+    <dt><?php echo $translate('Is active'); ?></dt>
+    <dd class="value">
+        <?php echo $escape($user->isActive() ? $translate('yes') : $translate('no')); ?>
+    </dd>
+</div>
+</dl>
+<?php $this->trigger('view.show.after'); ?>

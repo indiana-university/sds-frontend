@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageRepresentation $resource
+ * @var string $resourceName
+ * @var string $resourceType
+ * @var array $options
+ */
+
+// Currently, Page is an exception: no thumbnail, no description.
+
+$title = $resource->title();
+?>
+
+<div class="shortcode resource <?= $resourceType ?>">
+    <h4><?= $resource->link($title) ?></h4>
+</div>

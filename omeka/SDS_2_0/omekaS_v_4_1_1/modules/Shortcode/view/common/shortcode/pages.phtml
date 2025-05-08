@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageRepresentation[] $resources
+ * @var string $resourceName
+ * @var string $resourceType
+ * @var array $options
+ */
+
+// Adapted from view/common/block-layout/browse-preview
+?>
+
+<div class="shortcode resources <?= $resourceType ?>">
+    <ul class="resource-list preview">
+        <?php foreach ($resources as $resource): ?>
+        <?php $title = $resource->displayTitle(); ?>
+        <li class="resource <?= $resourceType?>">
+            <h4><?= $resource->link($title) ?></h4>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

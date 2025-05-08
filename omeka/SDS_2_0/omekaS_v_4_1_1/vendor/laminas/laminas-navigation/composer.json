@@ -1,0 +1,75 @@
+{
+    "name": "laminas/laminas-navigation",
+    "description": "Manage trees of pointers to web pages in order to build navigation systems",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "navigation"
+    ],
+    "homepage": "https://laminas.dev",
+    "support": {
+        "docs": "https://docs.laminas.dev/laminas-navigation/",
+        "issues": "https://github.com/laminas/laminas-navigation/issues",
+        "source": "https://github.com/laminas/laminas-navigation",
+        "rss": "https://github.com/laminas/laminas-navigation/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laminas": {
+            "component": "Laminas\\Navigation",
+            "config-provider": "Laminas\\Navigation\\ConfigProvider"
+        }
+    },
+    "require": {
+        "php": "^7.4 || ~8.0.0 || ~8.1.0",
+        "laminas/laminas-stdlib": "^2.7 || ^3.0"
+    },
+    "require-dev": {
+        "laminas/laminas-coding-standard": "^2.3.0",
+        "laminas/laminas-config": "^3.7.0",
+        "laminas/laminas-http": "^2.15.1",
+        "laminas/laminas-i18n": "^2.13.0",
+        "laminas/laminas-mvc": "^3.3.0",
+        "laminas/laminas-permissions-acl": "^2.9.0",
+        "laminas/laminas-router": "^3.5.0",
+        "laminas/laminas-servicemanager": "^3.10.0",
+        "laminas/laminas-uri": "^2.9.1",
+        "laminas/laminas-view": "^2.14.2",
+        "phpspec/prophecy-phpunit": "^2.0.1",
+        "phpunit/phpunit": "^9.5.10"
+    },
+    "suggest": {
+        "laminas/laminas-config": "^3.7, to provide page configuration (optional, as arrays and Traversables are also allowed)",
+        "laminas/laminas-permissions-acl": "^2.9, to provide ACL-based access restrictions to pages",
+        "laminas/laminas-router": "^3.5, to use router-based URI generation with Mvc pages",
+        "laminas/laminas-servicemanager": "^3.10, to use the navigation factories",
+        "laminas/laminas-view": "^2.14, to use the navigation view helpers"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laminas\\Navigation\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaminasTest\\Navigation\\": "test/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "conflict": {
+        "zendframework/zend-navigation": "*"
+    }
+}

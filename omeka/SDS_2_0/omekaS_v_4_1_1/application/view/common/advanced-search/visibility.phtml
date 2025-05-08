@@ -1,0 +1,11 @@
+<?php
+$element = new \Laminas\Form\Element\Select('is_public');
+$element->setLabel('Search by visibility') // @translate
+    ->setValueOptions([
+        '1' => 'Public', // @translate
+        '0' => 'Not public', // @translate
+    ])
+    ->setEmptyOption('Select visibility…') // @translate
+    ->setValue($query['is_public'] ?? '')
+    ->setAttribute('id', 'is_public');
+echo $this->formRow($element);

@@ -1,0 +1,39 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var bool $hasAdvancedSearch
+ */
+
+if (!$hasAdvancedSearch) {
+    return;
+}
+
+// @todo Use laminas navigation menu.
+
+$plugins = $this->getHelperPluginManager();
+$escape = $plugins->get('escapeHtml');
+$translate = $plugins->get('translate');
+$urlHelper = $plugins->get('url');
+
+$isAdminRequest = $this->status()->isAdminRequest();
+$route = $isAdminRequest ? 'admin/statistics/default' : 'site/statistics/default';
+
+$isAdminRequest = $this->status()->isAdminRequest();
+
+$sectionNavs = [];
+$sectionNavs[$urlHelper(dirname($route), [], true)] = $translate('Summary');
+$sectionNavs[$urlHelper($route, ['action' => 'by-site'], true)] = $translate('By site');
+$sectionNavs[$urlHelper($route, ['action' => 'by-value'], true)] = $translate('By value');
+
+$currentUrl = $urlHelper(null, [], true);
+?>
+
+<nav class="section-nav">
+    <ul class="navigation">
+        <?php foreach ($sectionNavs as $url => $label): ?>
+        <li<?= $currentUrl === $url ? ' class="active"' : '' ?>>
+            <a href="<?= $url ?>"><?= $escape($label) ?></a>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+</nav>

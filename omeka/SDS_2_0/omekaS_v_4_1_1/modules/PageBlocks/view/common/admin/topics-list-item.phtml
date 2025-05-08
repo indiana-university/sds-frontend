@@ -1,0 +1,19 @@
+<?php
+$translate = $this->plugin('translate');
+?>
+
+<div class="attachment">
+    <span class="sortable-handle"></span>
+    <div class="thumbnail fa <?= ($topic['icon']) ? "fa-" . $topic['icon'] : "fa-question unspecified"; ?>"></div>
+    <div class="asset-title"><?= $topic['label'] ?? '' ?></div>
+
+    <ul class="actions">
+        <li><a class="topic-form-edit o-icon-configure button" title="<?= $translate('Open asset options') ?>" aria-label="<?= $translate('Open asset options') ?>"></a></li>
+        <li class="delete"><a class="o-icon-delete button" title="<?= $translate('Delete attachment') ?>" href="#" aria-label="<?= $translate('Delete attachment') ?>"></a></li>
+        <li class="undo"><a class="o-icon-undo button" title="<?= $translate('Restore attachment') ?>" href="#" aria-label="<?= $translate('Restore attachment') ?>"></a></li>
+    </ul>
+    
+    <input type="hidden" data-sidebar-id="topic-data-label" name="o:block[__blockIndex__][o:data][topics][__attachmentIndex__][label]" value="<?= $topic['label'] ?? '' ?>">
+    <input type="hidden" data-sidebar-id="topic-data-icon" name="o:block[__blockIndex__][o:data][topics][__attachmentIndex__][icon]" value="<?= $topic['icon'] ?? '' ?>">
+    <input type="hidden" data-sidebar-id="topic-data-query" name="o:block[__blockIndex__][o:data][topics][__attachmentIndex__][query]" value="<?= $topic['query'] ?? '' ?>">
+</div>

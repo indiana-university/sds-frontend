@@ -1,0 +1,90 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'item-sets show');
+$viewItemsLink = $this->url(
+    'admin/default',
+    ['controller' => 'item', 'action' => 'browse'],
+    [
+        'query' =>  [
+            'item_set_id' => $itemSet->id()
+        ]
+    ]
+);
+if ($owner = $itemSet->owner()) {
+    $ownerText = $escape($itemSet->owner()->name());
+} else {
+    $ownerText = $translate('[No owner]');
+}
+
+$sectionNavs = [
+    'item-set-metadata' => $translate('Metadata'),
+    'resources-linked' => $translate('Linked resources'),
+];
+?>
+
+<?php echo $this->pageTitle($itemSet->displayTitle(), 1, $translate('Item sets')); ?>
+
+<div id="page-actions">
+    <?php $this->trigger('view.show.page_actions', ['resource' => $itemSet]); ?>
+    <?php if ($itemSet->userIsAllowed('update')): ?>
+    <?php echo $itemSet->link($translate('Edit item set'), 'edit', ['class' => 'button']); ?>
+    <?php endif; ?>
+    <a href="<?php echo $viewItemsLink; ?>" class="button"><?php echo $translate('View items'); ?></a>
+</div>
+
+<?php echo $this->sectionNav($sectionNavs, 'view.show.section_nav', $itemSet); ?>
+
+<div id="item-set-metadata" class="active section">
+    <?php if ($itemSet->resourceClass()): ?>
+    <dl>
+        <div class="meta-group">
+            <dt><?php echo $translate('Class'); ?></dt>
+            <dd class="value"><?php echo $escape($itemSet->resourceClass()->label()); ?></dd>
+        </div>
+    </dl>
+    <?php endif; ?>
+    <?php echo $itemSet->displayValues(); ?>
+</div>
+
+<div id="resources-linked" class="section">
+    <?php if ($itemSet->subjectValueTotalCount()): ?>
+        <p><?php echo $translate('The following resources link to this item set:'); ?></p>
+        <?php echo $itemSet->displaySubjectValues([
+            'page' => $this->params()->fromQuery('page', 1),
+            'perPage' => 25,
+            'resourceProperty' => $this->params()->fromQuery('resource_property'),
+        ]); ?>
+    <?php else: ?>
+        <div class="no-resources">
+            <p><?php echo $translate('No resources link to this item set.'); ?></p>
+        </div>
+    <?php endif; ?>
+</div>
+
+<div class="active sidebar">
+    <div class="meta-group">
+        <h4><?php echo $translate('ID'); ?></h4>
+        <div class="value"><?php echo $escape($itemSet->id()); ?></div>
+    </div>
+    <div class="meta-group">
+        <h4><?php echo $translate('Created'); ?></h4>
+        <div class="value"><?php echo $escape($this->i18n()->dateFormat($itemSet->created())); ?></div>
+    </div>
+    <div class="meta-group">
+        <h4><?php echo $translate('Owner'); ?></h4>
+        <div class="value"><?php echo $ownerText; ?></div>
+    </div>
+    <div class="meta-group">
+        <h4><?php echo $translate('Visibility'); ?></h4>
+        <div class="value"><?php echo ($itemSet->isPublic()) ? $escape($translate('Public')) : $escape($translate('Private')); ?></div>
+        <div class="value"><?php echo ($itemSet->isOpen()) ? $escape($translate('Open to additions')) : $escape($translate('Closed to additions')); ?></div>
+    </div>
+    <div class="meta-group">
+        <h4><?php echo $translate('Items'); ?></h4>
+        <div class="value"><?php echo $this->hyperlink($itemSet->itemCount(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['item_set_id' => $itemSet->id()]])); ?></div>
+    </div>
+    <?php $this->trigger('view.show.sidebar'); ?>
+</div>
+
+<?php $this->trigger('view.show.after'); ?>

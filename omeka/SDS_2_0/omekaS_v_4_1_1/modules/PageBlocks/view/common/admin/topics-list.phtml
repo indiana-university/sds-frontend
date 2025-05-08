@@ -1,0 +1,16 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+
+$template = $escape($this->partial('common/admin/topics-list-item'));
+?>
+
+<a href="#" class="collapse" aria-label="collapse">
+    <h4><?= $translate('Topics') ?></h4>
+</a>
+<div class="attachments topics collapsible" data-template="<?= $template ?>">
+    <button class="topic-form-add" type="button"><?= $translate('Add topic') ?></button>
+    <?php foreach ($topics as $topic) {
+        echo $this->partial('common/admin/topics-list-item', ['topic' => $topic]);
+    } ?>
+</div>

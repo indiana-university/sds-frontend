@@ -1,0 +1,14 @@
+<?php
+$translate = $this->plugin('translate');
+?>
+
+<div class="sidebar" id="<?= $id ?>">
+    <div class="sidebar-content">
+        <h3><?= $translate('Edit'); ?></h3>
+        <a href="#" class="sidebar-close o-icon-close"><span class="screen-reader-text"><?= $translate('Close'); ?></span></a>
+        <?= $form ?>
+        <div class="confirm-panel">
+            <button><?= $translate('Apply changes'); ?></button>
+        </div>
+    </div>
+</div>

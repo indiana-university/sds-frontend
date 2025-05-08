@@ -1,0 +1,52 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \BulkExport\Api\Representation\ExporterRepresentation $exporter
+ * @var \BulkExport\Form\ExporterForm $form
+ * @var array $exportArgs
+ * @var string $step
+ * @var array $steps
+ */
+
+$plugins = $this->getHelperPluginManager();
+$escape = $plugins->get('escapeHtml');
+$assetUrl = $plugins->get('assetUrl');
+$translate = $plugins->get('translate');
+
+$this->htmlElement('body')->appendAttribute('class', 'bulk-exporters bulk-exports edit');
+$this->headLink()->appendStylesheet($assetUrl('css/bulk-export-admin.css', 'BulkExport'));
+
+$form->prepare();
+
+/** @var \Laminas\Form\Element\Submit $submit */
+$submit = $form->get('form_submit')->get('submit');
+$submit->setAttribute('form', $form->getAttribute('id'));
+$form->get('form_submit')->remove('submit');
+?>
+
+<?= $this->pageTitle($translate('Export'), 1, $translate('Bulk export')) ?>
+
+<div id="bulk-export">
+    <h3><?= $escape($exporter->label()) ?></h3>
+    <?php if (isset($exportArgs)): ?>
+    <?php $comment = $exportArgs['comment']; ?>
+    <?php unset($exportArgs['comment']); ?>
+    <p><?= $escape(sprintf($translate('Comment: %s'), $comment)) ?></p>
+    <h3><?= $escape($translate('Parameters')) ?></h3>
+    <h4><?= $escape($translate('Writer')) ?></h4>
+    <div class="value">
+        <pre><?= $escape(json_encode($exportArgs['writer'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)); ?></pre>
+    </div>
+    <?php endif; ?>
+    <?= $this->form()->openTag($form) ?>
+    <?= $this->formCollection($form) ?>
+    <?= $this->form()->closeTag() ?>
+</div>
+
+<div id="page-actions">
+    <?php if ($step === 'confirm' && $exporter->configOption('exporter', 'as_task')): ?>
+    <?= $this->formSubmit($submit->setLabel($translate('Store export'))) ?>
+    <?php else: ?>
+    <?= $this->formSubmit($submit) ?>
+    <?php endif; ?>
+</div>

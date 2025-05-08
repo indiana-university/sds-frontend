@@ -1,0 +1,81 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var array $results
+ * @var bool $hasAccess
+ * @var bool $hasAdvancedSearch
+ */
+
+$plugins = $this->getHelperPluginManager();
+$escape = $plugins->get('escapeHtml');
+$assetUrl = $plugins->get('assetUrl');
+$translate = $plugins->get('translate');
+
+$this->headLink()->prependStylesheet($assetUrl('css/statistics.css', 'Statistics'));
+
+$this->htmlElement('body')->appendAttribute('class', 'statistics index');
+
+$isAdminRequest = $this->status()->isAdminRequest();
+?>
+
+<?= $this->pageTitle(sprintf($translate('Summary (%s total)'), $results['all']['resources']), 1, $isAdminRequest ? $translate('Statistics') : '') ?>
+
+<?= $this->partial('common/statistics-nav') ?>
+
+<h2><?= sprintf($translate('Total ressources: %d [%d item sets / %d items / %d medias]'),
+    $results['all']['resources'],
+    $results['all']['item_sets'],
+    $results['all']['items'],
+    $results['all']['media'])
+?></h2>
+
+<?php if (!$hasAdvancedSearch): ?>
+    <?php if ($isAdminRequest): ?>
+    <p><?= sprintf($translate('The module %1$sAdvanced Search%2$s is required to get many more statistics.'), '<a href="https://gitlab.com/Daniel-KM/Omeka-S-module-AdvancedSearch" target="_blank">', '</a>')?></p>
+    <?php endif; ?>
+    <?php return; ?>
+<?php endif; ?>
+
+<h3><?= sprintf($translate('Today: %d [%d / %d / %d]'),
+    $results['today']['resources'],
+    $results['today']['item_sets'],
+    $results['today']['items'],
+    $results['today']['media'])
+?></h3>
+
+<div class="statistics-dashboard">
+
+    <div>
+        <h2><?= $translate('History') ?></h2>
+        <ul>
+        <?php foreach ($results['history'] as $label => $value): ?>
+            <li><?=
+                sprintf('%s: %d [%d / %d / %d]', $escape($label), $value['resources'], $value['item_sets'], $value['items'], $value['media'])
+            ?></li>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <div>
+        <h2><?= $translate('Current') ?></h2>
+        <ul>
+        <?php foreach ($results['current'] as $label => $value): ?>
+            <li><?=
+                sprintf('%s: %d [%d / %d / %d]', $escape($label), $value['resources'], $value['item_sets'], $value['items'], $value['media'])
+            ?></li>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <div>
+        <h2><?= $translate('Rolling Period') ?></h2>
+        <ul>
+        <?php foreach ($results['rolling'] as $label => $value): ?>
+            <li><?=
+                sprintf('%s: %d [%d / %d / %d]', $escape($label), $value['resources'], $value['item_sets'], $value['items'], $value['media'])
+            ?></li>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+
+</div>

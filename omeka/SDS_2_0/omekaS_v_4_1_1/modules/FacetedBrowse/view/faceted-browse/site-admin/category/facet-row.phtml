@@ -1,0 +1,42 @@
+<?php
+use Laminas\Form\Element\Hidden;
+?>
+<li class="facet value row">
+    <span class="sortable-handle"></span>
+    <span class="restore-value"><?php echo sprintf('%s to be removed', 'Facet'); ?></span>
+    <span class="facet-name-display"><?php echo $facet['o:name']; ?></span>
+    <span class="facet-type-display"><?php echo $this->translate($this->facetedBrowse()->getFacetType($facet['o-module-faceted_browse:type'])->getLabel()); ?></span>
+    <ul class="actions">
+        <li><?php echo $this->hyperlink('', [], [
+            'class' => 'o-icon-edit facet-edit',
+            'title' => $this->translate('Edit facet'),
+        ]); ?></li>
+        <li><?php echo $this->hyperlink('', [], [
+            'class' => 'o-icon-delete facet-remove',
+            'title' => $this->translate('Remove facet'),
+        ]); ?></li>
+        <li><?php echo $this->hyperlink('', [], [
+            'class' => 'o-icon-undo facet-restore',
+            'title' => $this->translate('Restore facet'),
+            'style' => 'display: none;',
+        ]); ?></li>
+    </ul>
+    <?php
+    $idInput = (new Hidden(sprintf('o-module-faceted_browse:facet[%s][o:id]', $index)))
+        ->setValue($facet['o:id'])
+        ->setAttribute('class', 'facet-id');
+    $nameInput = (new Hidden(sprintf('o-module-faceted_browse:facet[%s][o:name]', $index)))
+        ->setValue($facet['o:name'])
+        ->setAttribute('class', 'facet-name');
+    $typeInput = (new Hidden(sprintf('o-module-faceted_browse:facet[%s][o-module-faceted_browse:type]', $index)))
+        ->setValue($facet['o-module-faceted_browse:type'])
+        ->setAttribute('class', 'facet-type');
+    $dataInput = (new Hidden(sprintf('o-module-faceted_browse:facet[%s][o:data]', $index)))
+        ->setValue(json_encode($facet['o:data']))
+        ->setAttribute('class', 'facet-data');
+    echo $this->formHidden($idInput);
+    echo $this->formHidden($typeInput);
+    echo $this->formHidden($nameInput);
+    echo $this->formHidden($dataInput);
+    ?>
+</li>

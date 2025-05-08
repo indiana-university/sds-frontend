@@ -1,0 +1,26 @@
+<?php
+
+$assetUrl = $this->plugin('assetUrl');
+$this->headLink()->appendStylesheet($assetUrl('css/style.css', 'PageBlocks'));
+
+$queryBase = $this->url('site', [], true) . "/item?";
+
+$style = "";
+if ($buttonColor) { $style .= "--button-color: " . $buttonColor . ";"; }
+if ($textColor) { $style .= "--text-color: " . $textColor . ";"; }
+
+?>
+
+<section class="topics-container">
+    <h2><?= $header ?></h2>
+    <div class="topics-list-container" style="<?= $style ?>">
+        <?php foreach ($topics as $topic): ?>
+            <a class="topic-single" href="<?= $queryBase . $topic['query'] ?>">
+                <?php if ($topic['icon']): ?>
+                    <span class="fa fa-<?= $topic['icon'] ?>"></span>
+                <?php endif; ?>
+                <h4><?= $topic['label'] ?></h4>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</section>

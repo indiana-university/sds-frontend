@@ -1,0 +1,64 @@
+@media screen {
+    header nav .statistics::before,
+    .statistics .subhead::before,
+    .statistics .no-resources:before {
+        content: '';
+    }
+    .statistics-hover {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .statistics-hover:hover {
+        overflow: visible;
+        position: absolute;
+        white-space: normal;
+    }
+    .odd .statistics-hover:hover {
+        background-color: #fff;
+    }
+    .even .statistics-hover:hover {
+        background-color: #f3f3e7;
+    }
+    .statistics-hover:hover+div {
+        margin-top: 20px;
+    }
+    .statistics .statistics-dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 0px 12px;
+      grid-template-areas:
+        ". . .";
+    }
+    .statistics .section-nav .navigation li {
+        display: inline-block;
+    }
+    .statistics .section-nav .navigation li.active {
+        font-weight: bold;
+    }
+    .statistics .section-nav .navigation li.active {
+        font-weight: bold;
+    }
+
+    .statistics .section-nav {
+        height: fit-content;
+    }
+    .statistics .flex-container {
+        width: fit-content;
+    }
+
+    .statistics .browse-controls {
+        justify-content: flex-end;
+    }
+
+    .statistics td:first-child,
+    .statistics th:first-child {
+        width: inherit;
+        max-width: 50%;
+    }
+
+    .statistics .statistics-totals {
+        text-transform: uppercase;
+    }
+}

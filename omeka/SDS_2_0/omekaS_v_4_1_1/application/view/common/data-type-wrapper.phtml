@@ -1,0 +1,32 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+
+$icons = [
+    'resource:item' => 'items',
+    'resource:itemset' => 'item-sets',
+    'resource:media' => 'media',
+];
+?>
+
+<div class="template value" data-data-type="<?php echo $escape($dataType); ?>" data-data-type-label="<?php echo $dataType === 'resource' ? $escape($translate('Omeka resource')) : $escape($translate($this->dataType()->getLabel($dataType))); ?>" data-data-type-icon="<?php echo in_array($dataType, $icons) ? $icons[$dataType] : '' ?>" role="group">
+    <div class="sortable-handle"></div>
+    <div class="input-body"><?php echo $this->dataType()->getTemplate($dataType); ?></div>
+    <div class="input-footer">
+        <span class="restore-value"><?php echo $translate('Value to be removed'); ?></span>
+        <ul class="actions">
+            <li><?php echo $this->hyperlink('', '#', ['class' => 'o-icon-delete remove-value', 'title' => $translate('Remove value')]); ?></li>
+            <li><?php echo $this->hyperlink('' , '#', ['class' => 'o-icon-undo restore-value', 'title' => $translate('Restore value')]); ?></li>
+            <li class="more-actions">
+                <?php echo $this->hyperlink('' , '#', ['class' => 'o-icon-more', 'title' => $translate('More actions')]); ?>
+                <ul>
+                    <li>
+                        <?php echo $this->hyperlink('' , '#', ['class' => 'value-visibility o-icon-public', 'title' => $translate('Make private'), 'aria-label' => $translate('Make private')]); ?>
+                        <input type="hidden" class="is_public">
+                    </li>
+                    <li><?php echo $this->hyperlink('', '#', ['class' => 'value-annotation-annotate o-icon-annotation', 'title' => $translate('Annotate value')]); ?></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

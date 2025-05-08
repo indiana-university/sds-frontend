@@ -1,0 +1,189 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var array $results
+ * @var string $type "value"
+ * @var array $hits
+ * @var int[]|null $periods
+ * @var int[] $years
+ * @var int $yearFilter
+ * @var int $monthFilter
+ * @var string $propertyFilter
+ * @var string $valueTypeFilter
+ * @var string $byPeriodFilter
+ */
+
+$plugins = $this->getHelperPluginManager();
+$escape = $plugins->get('escapeHtml');
+$assetUrl = $plugins->get('assetUrl');
+$translate = $plugins->get('translate');
+$urlHelper = $plugins->get('url');
+$escapeAttr = $plugins->get('escapeHtmlAttr');
+
+$this->headLink()->prependStylesheet($assetUrl('css/statistics.css', 'Statistics'));
+
+$this->htmlElement('body')->appendAttribute('class', 'statistics browse');
+
+$isAdminRequest = $this->status()->isAdminRequest();
+
+$currentUrl = $urlHelper(null, [], true);
+
+$isSimpleValue = !in_array($valueTypeFilter, ['resource', 'uri']);
+$isResource = $valueTypeFilter === 'resource';
+$isUri = $valueTypeFilter === 'uri';
+$isByAll = !in_array($byPeriodFilter, ['year', 'month']);
+
+$isAllPeriods = $byPeriodFilter === 'all';
+$isYearPeriods = $byPeriodFilter === 'year';
+// $hasResults = !empty($results) && ($isAllPeriods ? !empty($results['all']) : true);
+?>
+
+<?= $this->pageTitle($translate('By value'), 1, $isAdminRequest ? $translate('Analytics') : null) ?>
+
+<?= $this->partial('common/analytics-nav') ?>
+
+<form method="get">
+<div class="flex-container">
+    <?= $this->propertySelect([
+        'name' => 'property',
+        'options' => [
+            'empty_option' => $translate('Select a property'),
+            'term_as_value' => true,
+            'used_terms' => true,
+        ],
+        'attributes' => [
+            'class' => 'chosen-select',
+            'required' => true,
+            'value' => $propertyFilter,
+        ],
+    ]) ?>
+
+    <div>
+        <label><input type="radio" name="value_type" value="value"<?= $isSimpleValue ? ' checked="checked"' : '' ?>><?= $translate('Value') ?></label>
+        <label><input type="radio" name="value_type" value="resource"<?= $valueTypeFilter === 'resource' ? ' checked="checked"' : '' ?>><?= $translate('Resource') ?></label>
+        <label><input type="radio" name="value_type" value="uri"<?= $valueTypeFilter === 'uri' ? ' checked="checked"' : '' ?>><?= $translate('Uri') ?></label>
+    </div>
+
+    <div>
+        <label><input type="radio" name="by_period" value="all"<?= $isByAll ? ' checked="checked"' : '' ?>><?= $translate('All') ?></label>
+        <label><input type="radio" name="by_period" value="year"<?= $byPeriodFilter === 'year' ? ' checked="checked"' : '' ?>><?= $translate('By year') ?></label>
+        <label><input type="radio" name="by_period" value="month"<?= $byPeriodFilter === 'month' ? ' checked="checked"' : '' ?>><?= $translate('By month') ?></label>
+    </div>
+
+    <select name="year">
+        <option value=""><?= $translate('All years') ?></option>
+        <?php foreach ($years as $year): ?>
+            <option value="<?= $year ?>"<?= $yearFilter == $year ? ' selected="selected"' : '' ?>><?= $year ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <?php $months = [
+        1 => $translate('January'),
+        2 => $translate('February'),
+        3 => $translate('March'),
+        4 => $translate('April'),
+        5 => $translate('May'),
+        6 => $translate('June'),
+        7 => $translate('July'),
+        8 => $translate('August'),
+        9 => $translate('September'),
+        10 => $translate('October'),
+        11 => $translate('November'),
+        12 => $translate('December'),
+    ]; ?>
+    <select name="month">
+        <option value=""><?= $translate('All months') ?></option>
+        <?php foreach ($months as $numberMonth => $month): ?>
+            <option value="<?= $numberMonth ?>"<?= $monthFilter == $numberMonth ? ' selected="selected"' : '' ?>><?= $month ?></option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit"><?= $translate('Filter') ?></button>
+</div>
+</form>
+
+<?php if (!$propertyFilter): ?>
+
+<p><?= $translate('Select a property to get analytics on it.') ?></p>
+
+<?php elseif (is_null($periods)): ?>
+
+<p><?= $translate('Check the form.') ?></p>
+
+<?php elseif ($isAllPeriods && count($results)): ?>
+
+<table class="tablesaw statistics-table" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th>
+                <a href="<?= $currentUrl . '?sort_by=value' ?>"><?= $translate('Value') ?></a>
+            </th>
+            <?php if ($isResource): ?>
+            <th>
+                <span><?= $translate('Label') ?></span>
+            </th>
+            <?php endif; ?>
+            <th>
+                <a href="<?= $currentUrl . '?sort_by=hits' ?>"><?= $translate('Hits') ?></a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach ($results as $position => $result): ?>
+        <tr class="statistics-stat">
+            <td class="statistics-field"><?= $isUri ? '<a href="' . $escapeAttr($result['value']) . '" target="_blank" rel="noopener">' . $escape($result['label']) . '</a>' : $escape($result['value']) ?></td>
+            <?php if ($isResource): ?>
+            <td class="statistics-label"><?= $escape($result['label']) ?></td>
+            <?php endif; ?>
+            <td class="statistics-hits"><?= $result['hits'] ?></td>
+        </tr>
+<?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php elseif (!$isAllPeriods && count($results)): ?>
+
+<table class="tablesaw statistics-table" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th>
+                <a href="<?= $currentUrl . '?sort_by=value' ?>"><?= $translate('Value') ?></a>
+            </th>
+            <?php if ($isResource): ?>
+            <th>
+                <span><?= $translate('Label') ?></span>
+            </th>
+            <?php endif; ?>
+            <?php foreach (array_keys($periods) as $period): ?>
+            <th>
+                <span><?= $isYearPeriods ? $period : sprintf('%04d %02d', substr($period, 0, 4), substr($period, 4, 2)) ?></span>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach ($results as $value => $result): ?>
+        <tr class="statistics-stat">
+            <td class="statistics-field"><?= $isUri ? '<a href="' . $escapeAttr($value) . '" target="_blank" rel="noopener">' . $escape($result['label']) . '</a>' : $escape($value) ?></td>
+            <?php if ($isResource): ?>
+            <td class="statistics-label"><?= $escape($result['label']) ?></td>
+            <?php endif; ?>
+            <?php foreach (array_keys($periods) as $period): ?>
+            <td class="statistics-hits"><?= $result['hits'][$period] ?? '' ?></td>
+            <?php endforeach; ?>
+        </tr>
+<?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php else: ?>
+
+    <br class="clear" />
+    <?php $totalHits = $this->api()->search('hits', ['limit' => 0])->getTotalResults(); ?>
+    <?php if (!$totalHits): ?>
+        <h2><?= $translate('There is no hit yet.') ?></h2>
+    <?php else: ?>
+        <p><?= sprintf($translate('The query searched %s hits and returned no results.'), $totalHits) ?></p>
+        <p><a href="<?= $urlHelper('admin/analytics/default', ['action' => 'by-value'], true) ?>"><?= $translate('See all analytics.') ?></a></p>
+    <?php endif; ?>
+
+<?php endif; ?>

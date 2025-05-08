@@ -1,0 +1,70 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'jobs show');
+if ($job->started()) {
+    $started = $this->i18n()->dateFormat($job->started(), 'long', 'long');
+} else {
+    $started = $translate('[Not started]');
+}
+if ($job->ended()) {
+    $ended = $this->i18n()->dateFormat($job->ended(), 'long', 'long');
+} else {
+    $ended = $translate('[Not ended]');
+}
+if ($owner = $job->owner()) {
+    $ownerText = $this->escapeHtml($owner->email());
+} else {
+    $ownerText = $translate('[No owner]');
+}
+?>
+<?php echo $this->pageTitle('#' . $escape($job->id()), 1, $translate('Jobs')); ?>
+<div id="page-actions">
+    <?php if ('in_progress' == $job->status()): ?>
+        <?php echo $this->form($confirmForm); ?>
+    <?php endif; ?>
+</div>
+
+<dl class="job-metadata">
+    <div class="meta-group">
+        <dt><?php echo $translate('Status'); ?></dt>
+        <dd class="value"><?php echo $job->statusLabel(); ?></dd>
+    </div>
+    <div class="meta-group">
+        <dt><?php echo $translate('Started'); ?></dt>
+        <dd class="value"><?php echo $started; ?></dd>
+    </div>
+    <div class="meta-group">
+        <dt><?php echo $translate('Ended'); ?></dt>
+        <dd class="value"><?php echo $ended; ?></dd>
+    </div>
+    <div class="meta-group">
+        <dt><?php echo $translate('Class'); ?></dt>
+        <dd class="value"><?php echo $job->jobClass(); ?></dd>
+    </div>
+    <div class="meta-group">
+        <dt><?php echo $translate('Owner'); ?></dt>
+        <dd class="value"><?php echo $ownerText; ?></dd>
+    </div>
+    <div class="meta-group">
+        <dt><?php echo $translate('Args'); ?></dt>
+        <?php if ($job->args()): ?>
+            <?php $args = json_encode($job->args(), JSON_PRETTY_PRINT); ?>
+            <dd class="value"><pre><?php echo $args; ?></pre></dd>
+        <?php else: ?>
+            <dd class="value"><?php echo $translate('[No args]') ?></dd>
+        <?php endif; ?>
+    </div>
+    <div class="meta-group">
+        <dt><?php echo $translate('Log'); ?></dt>
+        <dd class="value">
+        <?php if ($job->log()): ?>
+        <?php echo $this->hyperlink($translate('view log'),
+            $this->url(null, ['action' => 'log'], true),
+            ['target' => '_blank']); ?>
+        <?php else: ?>
+        <?php echo $translate('[No log]'); ?>
+        <?php endif; ?>
+        </dd>
+    </div>
+</dl>

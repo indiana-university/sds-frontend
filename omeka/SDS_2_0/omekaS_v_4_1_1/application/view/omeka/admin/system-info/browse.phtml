@@ -1,0 +1,54 @@
+<?php
+$translate = $this->plugin('translate');
+$this->htmlElement('body')->appendAttribute('class', 'system-info');
+echo $this->pageTitle($translate('System information'));
+?>
+
+<table id="system-info-table">
+<col class="label-col">
+<col class="value-col">
+<?php foreach ($info as $section => $sectionInfo): ?>
+<tbody>
+<tr><th scope="rowgroup" colspan="2"><?php echo $this->escapeHtml($section); ?></th></tr>
+    <?php foreach ($sectionInfo as $label => $data): ?>
+    <tr>
+        <th scope="row"><?php echo $this->escapeHtml($label); ?></th>
+        <?php
+        if (is_bool($data)):
+            $data = $data ? $translate('Yes') : $translate('No');
+        elseif (is_array($data)):
+            $data = implode(', ', $data);
+        endif;
+        ?>
+        <td><?php echo $this->escapeHtml($data); ?></td>
+    </tr>
+    <?php endforeach; ?>
+</tbody>
+<?php endforeach; ?>
+</table>
+
+<div>
+    <button type="button" id="get-php-version-button" data-url="<?php echo $this->escapeHtml($this->url(null, ['action' => 'get-php-version'], true)); ?>"><?php echo $this->translate('Get PHP CLI version'); ?></button>
+    <textarea id="php-version" cols="80" rows="6" style="display: none;" disabled></textarea>
+</div>
+<div>
+    <button type="button" id="get-imagemagick-version-button" data-url="<?php echo $this->escapeHtml($this->url(null, ['action' => 'get-imagemagick-version'], true)); ?>"><?php echo $this->translate('Get ImageMagick version'); ?></button>
+    <textarea id="imagemagick-version" cols="80" rows="6" style="display: none;" disabled></textarea>
+</div>
+
+<script>
+const phpButton = $('#get-php-version-button');
+const imagemagickButton = $('#get-imagemagick-version-button');
+phpButton.on('click', function(e) {
+    $.get(phpButton.data('url'))
+        .done(data => {
+            $('#php-version').show().val(data);
+        });
+});
+imagemagickButton.on('click', function(e) {
+    $.get(imagemagickButton.data('url'))
+        .done(data => {
+            $('#imagemagick-version').show().val(data);
+        });
+});
+</script>

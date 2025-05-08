@@ -1,0 +1,34 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\AbstractResourceEntityRepresentation $resource
+ * @var \Omeka\Api\Representation\MediaRepresentation $media
+ * @var string $resourceName
+ * @var string $resourceType
+ * @var string $thumbnailType
+ * @var array $options
+ */
+
+// Adapted from view/common/block-layout/file
+
+$item = $media->item();
+$alignmentClass = isset($options['align']) && in_array($options['align'], ['left', 'right', 'center'])
+    ? $options['align']
+    : '';
+$showTitleOption = isset($options['show_title']) && in_array($options['show_title'], ['item_title', 'file_name', 'no_title'])
+    ? $options['show_title']
+    : '';
+?>
+
+<div class="shortcode <?= $alignmentClass . ' ' . $thumbnailType ?> file">
+    <div class="attachments">
+        <div class="item resource">
+            <?= $media->render($options) ?>
+            <?php if ($showTitleOption == 'item_title'): ?>
+            <h3><?= $item()->link($item->displayTitle()); ?></h3>
+            <?php elseif ($showTitleOption == 'file_name'): ?>
+            <h3><?php echo $media->displayTitle(); ?></h3>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

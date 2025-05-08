@@ -1,0 +1,23 @@
+<?php
+$translate = $this->plugin('translate');
+?>
+<h1><?php echo $translate('Omeka S encountered an error'); ?></h1>
+
+<?php if (ini_get('display_errors')): ?>
+<p>
+<strong><?php echo $this->escapeHtml(get_class($this->exception)); ?></strong><br>
+<?php echo $this->escapeHtml($this->exception->getMessage()); ?>
+</p>
+<p><?php echo $translate('Details:'); ?></p>
+<pre>
+<?php echo $this->escapeHtml($this->exception); ?>
+</pre>
+<?php else: ?>
+<p>
+<?php
+echo sprintf($translate('To learn how to see more detailed information about this error, see the Omeka S User Manual page on %s.'),
+    '<a href="https://omeka.org/s/docs/user-manual/errorLogging/">' . $this->translate('retrieving error messages') . '</a>'
+);
+?>
+</p>
+<?php endif; ?>

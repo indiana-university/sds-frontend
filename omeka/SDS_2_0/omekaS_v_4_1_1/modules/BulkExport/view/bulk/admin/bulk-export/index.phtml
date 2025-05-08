@@ -1,0 +1,34 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \BulkExport\Api\Representation\ExporterRepresentation[] $exporters
+ * @var \BulkExport\Api\Representation\ExportRepresentation[] $exports
+ */
+
+$plugins = $this->getHelperPluginManager();
+$url = $plugins->get('url');
+$escape = $plugins->get('escapeHtml');
+$translate = $plugins->get('translate');
+$hyperlink = $plugins->get('hyperlink');
+
+$this->htmlElement('body')->appendAttribute('class', 'bulk-exporters bulk-exports browse');
+$this->headLink()->appendStylesheet($this->assetUrl('css/bulk-export-admin.css', 'BulkExport'));
+?>
+
+<?= $this->pageTitle($translate('Bulk export'), 1, $translate('Bulk export')) ?>
+
+<div id="page-actions">
+    <?php if ($this->userIsAllowed(\BulkExport\Api\Adapter\ExporterAdapter::class, 'create')): ?>
+    <?= $hyperlink($translate('Add an exporter'), $url('admin/bulk-export/default', ['controller' => 'exporter', 'action' => 'add'], true), ['class' => 'button']) ?>
+    <?php endif; ?>
+    <?php if (!empty($exports)): ?>
+    <?= $hyperlink($translate('See all exports'), $this->url('admin/bulk-export/default', ['controller' => 'export', 'action' => 'index'], true), ['class' => 'button']) ?>
+    <?php endif; ?>
+</div>
+
+<?= $this->partial('bulk/admin/exporter/exporter-table', ['exporters' => $exporters]) ?>
+
+<?php if (!empty($exports)): ?>
+    <h2><?= $escape($translate('Last exports')) // @translate?></h2>
+    <?= $this->partial('bulk/admin/export/export-table', ['exports' => $exports]) ?>
+<?php endif; ?>

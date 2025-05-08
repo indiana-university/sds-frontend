@@ -1,0 +1,25 @@
+@media screen {
+    header nav .bulk-exports::before,
+    header nav .bulk-exporters::before,
+    .bulk-exports .subhead::before,
+    .bulk-exporters .subhead::before,
+    .bulk-exports .no-resources:before,
+    .bulk-exporters .no-resources:before {
+        content:"";
+    }
+
+    .bulk-as-task,
+    .bulk-label-sub {
+        font-style: italic;
+        opacity: .5;
+        font-size: small;
+    }
+    /* Fix default css of tables in Omeka: space and no-break space. */
+    .bulk-label-sub:before {
+        content: '  ';
+    }
+
+    .bulk-exports.browse table td.process .tablesaw-cell-content {
+        display: block;
+    }
+}

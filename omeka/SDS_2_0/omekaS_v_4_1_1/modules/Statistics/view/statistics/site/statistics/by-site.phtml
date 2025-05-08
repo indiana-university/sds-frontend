@@ -1,0 +1,112 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var array $results
+ * @var string $type "site"
+ * @var string[] $resourceTypes
+ * @var int[] $years
+ * @var int $yearFilter
+ * @var int $monthFilter
+ * @var bool $hasAccess
+ * @var bool $hasAdvancedSearch
+ */
+
+$plugins = $this->getHelperPluginManager();
+$assetUrl = $plugins->get('assetUrl');
+$translate = $plugins->get('translate');
+$hyperlink = $plugins->get('hyperlink');
+$urlHelper = $plugins->get('url');
+
+$this->headLink()->prependStylesheet($assetUrl('css/statistics.css', 'Statistics'));
+
+$this->htmlElement('body')->appendAttribute('class', 'statistics browse');
+
+$isAdminRequest = $this->status()->isAdminRequest();
+$query = $this->params()->fromQuery();
+
+$currentUrl = $urlHelper(null, [], true);
+?>
+
+<?= $this->pageTitle($translate('By site'), 1, $isAdminRequest ? $translate('Statistics') : null) ?>
+
+<?= $this->partial('common/statistics-nav') ?>
+
+<form method="get">
+    <?php foreach (['resources' => $translate('Resources'), 'item_sets' => $translate('Item sets'), 'items' => $translate('Items'), 'media' => $translate('Medias')] as $resourceType => $label): ?>
+    <label><input type="checkbox" name="resource_type[]" id="resource_type_resources" value="<?= $resourceType ?>"<?= in_array($resourceType, $resourceTypes) ? ' checked="checked"' : '' ?>><?= $label ?></label>
+    <?php endforeach; ?>
+
+    <select name="year">
+        <option value=""><?= $translate('All years') ?></option>
+        <?php foreach ($years as $year): ?>
+            <option value="<?= $year ?>"<?= $yearFilter == $year ? ' selected="selected"' : '' ?>><?= $year ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <?php $months = [
+        $translate('January'),
+        $translate('February'),
+        $translate('March'),
+        $translate('April'),
+        $translate('May'),
+        $translate('June'),
+        $translate('July'),
+        $translate('August'),
+        $translate('September'),
+        $translate('October'),
+        $translate('November'),
+        $translate('December'),
+    ]; ?>
+    <select name="month">
+        <option value=""><?= $translate('All months') ?></option>
+        <?php foreach ($months as $i => $month): ?>
+            <option value="<?= $i + 1 ?>"<?= $monthFilter == $i + 1 ? ' selected="selected"' : '' ?>><?= $month ?></option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit"><?= $translate('Filter') ?></button>
+</form>
+
+<?php if (count($results)): ?>
+
+<div class="browse-controls">
+    <?php //= $this->pagination(); ?>
+    <div>
+        <?= $hyperlink($translate('ODS'), $this->url('admin/statistics/default/output', ['output' => 'ods'], ['query' => $query], true)) ?>
+        <?= $hyperlink($translate('TSV'), $this->url('admin/statistics/default/output', ['output' => 'tsv'], ['query' => $query], true)) ?>
+        <?= $hyperlink($translate('CSV'), $this->url('admin/statistics/default/output', ['output' => 'csv'], ['query' => $query], true)) ?>
+    </div>
+</div>
+
+<table class="tablesaw statistics-table" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th>
+                <a href="<?= $currentUrl . '?sort_by=site' ?>"><?= $translate('Site') ?></a>
+            </th>
+            <th>
+                <a href="<?= $currentUrl . '?sort_by=resources' ?>"><?= $translate('Resources') ?></a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach ($results as $position => $result): ?>
+        <tr class="statistics-stat">
+            <td class="statistics-field"><?= $result['label'] ?></td>
+            <td class="statistics-hits"><?= implode(' / ', $result['count']) ?></td>
+        </tr>
+<?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php else: ?>
+
+    <br class="clear" />
+    <?php $totalResources = $plugins->get('apiResourcesTotalResults')(); ?>
+    <?php if (!$totalResources): ?>
+        <h2><?= $translate('There is no resource yet.') ?></h2>
+    <?php else: ?>
+        <p><?= sprintf($translate('The query searched %s resources and returned no results.'), $totalResources) ?></p>
+        <p><a href="<?= $urlHelper('admin/statistics/default', ['action' => 'by-site'], true) ?>"><?= $translate('See all statistics.') ?></a></p>
+    <?php endif; ?>
+
+<?php endif; ?>

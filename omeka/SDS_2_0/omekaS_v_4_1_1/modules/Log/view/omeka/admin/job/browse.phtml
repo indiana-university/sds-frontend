@@ -1,0 +1,80 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\JobRepresentation[] $jobs
+ */
+
+// Copy of Omeka application/view/omeka/admin/job/browse.phtml, with added links.
+
+$plugins = $this->getHelperPluginManager();
+$url = $this->plugin('url');
+$escape = $plugins->get('escapeHtml');
+$translate = $plugins->get('translate');
+$hyperlink = $plugins->get('hyperlink');
+
+$this->htmlElement('body')->appendAttribute('class', 'jobs browse');
+?>
+
+<?= $this->pageTitle($translate('Jobs')) ?>
+
+<div class="browse-controls">
+    <?= $this->pagination() ?>
+    <?= $this->browse()->renderSortSelector('jobs') ?>
+</div>
+<?php $this->trigger('view.browse.before'); ?>
+
+<?php if (count($jobs)): ?>
+<table class="tablesaw" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th><?= $translate('Id / Params') ?></th>
+            <th><?= $translate('Date') ?></th>
+            <th><?= $translate('Class') ?></th>
+            <th><?= $translate('Status / Log') ?></th>
+            <th><?= $translate('Owner') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($jobs as $job): ?>
+        <?php
+        if ($owner = $job->owner()) {
+            $ownerText = $hyperlink($owner->email(), $url(
+                'admin/id',
+                ['controller' => 'user', 'action' => 'show', 'id' => $owner->id()]
+            ));
+        } else {
+            $ownerText = $translate('[no owner]');
+        }
+        ?>
+        <tr>
+            <td><?= $job->link($escape($job->id())) ?></td>
+            <td><?= $escape($this->i18n()->dateFormat($job->started(), null, \Omeka\View\Helper\i18n::DATE_FORMAT_SHORT)) ?></td>
+            <td><?= $escape($job->jobClass()) ?></td>
+            <td>
+            <?php $totalLogs = $this->api()->search('logs', ['job_id' => $job->id(), 'limit' => 0])->getTotalResults(); ?>
+            <?php if ($totalLogs): ?>
+            <?= $hyperlink($translate($job->statusLabel()), $url('admin/log/default', [], ['query' => ['job_id' => $job->id()]])) ?>
+            <?php else: ?>
+            <?= $escape($translate($job->statusLabel())) ?>
+            <?php endif; ?>
+            <?php if (method_exists($job, 'step') && $step = $job->step()): ?>
+            - <?= $step; ?> / <?= $job->totalSteps() ?>
+            <?php endif; ?>
+            </td>
+            <td><?= $ownerText ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php $this->trigger('view.browse.after'); ?>
+<div class="browse-controls">
+    <?= $this->pagination() ?>
+</div>
+
+<?php else: ?>
+
+<div class="no-resources">
+    <p><?= $translate('Omeka could not find any jobs.') ?></p>
+</div>
+
+<?php endif; ?>

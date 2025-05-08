@@ -1,0 +1,57 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+ ?>
+<div class="resource-details" data-resource-values="<?php echo $escape($values); ?>">
+    <?php if ($linkTitle): ?>
+    <h3 class="o-title"><?php echo $resource->link($resource->displayTitle()); ?></h3>
+    <?php else: ?>
+    <h3 class="o-title"><?php echo $escape($resource->displayTitle()); ?></h3>
+    <?php endif; ?>
+    <div class="o-description"><?php echo $escape($resource->displayDescription()); ?></div>
+    <div class="meta-group">
+        <h4><?php echo $translate('ID'); ?></h4>
+        <div class="value"><?php echo $escape($resource->id()); ?></div>
+    </div>
+    <div class="meta-group">
+        <h4><?php echo $escape($translate('Visibility')); ?></h4>
+        <div class="value"><?php echo ($resource->isPublic()) ? $translate('Public') : $translate('Private'); ?></div>
+    </div>
+    <?php $itemsets = $resource->itemSets(); ?>
+    <?php if (count($itemsets) > 0): ?>
+    <div class="meta-group">
+        <h4><?php echo $translate('Item sets'); ?></h4>
+        <?php foreach ($itemsets as $itemset): ?>
+        <div class="value item-sets"><?php echo $itemset->link($itemset->displayTitle()); ?></div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+    <?php $sites = $resource->sites(); ?>
+    <?php if ($sites): ?>
+    <div class="meta-group item-sites">
+        <h4><?php echo $translate('Sites'); ?></h4>
+        <?php foreach ($sites as $site): ?>
+        <div class="value">
+            <?php
+            $siteTitle = $site->title();
+            $externalLinkText = sprintf($translate('View this item in "%s"'), $siteTitle);
+            echo $site->link($siteTitle);
+            echo $this->hyperlink('', $this->url('site/resource-id', ['site-slug' => $site->slug(), 'controller' => 'item', 'id' => $resource->id()]),
+                ['class' => 'o-icon-external', 'target' => '_blank', 'aria-label' => $externalLinkText, 'title' => $externalLinkText]);
+            ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+    <?php if ($resource->media()): ?>
+    <div class="meta-group">
+        <h4><?php echo $translate('Media'); ?></h4>
+        <?php foreach ($resource->media() as $media): ?>
+        <div class="value">
+            <?php echo $media->linkPretty(); ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+    <?php $this->trigger('view.details', array('entity' => $resource)); ?>
+</div>

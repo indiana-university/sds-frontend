@@ -1,0 +1,18 @@
+{
+    "require": {
+        "openspout/openspout": "^3.7",
+        "phpoffice/phpword": "^1.1"
+    },
+    "replace": {
+        "doctrine/inflector": "*",
+        "laminas/laminas-escaper": "*"
+    },
+    "require-dev": {
+        "biblibre/omeka-s-test-helper": "dev-master"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BulkExportTest\\": "test/BulkExportTest/"
+        }
+    }
+}

@@ -1,0 +1,1626 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'item resource show');
+$embedMedia = $this->siteSetting('item_media_embed', false);
+$itemMedia = $item->media();
+
+$filterLocale = (bool) $this->siteSetting('filter_locale_values');
+$lang = $this->lang();
+$downloadTerm = 'sdsvwhl:downloadURL';	
+$archivesizeTerm = 'sdsvwhl:filesizeMB';	
+$download = $downloadTerm ? $item->value($downloadTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$archivesize = $archivesizeTerm ? $item->value($archivesizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$typeTerm = 'dcterms:type';
+$uidTerm = 'sdsvwhl:uid';
+$objectNameTerm = 'sdsvwhl:objectName';
+$projectNameTerm = 'sdsvwhl:projectName';
+$titleTerm = 'sdsvwhl:title';
+$descriptionTerm = 'dcterms:description';
+$stakeholdersTerm = 'sdsvwhl:stakeholders';
+$stakeholderEmailTerm = 'sdsvwhl:stakeholderEmail';
+$locationTerm = 'sdsvwhl:location';
+$mainRecordTerm = 'sdsvwhl:mainRecord';
+$subObject1Term = 'sdsvwhl:mpo1';
+$subObject2Term = 'sdsvwhl:mpo2';
+$subObject3Term = 'sdsvwhl:mpo3';
+$subObject4Term = 'sdsvwhl:mpo4';
+$subObject5Term = 'sdsvwhl:mpo5';
+$subObject6Term = 'sdsvwhl:mpo6';
+$subObject7Term = 'sdsvwhl:mpo7';
+$subObject8Term = 'sdsvwhl:mpo8';
+$acquisitionMethodTerm = 'sdsvwhl:acquisitionMethod';
+$primaryAcquisitionDeviceTerm = 'sdsvwhl:primaryAcquisitionDevice';
+$primaryAcquisitionSettingsTerm = 'sdsvwhl:primaryAcquisitionSettings';
+/*$secondaryAcquisitionDeviceTerm = 'sdsvwhl:secondaryAcquisitionDevice';
+$secondaryAcquisitionSettingsTerm = 'sdsvwhl:secondaryAcquisitionSettings';
+$tertiaryAcquisitionDeviceTerm = 'sdsvwhl:tertiaryAcquisitionDevice';
+$tertiaryAcquisitionSettingsTerm = 'sdsvwhl:tertiaryAcquisitionSettings';
+*/
+$archivalDataMeasurementsTerm = 'sdsvwhl:archivalDataMeasurements';
+$modelMeasurementsTerm = 'sdsvwhl:modelMeasurements';
+$inventoryNumberTerm = 'sdsvwhl:inventoryNumber';
+$inventoryNumberAttributeTerm = 'sdsvwhl:inventoryNumberAttribute';
+$provenienceTerm = 'sdsvwhl:provenience';
+$discoveryDateTerm = 'sdsvwhl:discoveryDate';
+$mannCollectionDateTerm = 'sdsvwhl:mannCollectionDate';
+$provenanceTerm = 'sdsvwhl:provenance';
+$conservationReportTerm = 'sdsvwhl:conservationReport';
+$policromyReportTerm = 'sdsvwhl:policromyReport';
+$notesTerm = 'sdsvwhl:notes';
+$acquisitionEnvironmentTerm = 'sdsvwhl:acquisitionEnvironment';
+$acquiredByTerm = 'sdsvwhl:acquiredBy';
+$acquisitionDateTerm = 'sdsvwhl:acquisitionDate';
+$averageCTDTerm = 'sdsvwhl:averageCameraTargetDistance';
+$averageGSDTerm = 'sdsvwhl:averageGSD';
+$numberofTiePointsTerm = 'sdsvwhl:numberOfTiePoints';
+$reprojectionErrorTerm = 'sdsvwhl:reprojectionError';
+$cameraModelTerm = 'sdsvwhl:cameraModel';
+$resolutionTerm = 'sdsvwhl:resolution';
+$focalLengthTerm = 'sdsvwhl:focalLength';
+$pixelSizeTerm = 'sdsvwhl:pixelSize';
+$primaryAcquisitionSourceTypeTerm = 'sdsvwhl:primaryAcquisitionSourceType';
+$numberofPrimaryAcquisitionImagesTerm = 'sdsvwhl:numberofPrimaryAcquisitionImages';
+/*$secondaryAcquisitionSourceTypeTerm = 'sdsvwhl:secondaryAcquisitionSourceType';
+$numberofSecondaryAcquisitionImagesTerm = 'sdsvwhl:numberofSecondaryAcquisitionImages';
+$tertiaryAcquisitionSourceTypeTerm = 'sdsvwhl:tertiaryAcquisitionSourceType';
+$numberofTertiaryAcquisitionImagesTerm = 'sdsvwhl:numberofTertiaryAcquisitionImages';
+*/
+$primaryAcquisitionImageFileTypeTerm = 'sdsvwhl:primaryAcquisitionImageFileType';
+$primaryAcquisitionSourceDataFileSizeTerm = 'sdsvwhl:primaryAcquisitionSourceDataFileSize';
+/*$secondaryAcquisitionImageFileTypeTerm = 'sdsvwhl:secondaryAcquisitionImageFileType';
+$secondaryAcquisitionSourceDataFileSizeTerm = 'sdsvwhl:secondaryAcquisitionSourceDataFileSize';
+$teritaryAcquisitionImageFileTypeTerm = 'sdsvwhl:teritaryAcquisitionImageFileType';
+$tertiaryAcquisitionSourceDataFileSizeTerm = 'sdsvwhl:tertiaryAcquisitionSourceDataFileSize';
+*/
+$processingMethodTerm = 'sdsvwhl:processingMethod';
+$processingSoftwareTerm = 'sdsvwhl:processingSoftware';
+$processingHardwareTerm = 'sdsvwhl:processingHardware';
+$processingProjectFileNameTerm = 'sdsvwhl:processingProjectFileName';
+$processingReportFilenameTerm = 'sdsvwhl:processingReportFilename';
+$numberofProcessingImagesOrSourceDataFilesTerm = 'sdsvwhl:numberofProcessingImagesOrSourceDataFiles';
+$processingSourceDataFileTypeTerm = 'sdsvwhl:processingSourceDataFileType';
+$processingSourceDataFileNameTerm = 'sdsvwhl:processingSourceDataFileName';
+$processingSourceDataFileSizeTerm = 'sdsvwhl:processingSourceDataFileSize';
+$processedByTerm = 'sdsvwhl:processedBy';
+$processingDateTerm = 'sdsvwhl:processingDate';
+$postProcessingSoftwareTerm = 'sdsvwhl:post-ProcessingSoftware';
+$postProcessingHardwareTerm = 'sdsvwhl:post-ProcessingHardware';
+$postProcessingSettingsTerm = 'sdsvwhl:post-ProcessingSettings';
+$numberofAnnotationsTerm = 'sdsvwhl:numberofAnnotations';
+$deliverableFolderNameTerm = 'sdsvwhl:deliverableFolderName';
+$deliverableFileSizeTerm = 'sdsvwhl:deliverableFileSize';
+$deliverableFileTypeTerm = 'sdsvwhl:deliverableFileType';
+$deliverablePolyCountTerm = 'sdsvwhl:deliverablePolyCount';
+$numberofTexturesTerm = 'sdsvwhl:numberofTextures';
+$exportDateTerm = 'sdsvwhl:exportDate';
+
+
+$type = $typeTerm ? $item->value($typeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$uid= $uidTerm ? $item->value($uidTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$objectName= $objectNameTerm ? $item->value($objectNameTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$projectName= $projectNameTerm ? $item->value($projectNameTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$title= $titleTerm ? $item->value($titleTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$description= $descriptionTerm ? $item->value($descriptionTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$stakeholders= $stakeholdersTerm ? $item->value($stakeholdersTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$stakeholderEmail= $stakeholderEmailTerm ? $item->value($stakeholderEmailTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$location= $locationTerm ? $item->value($locationTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$acquisitionMethod= $acquisitionMethodTerm ? $item->value($acquisitionMethodTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$mainRecord = $mainRecordTerm ? $item->value($mainRecordTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject1 = $subObject1Term ? $item->value($subObject1Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject2 = $subObject2Term ? $item->value($subObject2Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject3 = $subObject3Term ? $item->value($subObject3Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject4 = $subObject4Term ? $item->value($subObject4Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject5 = $subObject5Term ? $item->value($subObject5Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject6 = $subObject6Term ? $item->value($subObject6Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject7 = $subObject7Term ? $item->value($subObject7Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$subObject8 = $subObject8Term ? $item->value($subObject8Term, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+
+
+/*$primaryAcquisitionDevice= $primaryAcquisitionDeviceTerm ? $item->value($primaryAcquisitionDeviceTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$primaryAcquisitionSettings= $primaryAcquisitionSettingsTerm ? $item->value($primaryAcquisitionSettingsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$secondaryAcquisitionDevice= $secondaryAcquisitionDeviceTerm ? $item->value($secondaryAcquisitionDeviceTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$secondaryAcquisitionSettings= $secondaryAcquisitionSettingsTerm ? $item->value($secondaryAcquisitionSettingsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$tertiaryAcquisitionDevice= $tertiaryAcquisitionDeviceTerm ? $item->value($tertiaryAcquisitionDeviceTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$tertiaryAcquisitionSettings= $tertiaryAcquisitionSettingsTerm ? $item->value($tertiaryAcquisitionSettingsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+*/
+$archivalDataMeasurements= $archivalDataMeasurementsTerm ? $item->value($archivalDataMeasurementsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$modelMeasurements= $modelMeasurementsTerm ? $item->value($modelMeasurementsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$inventoryNumber= $inventoryNumberTerm ? $item->value($inventoryNumberTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$inventoryNumberAttribute= $inventoryNumberAttributeTerm ? $item->value($inventoryNumberAttributeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$provenience= $provenienceTerm ? $item->value($provenienceTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$discoveryDate= $discoveryDateTerm ? $item->value($discoveryDateTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$mannCollectionDate= $mannCollectionDateTerm ? $item->value($mannCollectionDateTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$provenance= $provenanceTerm ? $item->value($provenanceTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$conservationReport= $conservationReportTerm ? $item->value($conservationReportTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$policromyReport= $policromyReportTerm ? $item->value($policromyReportTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$notes= $notesTerm ? $item->value($notesTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+
+$acquisitionEnvironment= $acquisitionEnvironmentTerm ? $item->value($acquisitionEnvironmentTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$acquiredBy= $acquiredByTerm ? $item->value($acquiredByTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$acquisitionDate= $acquisitionDateTerm ? $item->value($acquisitionDateTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$averageCTD = $averageCTDTerm ? $item->value($averageCTDTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$averageGSD = $averageGSDTerm ? $item->value($averageGSDTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofTiePoints = $numberofTiePointsTerm ? $item->value($numberofTiePointsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$reprojectionError = $reprojectionErrorTerm ? $item->value($reprojectionErrorTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$cameraModel = $cameraModelTerm ? $item->value($cameraModelTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$resolution = $resolutionTerm ? $item->value($resolutionTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$focalLength = $focalLengthTerm ? $item->value($focalLengthTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$pixelSize = $pixelSizeTerm ? $item->value($pixelSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$primaryAcquisitionSourceType= $primaryAcquisitionSourceTypeTerm ? $item->value($primaryAcquisitionSourceTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofPrimaryAcquisitionImages= $numberofPrimaryAcquisitionImagesTerm ? $item->value($numberofPrimaryAcquisitionImagesTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+/*$secondaryAcquisitionSourceType= $secondaryAcquisitionSourceTypeTerm ? $item->value($secondaryAcquisitionSourceTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofSecondaryAcquisitionImages= $numberofSecondaryAcquisitionImagesTerm ? $item->value($numberofSecondaryAcquisitionImagesTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$tertiaryAcquisitionSourceType= $tertiaryAcquisitionSourceTypeTerm ? $item->value($tertiaryAcquisitionSourceTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofTertiaryAcquisitionImages= $numberofTertiaryAcquisitionImagesTerm ? $item->value($numberofTertiaryAcquisitionImagesTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+*/
+$primaryAcquisitionImageFileType= $primaryAcquisitionImageFileTypeTerm ? $item->value($primaryAcquisitionImageFileTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$primaryAcquisitionSourceDataFileSize= $primaryAcquisitionSourceDataFileSizeTerm ? $item->value($primaryAcquisitionSourceDataFileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+/*$secondaryAcquisitionImageFileType= $secondaryAcquisitionImageFileTypeTerm ? $item->value($secondaryAcquisitionImageFileTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$secondaryAcquisitionSourceDataFileSize= $secondaryAcquisitionSourceDataFileSizeTerm ? $item->value($secondaryAcquisitionSourceDataFileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$teritaryAcquisitionImageFileType= $teritaryAcquisitionImageFileTypeTerm ? $item->value($teritaryAcquisitionImageFileTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$tertiaryAcquisitionSourceDataFileSize= $tertiaryAcquisitionSourceDataFileSizeTerm ? $item->value($tertiaryAcquisitionSourceDataFileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+*/
+$processingMethod= $processingMethodTerm ? $item->value($processingMethodTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingSoftware= $processingSoftwareTerm ? $item->value($processingSoftwareTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingHardware= $processingHardwareTerm ? $item->value($processingHardwareTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingProjectFileName= $processingProjectFileNameTerm ? $item->value($processingProjectFileNameTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingReportFilename= $processingReportFilenameTerm ? $item->value($processingReportFilenameTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofProcessingImagesOrSourceDataFiles= $numberofProcessingImagesOrSourceDataFilesTerm ? $item->value($numberofProcessingImagesOrSourceDataFilesTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingSourceDataFileType= $processingSourceDataFileTypeTerm ? $item->value($processingSourceDataFileTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingSourceDataFileName= $processingSourceDataFileNameTerm ? $item->value($processingSourceDataFileNameTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingSourceDataFileSize= $processingSourceDataFileSizeTerm ? $item->value($processingSourceDataFileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processedBy= $processedByTerm ? $item->value($processedByTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$processingDate= $processingDateTerm ? $item->value($processingDateTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$postProcessingSoftware= $postProcessingSoftwareTerm ? $item->value($postProcessingSoftwareTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$postProcessingHardware= $postProcessingHardwareTerm ? $item->value($postProcessingHardwareTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$postProcessingSettings= $postProcessingSettingsTerm ? $item->value($postProcessingSettingsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofAnnotations= $numberofAnnotationsTerm ? $item->value($numberofAnnotationsTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$deliverableFolderName= $deliverableFolderNameTerm ? $item->value($deliverableFolderNameTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$deliverableFileSize= $deliverableFileSizeTerm ? $item->value($deliverableFileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$deliverableFileType= $deliverableFileTypeTerm ? $item->value($deliverableFileTypeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$deliverablePolyCount= $deliverablePolyCountTerm ? $item->value($deliverablePolyCountTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$numberofTextures= $numberofTexturesTerm ? $item->value($numberofTexturesTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$exportDate= $exportDateTerm ? $item->value($exportDateTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+
+?>
+
+<?php echo $this->pageTitle($item->displayTitle(null, ($filterLocale ? $lang : null)), 2); ?>
+<?php $this->trigger('view.show.before'); ?>
+<?php if ($embedMedia && $itemMedia): ?>
+    <div class="media-embeds" style="width:20%;">
+    <?php foreach ($itemMedia as $media):
+        echo $media->render();
+    endforeach;
+    ?>
+    </div>
+<?php endif; ?>
+
+<!-- URL Creation-->
+<div>
+<?php
+$user = $this->identity();
+    if ($user != null) {
+    $useremail = $user->getEmail();
+	     }   ?>
+	</div>
+
+<?php if ($user == null) { 
+		echo "<div style=\"margin-left:2%;\">";
+		echo "Please <a href=\"https://[Site Name].sitehost-test.iu.edu/oidc/login\">login</a> to submit a download request.";
+		}
+
+	elseif ($useremail == "siscan@iu.edu"){
+		echo "Your account is not approved for downloads.";
+	}
+    elseif ($user != null) {  ?>
+
+<div class="property">
+    <?php 		
+    echo "<a href=https://[Site Name]-sds-prod.uits.iu.edu:8080/[Site Name]/pull?p=".$download."&uid=".$useremail." target=blank>Click here to download dataset (".$archivesize."MB)</a>";
+} 
+	
+?>
+</div>
+
+<br/>
+
+<!-- Customized Metadata in Accordion Format-->
+
+<?php if ($type == 'main'): ?>
+
+<!--Physical Item Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Physical Item Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel"> 
+<!---Main Object Physical Metadata     -->
+<?php	if ($uid): ?>
+        <div class="property">
+        <h3><?php echo 'UID'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($uid); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($objectName): ?>
+        <div class="property">
+        <h3><?php echo 'Object Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($objectName); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($projectName): ?>
+        <div class="property">
+        <h3><?php echo 'Project Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($projectName); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($description): ?>
+        <div class="property">
+        <h3><?php echo 'Description'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($description); ?></span>
+        		</div>
+        	</div>
+    	</div>  	
+        <?php endif; ?>
+<?php	if ($stakeholders): ?>
+        <div class="property">
+        <h3><?php echo 'Stakeholders'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($stakeholders); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($stakeholderEmail): ?>
+        <div class="property">
+        <h3><?php echo 'Stakeholder Email'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($stakeholderEmail); ?></span>
+        		</div>
+        	</div>
+    	</div>	
+        <?php endif; ?>
+<?php	if ($location): ?>
+        <div class="property">
+        <h3><?php echo 'Location'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($location); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($mainRecord): ?>
+        <div class="property">
+        <h3><?php echo 'Main Record'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($mainRecord); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+    </div>
+
+<!---Component Links     -->
+<button class="accordion1">
+    <h3><?php echo 'Components'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel"> 
+<?php	if ($subObject1): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 1'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject1."\">Component 1</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+       	<?php endif; ?>
+<?php	if ($subObject2): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 2'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject2."\">Component 2</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($subObject3): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 3'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject3."\">Component 3</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($subObject4): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 4'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject4."\">Component 4</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($subObject5): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 5'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject5."\">Component 5</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($subObject6): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 6'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject6."\">Component 6</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($subObject7): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 7'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject7."\">Component 7</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($subObject8): ?>
+        <div class="property">
+        <h3><?php echo 'SubObject 8'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo "<a href=\"".$subObject8."\">Component 8</a>"; ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+    </div>
+<?php endif; ?>
+
+
+<!---Subobject Metadata     -->
+
+<?php if ($type == 'subobject'): ?>
+<!--Physical Item Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Physical Item Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel"> 
+<?php	if ($description): ?>
+        <div class="property">
+        <h3><?php echo 'Description'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($description); ?></span>
+        		</div>
+        	</div>
+    	</div>  	
+        <?php endif; ?>
+<?php	if ($archivalDataMeasurements): ?>
+        <div class="property">
+        <h3><?php echo 'Archival Data Measurements'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($archivalDataMeasurements); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($modelMeasurements): ?>
+        <div class="property">
+        <h3><?php echo 'Model Measurements'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($modelMeasurements); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($inventoryNumber): ?>
+        <div class="property">
+        <h3><?php echo 'Inventory Number'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($inventoryNumber); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($inventoryNumberAttribute): ?>
+        <div class="property">
+        <h3><?php echo 'Inventory Number'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($inventoryNumberAttribute); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($provenience): ?>
+        <div class="property">
+        <h3><?php echo 'Provenience'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($provenience); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($discoveryDate): ?>
+        <div class="property">
+        <h3><?php echo 'Discovery Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($discoveryDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($mannCollectionDate): ?>
+        <div class="property">
+        <h3><?php echo 'Mann Collection Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($mannCollectionDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($provenance): ?>
+        <div class="property">
+        <h3><?php echo 'Provenance'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($provenance); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($conservationReport): ?>
+        <div class="property">
+        <h3><?php echo 'Conservation Report'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($conservationReport); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($policromyReport): ?>
+        <div class="property">
+        <h3><?php echo 'Policromy Report'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($policromyReport); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>    	
+<?php	if ($notes): ?>
+        <div class="property">
+        <h3><?php echo 'Notes'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($notes); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>  
+</div>
+<!--Acquisition Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Acquisition Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel">        	
+<?php	if ($acquisitionMethod): ?>
+        <div class="property">
+        <h3><?php echo 'Acquisition Method'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquisitionMethod); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+
+<?php	if ($acquisitionEnvironment): ?>
+        <div class="property">
+        <h3><?php echo 'Acquisition Environment'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquisitionEnvironment); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($acquiredBy): ?>
+        <div class="property">
+        <h3><?php echo 'Acquired By'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquiredBy); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($acquisitionDate): ?>
+        <div class="property"">
+        <h3><?php echo 'Acquisition Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquisitionDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+            <?php endif; ?>
+    	
+        
+<?php	if ($cameraModel): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Device'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($cameraModel); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+<?php	if ($resolution): ?>
+        <div class="property">
+        <h3><?php echo 'Resolution'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($resolution); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($focalLength): ?>
+        <div class="property">
+        <h3><?php echo 'Focal Length'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($focalLength); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($pixelSize): ?>
+        <div class="property">
+        <h3><?php echo 'Pixel Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($pixelSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+
+<?php	if ($primaryAcquisitionSourceType): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Source Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($primaryAcquisitionSourceType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($numberofPrimaryAcquisitionImages): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Primary Acquisition Images or Files'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofPrimaryAcquisitionImages); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+<?php	if ($primaryAcquisitionImageFileType): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Image File Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($primaryAcquisitionImageFileType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($primaryAcquisitionSourceDataFileSize): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Source Data File Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($primaryAcquisitionSourceDataFileSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+    </div>
+<!--Processing Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Processing Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel">        	
+<?php	if ($processingMethod): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Method'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingMethod); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSoftware): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Software'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSoftware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingHardware): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Hardware'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingHardware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingProjectFileName): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Project File Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingProjectFileName); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingReportFilename): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Report Filename'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingReportFilename); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($numberofProcessingImagesOrSourceDataFiles): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Processing Images or Source Data Files'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofProcessingImagesOrSourceDataFiles); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSourceDataFileType): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Source Data File Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSourceDataFileType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSourceDataFileName): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Source Data File Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSourceDataFileName); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSourceDataFileSize): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Source Data File Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSourceDataFileSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processedBy): ?>
+        <div class="property">
+        <h3><?php echo 'Processed By'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processedBy); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingDate): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($postProcessingSoftware): ?>
+        <div class="property">
+        <h3><?php echo 'Post-Processing Software'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($postProcessingSoftware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($postProcessingHardware): ?>
+        <div class="property">
+        <h3><?php echo 'Post-Processing Hardware'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($postProcessingHardware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($postProcessingSettings): ?>
+        <div class="property">
+        <h3><?php echo 'Post-Processing Settings'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($postProcessingSettings); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($numberofAnnotations): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Annotations'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofAnnotations); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	 <?php endif; ?>
+
+ </div>   	
+
+ <!--Deliverable Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Deliverable Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel">       	
+<?php	if ($deliverableFolderName): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable Folder Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverableFolderName); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($deliverableFileSize): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable File Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverableFileSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($deliverableFileType): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable File Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverableFileType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($deliverablePolyCount): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable Poly Count'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverablePolyCount); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($numberofTextures): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Textures'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofTextures); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($exportDate): ?>
+        <div class="property">
+        <h3><?php echo 'Export Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($exportDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php endif; ?>
+
+
+<!---Object Metadata     -->
+
+<?php if ($type == 'object'): ?>
+<!--Physical Item Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Physical Item Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel"> 
+<?php	if ($uid): ?>
+        <div class="property">
+        <h3><?php echo 'UID'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($uid); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($objectName): ?>
+        <div class="property">
+        <h3><?php echo 'Object Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($objectName); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($projectName): ?>
+        <div class="property">
+        <h3><?php echo 'Project Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($projectName); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($description): ?>
+        <div class="property">
+        <h3><?php echo 'Description'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($description); ?></span>
+        		</div>
+        	</div>
+    	</div>  	
+        <?php endif; ?>
+<?php	if ($stakeholders): ?>
+        <div class="property">
+        <h3><?php echo 'Stakeholders'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($stakeholders); ?></span>
+        		</div>
+        	</div>
+    	</div>    	
+        <?php endif; ?>
+<?php	if ($stakeholderEmail): ?>
+        <div class="property">
+        <h3><?php echo 'Stakeholder Email'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($stakeholderEmail); ?></span>
+        		</div>
+        	</div>
+    	</div>	
+        <?php endif; ?>
+<?php	if ($location): ?>
+        <div class="property">
+        <h3><?php echo 'Location'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($location); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($archivalDataMeasurements): ?>
+        <div class="property">
+        <h3><?php echo 'Archival Data Measurements'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($archivalDataMeasurements); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($modelMeasurements): ?>
+        <div class="property">
+        <h3><?php echo 'Model Measurements'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($modelMeasurements); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($inventoryNumber): ?>
+        <div class="property">
+        <h3><?php echo 'Inventory Number'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($inventoryNumber); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($inventoryNumberAttribute): ?>
+        <div class="property">
+        <h3><?php echo 'Inventory Number'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($inventoryNumberAttribute); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($provenience): ?>
+        <div class="property">
+        <h3><?php echo 'Provenience'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($provenience); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($discoveryDate): ?>
+        <div class="property">
+        <h3><?php echo 'Discovery Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($discoveryDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($mannCollectionDate): ?>
+        <div class="property">
+        <h3><?php echo 'Mann Collection Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($mannCollectionDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($provenance): ?>
+        <div class="property">
+        <h3><?php echo 'Provenance'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($provenance); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($conservationReport): ?>
+        <div class="property">
+        <h3><?php echo 'Conservation Report'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($conservationReport); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+<?php	if ($policromyReport): ?>
+        <div class="property">
+        <h3><?php echo 'Policromy Report'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($policromyReport); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>    	
+<?php	if ($notes): ?>
+        <div class="property">
+        <h3><?php echo 'Notes'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($notes); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>  
+</div>
+<!--Acquisition Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Acquisition Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel">        	
+<?php	if ($acquisitionMethod): ?>
+        <div class="property">
+        <h3><?php echo 'Acquisition Method'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquisitionMethod); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	<?php endif; ?>
+
+<?php	if ($acquisitionEnvironment): ?>
+        <div class="property">
+        <h3><?php echo 'Acquisition Environment'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquisitionEnvironment); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($acquiredBy): ?>
+        <div class="property">
+        <h3><?php echo 'Acquired By'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquiredBy); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($acquisitionDate): ?>
+        <div class="property"">
+        <h3><?php echo 'Acquisition Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($acquisitionDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+            <?php endif; ?>
+    	
+        
+<?php	if ($cameraModel): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Device'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($cameraModel); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+<?php	if ($resolution): ?>
+        <div class="property">
+        <h3><?php echo 'Resolution'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($resolution); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($focalLength): ?>
+        <div class="property">
+        <h3><?php echo 'Focal Length'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($focalLength); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($pixelSize): ?>
+        <div class="property">
+        <h3><?php echo 'Pixel Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($pixelSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+
+<?php	if ($primaryAcquisitionSourceType): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Source Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($primaryAcquisitionSourceType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($numberofPrimaryAcquisitionImages): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Primary Acquisition Images or Files'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofPrimaryAcquisitionImages); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+<?php	if ($primaryAcquisitionImageFileType): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Image File Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($primaryAcquisitionImageFileType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+<?php	if ($primaryAcquisitionSourceDataFileSize): ?>
+        <div class="property">
+        <h3><?php echo 'Primary Acquisition Source Data File Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($primaryAcquisitionSourceDataFileSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+        <?php endif; ?>
+
+    </div>
+<!--Processing Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Processing Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel">        	
+<?php	if ($processingMethod): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Method'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingMethod); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSoftware): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Software'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSoftware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingHardware): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Hardware'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingHardware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingProjectFileName): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Project File Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingProjectFileName); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingReportFilename): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Report Filename'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingReportFilename); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($numberofProcessingImagesOrSourceDataFiles): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Processing Images or Source Data Files'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofProcessingImagesOrSourceDataFiles); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSourceDataFileType): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Source Data File Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSourceDataFileType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSourceDataFileName): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Source Data File Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSourceDataFileName); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingSourceDataFileSize): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Source Data File Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingSourceDataFileSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processedBy): ?>
+        <div class="property">
+        <h3><?php echo 'Processed By'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processedBy); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($processingDate): ?>
+        <div class="property">
+        <h3><?php echo 'Processing Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($processingDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($postProcessingSoftware): ?>
+        <div class="property">
+        <h3><?php echo 'Post-Processing Software'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($postProcessingSoftware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($postProcessingHardware): ?>
+        <div class="property">
+        <h3><?php echo 'Post-Processing Hardware'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($postProcessingHardware); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($postProcessingSettings): ?>
+        <div class="property">
+        <h3><?php echo 'Post-Processing Settings'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($postProcessingSettings); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($numberofAnnotations): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Annotations'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofAnnotations); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	 <?php endif; ?>
+
+ </div>   	
+
+ <!--Deliverable Metadata -->
+<button class="accordion1">
+    <h3><?php echo 'Deliverable Metadata'; ?></h3>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16" width="16" class="accordion-icon" >
+            <g fill="currentColor">
+           		 <path d="M8,15a1,1,0,0,1-1-1V2A1,1,0,0,1,9,2V14A1,1,0,0,1,8,15Z"></path>
+                 <path d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z"></path>
+        	</g>
+     </svg>
+</button>
+<div class="panel">       	
+<?php	if ($deliverableFolderName): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable Folder Name'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverableFolderName); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($deliverableFileSize): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable File Size'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverableFileSize); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($deliverableFileType): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable File Type'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverableFileType); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($deliverablePolyCount): ?>
+        <div class="property">
+        <h3><?php echo 'Deliverable Poly Count'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($deliverablePolyCount); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($numberofTextures): ?>
+        <div class="property">
+        <h3><?php echo 'Number of Textures'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($numberofTextures); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php	if ($exportDate): ?>
+        <div class="property">
+        <h3><?php echo 'Export Date'; ?></h3>
+        <div class="values">
+        <div class="value">
+        <span class="value-content"><?php echo $escape($exportDate); ?></span>
+        		</div>
+        	</div>
+    	</div>
+    	
+        <?php endif; ?>
+<?php endif; ?>
+</div>
+
+
+
+
+<!-- Relation Metadata-->
+<div class="property" style="margin-left:1.5%; margin-top: 3%;">
+    <?php $itemSets = $item->itemSets(); ?>
+    <?php if (count($itemSets) > 0): ?>
+    <h3 style="min-width:100%;"><?php echo $translate('Collections'); ?></h3><br/>
+    <?php foreach ($itemSets as $itemSet): ?>
+    <div class="value" style= "margin-left: 1.5%;">
+    <?php 
+    	$headingTerm = $this->siteSetting('browse_heading_property_term');
+        $heading = $headingTerm ? $itemSet->value($headingTerm, ['default' => $translate('[Untitled]'), 'lang' => ($filterLocale ? [$lang, ''] : null)]) : $itemSet->displayTitle(null, ($filterLocale ? [$lang, ''] : null));
+   	    echo $itemSet->link($heading); 
+    ?></div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+<?php if (($this->siteSetting('show_attached_pages', true)) && ($sitePages = $item->sitePages($site->id()))): ?>
+<div class="property">
+    <h3><?php echo $translate('Site pages'); ?></h3>
+    <div class="values">
+        <?php foreach ($sitePages as $sitePage): ?>
+        <div class="value"><?php echo $sitePage->link($sitePage->title()); ?></div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+
+
+
+<?php $this->trigger('view.show.after'); ?>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+
+var acc = document.getElementsByClassName("accordion1");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+
+var acc = document.getElementsByClassName("accordion2");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>

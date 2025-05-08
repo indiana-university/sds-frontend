@@ -1,0 +1,37 @@
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Statistics\Api\Representation\StatRepresentation $stat
+ * @var string $userStatus
+ * @var string $type
+ *
+ * @todo Add the basePath to the hit url.
+ */
+
+// When type is resource, the position has no meaning currently.
+
+$plugins = $this->getHelperPluginManager();
+$escape = $plugins->get('escapeHtml');
+$translate = $plugins->get('translate');
+$escapeAttr = $plugins->get('escapeHtmlAttr');
+?>
+
+<div class="statistics-stat">
+    <p>
+        <?php
+        if (empty($stat)):
+            echo $type === 'download'
+                ? $translate('No download') // @translate
+                : $translate('No view'); // @translate
+        else:
+            echo sprintf($type === 'download'
+                ? $translate('%s downloads: %s [%s]') // @translate
+                : $translate('%s views: %s [%s]'), // @translate
+                '<span class="statistics-hits">' . $stat->totalHits($userStatus) . '</span>',
+                '<a href="' . $escapeAttr($stat->hitUrl()) . '"><span class="statistics-url">' . $escape($stat->hitUrl()) . '</span></a>',
+                '<span class="statistics-resource-type">' . $escape($stat->humanResourceType($translate('No specific resource'))) . '</span>'
+            );
+        endif;
+        ?>
+    </p>
+</div>

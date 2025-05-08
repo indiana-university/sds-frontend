@@ -1,0 +1,20 @@
+<?php
+
+$assetUrl = $this->plugin('assetUrl');
+$this->headLink()->appendStylesheet($assetUrl('css/style.css', 'PageBlocks'));
+
+?>
+
+<section class="col-container col-media-container">
+    <div class="col-single">
+        <?php foreach ($attachments as $attachment) {
+            echo $attachment->media()->render([
+                'hideTranscript' => true,
+                'compactMode' => true,
+            ]);
+        } ?>
+    </div>
+    <div class="col-single">
+        <?= $html ?>
+    </div>
+</section>

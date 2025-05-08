@@ -1,0 +1,8 @@
+<h1><?php echo $this->hyperlink($this->setting('installation_title', 'Omeka S'), $this->url('top', ['action' => 'index'])); ?></h1>
+
+<?php echo $this->partial(
+    'common/cross-site-search/fulltext-form.phtml',
+    ['action' => $this->url(null, ['action' => 'results'], true)]
+); ?>
+
+<?php echo $this->partial('common/cross-site-search/item-results.phtml'); ?>

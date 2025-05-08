@@ -1,0 +1,153 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'site-pages edit');
+$this->ckEditor();
+$this->headScript()->appendFile($this->assetUrl('vendor/sortablejs/Sortable.min.js', 'Omeka'));
+$this->headScript()->appendFile($this->assetUrl('js/site-page-edit.js', 'Omeka'));
+$this->blockLayout()->prepareForm();
+$form->prepare();
+?>
+<?php echo $this->pageTitle($page->title(), 1, $translate('Pages'), $translate('Edit')); ?>
+<?php $this->trigger('view.edit.before'); ?>
+<?php echo $this->form()->openTag($form); ?>
+<div id="page-actions">
+    <?php $this->trigger('view.edit.page_actions', ['resource' => $page]); ?>
+    <?php if ($page->isPublic()): ?>
+    <?php echo $this->hyperlink('', '#', [
+        'class' => 'o-icon-public button',
+        'title' => $translate('Make private'),
+    ]); ?>
+    <input type="hidden" name="o:is_public" value="1">
+    <?php else: ?>
+    <?php echo $this->hyperlink('', '#', [
+        'class' => 'o-icon-private button',
+        'title' => $translate('Make public'),
+    ]); ?>
+    <input type="hidden" name="o:is_public" value="0">
+    <?php endif; ?>
+    <a href="<?php echo $page->siteUrl(); ?>" class="button" target="_blank"><?php echo $translate('View'); ?></a>
+    <a href="#" class="delete button"><?php echo $translate('Delete'); ?></a>
+    <?php echo $this->cancelButton(); ?>
+    <button><?php echo $translate('Save'); ?></button>
+</div>
+
+<?php echo $this->formCollection($form, false); ?>
+
+<div id="block-controls-header">
+    <?php
+    $pageLayout = $page->layout();
+    $pageLayoutData = $page->layoutData();
+    $pageLayoutOptions = [
+        '' => $translate('Normal flow'),
+        'grid' => $translate('Grid'),
+    ];
+    $pageLayoutGridColumnsOptions = [1 => $translate('1 column')];
+    foreach (range(2, 12) as $value) {
+        $pageLayoutGridColumnsOptions[$value] = sprintf($translate('%s columns'), $value);
+    }
+    $pageLayoutGridColumns = $pageLayoutData['grid_columns'] ?? '12';
+
+    ?>
+    <div id="page-layout-controls">
+        <label id="page-layout-label">
+            <?php echo $translate('Layout'); ?>
+            <select name="o:layout" id="page-layout-select" data-page-layout="<?php echo $escape($pageLayout); ?>">
+                <?php foreach ($pageLayoutOptions as $key => $value): ?>
+                <option value="<?php echo $escape($key); ?>"<?php echo ($pageLayout == $key) ? ' selected' : ''; ?>><?php echo $escape($value); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label id="page-layout-grid-columns-label">
+            <?php echo $translate('Columns'); ?>
+            <select name="o:layout_data[grid_columns]" id="page-layout-grid-columns-select" data-page-layout-grid-columns="<?php echo $escape($pageLayoutGridColumns); ?>">
+                <?php foreach ($pageLayoutGridColumnsOptions as $key => $value): ?>
+                <option value="<?php echo $escape($key); ?>"<?php echo ($pageLayoutGridColumns == $key) ? ' selected' : '' ?>><?php echo $escape($key); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <ul class="actions center">
+            <li><a href="#" id="preview-page-layout" aria-label="<?php echo $escape($translate('Preview layout')); ?>" title="<?php echo $escape($translate('Preview layout')); ?>"></a></li>
+            <li><a href="#" id="configure-page-layout-data" class="o-icon-settings" aria-label="<?php echo $escape($translate('Configure layout')); ?>" title="<?php echo $escape($translate('Configure layout')); ?>"></a></li>
+        </ul>
+        <button type="button" id="page-layout-restore" style="display: none;"><?php echo $translate('Restore'); ?></button>
+    </div>
+
+    <div class="expand-collapse-all">
+        <button type="button" class="expand-all"><?php echo $translate('Expand all'); ?></button>
+        <button type="button" class="collapse-all"><?php echo $translate('Collapse all'); ?></button>
+    </div>
+</div>
+
+<?php echo $this->blockLayout()->forms($page); ?>
+
+<div id="page-layout-data-sidebar" class="sidebar">
+    <a href="#" class="sidebar-close o-icon-close"><span class="screen-reader-text"><?php echo $translate('Close'); ?></span></a>
+    <h3><?php echo $translate('Page layout configuration'); ?></h3>
+    <?php echo $this->formCollection($pageLayoutDataForm); ?>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>
+
+<div id="new-block" class="active sidebar" data-url="<?php echo $this->url('admin/site/slug/page/default', ['action' => 'block'], true); ?>">
+    <div class="sidebar-header">
+        <h3><?php echo $translate('Add new block'); ?></h3>
+        <button type="button" value="blockGroup" class="add-block-group"><?php echo $translate('Add block group'); ?></button>
+    </div>
+    <?php foreach ($this->blockLayout()->getLayouts() as $layout): ?>
+    <?php if ('blockGroup' !== $layout): ?>
+    <button type="button" value="<?php echo $escape($layout); ?>" class="option">
+        <?php echo $escape($translate($this->blockLayout()->getLayoutLabel($layout))); ?>
+    </button>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+
+<div id="layout-preview-sidebar" class="sidebar">
+    <a href="#" class="sidebar-close o-icon-close"><span class="screen-reader-text"><?php echo $translate('Close'); ?></span></a>
+    <h3><?php echo $translate('Layout preview'); ?></h3>
+    <div id="layout-preview"></div>
+</div>
+
+<div id="block-layout-data-sidebar" class="sidebar" data-api-endpoint-url="<?php echo $escape($this->url('api')); ?>">
+    <div class="confirm-main">
+        <a href="#" class="sidebar-close o-icon-close"><span class="screen-reader-text"><?php echo $translate('Close'); ?></span></a>
+        <h3><?php echo $translate('Block layout configuration'); ?></h3>
+        <?php echo $this->formCollectionElementGroupsCollapsible($blockLayoutDataForm); ?>
+    </div>
+    <div class="confirm-panel">
+        <button id="apply-block-layout-data"><?php echo $translate('Apply changes'); ?></button>
+    </div>
+</div>
+
+<div id="attachment-options" class="sidebar" data-url="<?php echo $this->url(null, ['action' => 'attachment-item-options'], true); ?>">
+    <div id="attachment-options-main" class="confirm-main">
+        <a href="#" class="sidebar-close o-icon-close"><span class="screen-reader-text"><?php echo $translate('Close'); ?></span></a>
+        <div id="attachment-item"></div>
+        <div id="attachment-caption" class="option">
+            <h3><?php echo $translate('Caption'); ?></h3>
+            <?php echo $this->hyperlink('', '#', [
+                'class' => 'collapse',
+                'title' => $translate('Collapse'),
+            ]); ?>
+            <div class="collapsible">
+                <textarea class="caption wysiwyg"></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="attachment-confirm-panel" class="confirm-panel">
+        <button><?php echo $translate('Apply changes'); ?></button>
+    </div>
+</div>
+
+<?php echo $this->deleteConfirm($page, 'page'); ?>
+
+<?php echo $this->partial('common/asset-options'); ?>
+
+<?php echo $this->partial('common/resource-select-sidebar'); ?>
+
+<?php echo $this->partial('common/page-select-sidebar'); ?>
+
+<?php echo $this->partial('common/sidebar-pagelist'); ?>
+
+<?php $this->trigger('view.edit.after'); ?>

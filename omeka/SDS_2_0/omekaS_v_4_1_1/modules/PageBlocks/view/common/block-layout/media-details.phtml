@@ -1,0 +1,28 @@
+<?php
+
+$lang = explode('-', $this->lang())[0];
+$assetUrl = $this->plugin('assetUrl');
+$this->headLink()->appendStylesheet($assetUrl('css/style.css', 'PageBlocks'));
+
+?>
+
+<section class="col-container col-media-container media-details-container">
+    <?php foreach ($attachments as $attachment): ?>
+        <?php $item = $attachment->item(); ?>
+        <div class="col-single">
+            <?= $attachment->media()->render([
+                'hideTranscript' => true,
+                'compactMode' => true,
+            ]) ?>
+            <?php if ($showHeading): ?>
+                <h4><?= $item->link($item->displayTitle('', $lang)) ?></h4>
+            <?php endif; ?>
+            <?php if (!empty($properties)): ?>
+                <?php foreach ($properties as $property): ?>
+                    <p><?= $item->value($property, [ 'type' => 'literal', 'lang' => $lang ])
+                        ?? $item->value($property, [ 'type' => 'literal' ]) ?></p>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</section>

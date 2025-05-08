@@ -43,7 +43,7 @@ Omeka should now be installed and will have created the necessary databases in y
 9. Add your database settings to the "My Downloads" section of the Page Blocks module in modules/PageBlocks/view/common/block-layout/mydownloads.phtml in line 10.
 
 10. Configure the OIDC Module
-- Navigate to [Omeka-s-module-OIDC](https://indiana-university/omeka-s-module-oidc) and follow the instructions to download and install the OIDC module.
+- Navigate to [Omeka-s-module-OIDC](https://github.com/indiana-university/omeka-s-module-oidc) and follow the instructions to download and install the OIDC module.
 - In config/local.config.php, add the client_id and client_secret for your instance (see module documentation).
 - In the Omeka admin site, go to Modules-> OIDC and enter the 'Discover Document URL' for your OIDC connection.
 

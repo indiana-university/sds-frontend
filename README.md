@@ -14,7 +14,7 @@ Please review the resources needed to run Omeka S (https://omeka.org/s/docs/user
 ## Setup Omeka S Core Server Files
 
 1. Download Omeka S from the Omeka repository (https://omeka.org/s/).
-2. Downloand the directories containing SDS's modifications to Omeka S from the SDS Git Repository (https://github.com/RDServices/scholarly-data-share).
+2. Replace the directories containing SDS's modifications to Omeka S from this repo. See [README](./omeka/README.md) for details.
 3. Fill in the database connection information in config/database.ini (host, database username, database name) and confirm the port number is correct for your system (if not, update it). Save and close the file.
 4. Open the .htaccess file and change the entry in the first line from 'SetEnv APPLICATION_ENV "production"' to 'SetEnv APPLICATION_ENV "development"' so that Omeka will provide more information on any errors you encounter during setup. Once the site dev is complete, change it back to production before taking the site live.
 5. Upload the SDS core files to your server.
@@ -43,7 +43,7 @@ Omeka should now be installed and will have created the necessary databases in y
 9. Add your database settings to the "My Downloads" section of the Page Blocks module in modules/PageBlocks/view/common/block-layout/mydownloads.phtml in line 10.
 
 10. Configure the OIDC Module
-- Navigate to [Omeka-s-module-OIDC](https://github.iu.edu/RDServices/Omeka-s-module-OIDC) and follow the instructions to download and install the OIDC module.
+- Navigate to [Omeka-s-module-OIDC](https://indiana-university/omeka-s-module-oidc) and follow the instructions to download and install the OIDC module.
 - In config/local.config.php, add the client_id and client_secret for your instance (see module documentation).
 - In the Omeka admin site, go to Modules-> OIDC and enter the 'Discover Document URL' for your OIDC connection.
 

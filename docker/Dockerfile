@@ -38,6 +38,9 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
 # Install the PHP extensions we need
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
 RUN docker-php-ext-install -j$(nproc) iconv pdo pdo_mysql mysqli gd
+
+# Install Composer globally
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN yes | pecl install imagick && docker-php-ext-enable imagick 
 
 # Support for more languages, e.g. for date formatting and month names
@@ -58,7 +61,6 @@ COPY ./imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
 # Create one volume for files, config, themes, modules and logs
 RUN mkdir -p /var/www/html/volume/config/ && mkdir -p /var/www/html/volume/files/ && mkdir -p /var/www/html/volume/modules/ && mkdir -p /var/www/html/volume/themes/ && mkdir -p /var/www/html/volume/logs/
 
-
 COPY ./database.ini /var/www/html/volume/config/
 COPY ./local.config.php /var/www/html/volume/config/
 RUN rm /var/www/html/config/database.ini \
@@ -67,10 +69,6 @@ RUN rm /var/www/html/config/database.ini \
 && ln -s /var/www/html/volume/config/local.config.php /var/www/html/config/local.config.php \
 && rm -Rf /var/www/html/files/ \
 && ln -s /var/www/html/volume/files/ /var/www/html/files \
-&& rm -Rf /var/www/html/modules/ \
-&& ln -s /var/www/html/volume/modules/ /var/www/html/modules \
-&& rm -Rf /var/www/html/themes/ \
-&& ln -s /var/www/html/volume/themes/ /var/www/html/themes \
 && rm -Rf /var/www/html/logs/ \
 && ln -s /var/www/html/volume/logs/ /var/www/html/logs \
 && chown -R www-data:www-data /var/www/html/ \
@@ -79,6 +77,7 @@ RUN rm /var/www/html/config/database.ini \
 && chmod 600 /var/www/html/.htaccess
 
 VOLUME /var/www/html/volume/
+
 
 # Overwrite the original Docker PHP entrypoint
 COPY docker-php-entrypoint /usr/local/bin/

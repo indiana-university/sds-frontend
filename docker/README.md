@@ -1,5 +1,24 @@
 # Docker
-This setup is for the local development purpose, it builds two images: omekas and omekas_db.
+
+Build docker image from the offical Omekas release [Omeka S v4.1.1](https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip)
+
+Omeka Modules:
+OIDC    https://github.com/indiana-university/omeka-s-module-oidc/   *fix/package_update
+BulkEdit    https://gitlab.com/Daniel-KM/Omeka-S-module-BulkEdit
+BulkExport  https://gitlab.com/Daniel-KM/Omeka-S-module-BulkExport
+CSVImport   https://github.com/Omeka-s-modules/CSVImport
+CustomOntology  https://gitlab.com/Daniel-KM/Omeka-S-module-CustomOntology
+FacetedBrowse    https://github.com/omeka-s-modules/FacetedBrowse
+FileSideload    https://github.com/omeka-s-modules/FileSideload
+HideProperties  https://github.com/zerocrates/HideProperties
+Log https://gitlab.com/Daniel-KM/Omeka-S-module-Log
+NumericDataTypes    https://github.com/omeka-s-modules/NumericDataTypes
+RestrictedSites https://github.com/ManOnDaMoon/omeka-s-module-RestrictedSites
+Shortcode   https://github.com/Daniel-KM/Omeka-S-module-Shortcode
+Sitemaps    https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps
+Statistics  https://github.com/Daniel-KM/Omeka-s-module-Statistics
+ValueSuggest    https://github.com/omeka-s-modules/ValueSuggest
+
 ## 1. Pakcage omeka
 Run ./zip_omekas.sh to generate omeka-s.zip 
 ## 2. Setup database

@@ -29,6 +29,7 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
     zlib1g-dev \
     imagemagick \
     libmagickwand-dev \
+    jq \
     wget \
     ghostscript \
     poppler-utils \

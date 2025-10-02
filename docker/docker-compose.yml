@@ -9,6 +9,23 @@ services:
       - "8000:80"
     restart: unless-stopped
     env_file: "development.env"
+    environment:
+      OMEKA_MODULES: |
+          https://gitlab.com/Daniel-KM/Omeka-S-module-BulkEdit                  
+          https://gitlab.com/Daniel-KM/Omeka-S-module-BulkExport                
+          https://github.com/Omeka-s-modules/CSVImport                          
+          https://gitlab.com/Daniel-KM/Omeka-S-module-CustomOntology            
+          https://github.com/omeka-s-modules/FacetedBrowse                      
+          https://github.com/omeka-s-modules/FileSideload                       
+          https://github.com/zerocrates/HideProperties                          
+          https://gitlab.com/Daniel-KM/Omeka-S-module-Log                       
+          https://github.com/omeka-s-modules/NumericDataTypes                   
+          https://github.com/ManOnDaMoon/omeka-s-module-RestrictedSites         
+          https://github.com/Daniel-KM/Omeka-S-module-Shortcode                 
+          https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps                
+          https://github.com/Daniel-KM/Omeka-s-module-Statistics                
+          https://github.com/omeka-s-modules/ValueSuggest
+          https://github.com/webgisdeveloper/omeka-s-module-oidc                      
     volumes:
       - omekas:/var/www/html/volume:Z
 

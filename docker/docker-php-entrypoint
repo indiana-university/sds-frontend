@@ -55,30 +55,217 @@ else
   echo "No theme URLs provided. Skipping theme installation."
 fi
 
-# Automatically download and install modules if provided
-if [ -n "$OMEKA_MODULES" ]; then
-  echo "Installing modules..."
-  TMPDIR=$(mktemp -d)
+# Function to get download URL from GitLab repository URL
+get_gitlab_zip_url() {
+    repo_url="$1"
+    # Normalize URL by removing trailing slashes
+    normalized_url=$(echo "$repo_url" | sed 's|/*$||')
 
-  echo "$OMEKA_MODULES" | while read -r module_url; do
-    [ -z "$module_url" ] && continue
+    # Extract owner and repo from URL and trim whitespace
+    owner=$(echo "$normalized_url" | sed -n 's|https://gitlab.com/\([^/]*\)/\([^/]*\)$|\1|p' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    repo=$(echo "$normalized_url" | sed -n 's|https://gitlab.com/\([^/]*\)/\([^/]*\)$|\2|p' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
-    MODULE_NAME=$(basename "$module_url" .zip)
-    MODULE_DIR="/var/www/html/volume/modules/$MODULE_NAME"
-
-    if [ -d "$MODULE_DIR" ]; then
-      echo "Plugin '$MODULE_NAME' already exists. Skipping."
-      continue
+    if [ -z "$owner" ] || [ -z "$repo" ]; then
+        echo "ERROR: Invalid GitLab repository URL: $repo_url" >&2
+        return 1
     fi
 
-    echo "Downloading module from $module_url"
-    curl -sL "$module_url" -o "$TMPDIR/module.zip"
-    unzip -oq "$TMPDIR/module.zip" -d /var/www/html/volume/modules
-  done
+    # URL encode the owner/repo path
+    encoded_path=$(echo "${owner}/${repo}" | sed 's|/|%2F|g')
+    api_url="https://gitlab.com/api/v4/projects/${encoded_path}/releases"
+    
+    # Try to get the latest release
+    latest_release=$(curl -s "$api_url" | jq -r '.[0]')
+    
+    if [ "$latest_release" != "null" ] && [ -n "$latest_release" ]; then
+        # Get tag name from latest release
+        tag_name=$(echo "$latest_release" | jq -r '.tag_name' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        
+        if [ -n "$tag_name" ] && [ "$tag_name" != "null" ]; then
+            echo "https://gitlab.com/${owner}/${repo}/-/archive/${tag_name}/${repo}-${tag_name}.zip"
+            return 0
+        fi
+    fi
+    
+    # No release found, fall back to the default branch
+    echo "WARNING: No release found for $repo_url, using default branch" >&2
+    echo "https://gitlab.com/${owner}/${repo}/-/archive/master/${repo}-master.zip"
+    return 0
+}
 
-  rm -rf "$TMPDIR"
+# Function to get download URL from GitHub repository URL
+get_github_zip_url() {
+    repo_url="$1"
+    # Normalize URL by removing trailing slashes
+    normalized_url=$(echo "$repo_url" | sed 's|/*$||')
+
+    # Extract owner and repo from URL and trim whitespace
+    owner=$(echo "$normalized_url" | sed -n 's|https://github.com/\([^/]*\)/\([^/]*\)$|\1|p' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    repo=$(echo "$normalized_url" | sed -n 's|https://github.com/\([^/]*\)/\([^/]*\)$|\2|p' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+    if [ -z "$owner" ] || [ -z "$repo" ]; then
+        echo "ERROR: Invalid GitHub repository URL: $repo_url" >&2
+        return 1
+    fi
+
+    api_url="https://api.github.com/repos/${owner}/${repo}/releases/latest"
+    
+    # Try to get ZIP asset from release first (trim whitespace)
+    download_url=$(curl -s "$api_url" | jq -r '.assets[] | select(.name | endswith(".zip")) | .browser_download_url' | head -n 1 | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+    # Check if we got a valid download URL (not empty and not "null")
+    if [ -n "$download_url" ] && [ "$download_url" != "null" ]; then
+        echo "$download_url"
+        return 0
+    fi
+    
+    # No ZIP asset found, try to get the source code zipball from the latest release tag
+    tag_name=$(curl -s "$api_url" | jq -r '.tag_name' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    
+    if [ -n "$tag_name" ] && [ "$tag_name" != "null" ]; then
+        echo "https://github.com/${owner}/${repo}/archive/refs/tags/${tag_name}.zip"
+        return 0
+    fi
+    
+    # No release found, fall back to the default branch (usually main or master)
+    echo "WARNING: No release found for $repo_url, using default branch" >&2
+    echo "https://github.com/${owner}/${repo}/archive/refs/heads/main.zip"
+    return 0
+}
+
+# Function to normalize module name from folder name
+normalize_module_name() {
+    folder_name="$1"
+    
+    # Remove common prefixes and suffixes using basic sed
+    normalized="$folder_name"
+    
+    # Remove Omeka-S-module- prefix (case insensitive)
+    normalized=$(echo "$normalized" | sed 's/^[Oo]meka-[Ss]-module-//')
+    
+    # Remove omeka-s-module- prefix (case insensitive)  
+    normalized=$(echo "$normalized" | sed 's/^omeka-s-module-//')
+    
+    # Remove -master suffix
+    normalized=$(echo "$normalized" | sed 's/-master$//')
+    
+    # Remove -main suffix
+    normalized=$(echo "$normalized" | sed 's/-main$//')
+    
+    # Remove version suffixes like -v1.2.3 or -1.2.3
+    normalized=$(echo "$normalized" | sed 's/-v\?[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$//')
+    normalized=$(echo "$normalized" | sed 's/-v\?[0-9][0-9]*\.[0-9][0-9]*$//')
+    
+    # Remove other common branch suffixes
+    normalized=$(echo "$normalized" | sed 's/-develop$//')
+    normalized=$(echo "$normalized" | sed 's/-dev$//')
+    normalized=$(echo "$normalized" | sed 's/-stable$//')
+    
+    echo "$normalized"
+}
+
+# Function to process download URLs
+process_download() {
+    url="$1"
+    type="$2"
+
+    case "$url" in
+        *.zip)
+            # Direct ZIP link
+            echo "$url"
+            ;;
+        https://github.com/*)
+            # GitHub repository URL
+            get_github_zip_url "$url"
+            ;;
+        https://gitlab.com/*)
+            # GitLab repository URL
+            get_gitlab_zip_url "$url"
+            ;;
+        *)
+            echo "ERROR: Unsupported URL format for $type: $url" >&2
+            return 1
+            ;;
+    esac
+}
+
+# Automatically download and install modules
+echo "Checking for modules to install..."
+echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
+
+if [ -n "$OMEKA_MODULES" ]; then
+    echo "Installing modules..."
+    TMPDIR=$(mktemp -d)
+
+    echo "$OMEKA_MODULES" | while IFS= read -r module_url; do
+        echo "Processing module URL: '$module_url'"
+        [ -z "$module_url" ] && continue
+
+        # Resolve download URL
+        resolved_url=$(process_download "$module_url" "module" 2>/dev/null)
+        if [ -z "$resolved_url" ]; then
+            echo "ERROR: Could not resolve download URL for $module_url" >&2
+            continue
+        fi
+        echo "Resolved module URL: $resolved_url"
+
+        echo "Downloading module from $resolved_url"
+        if ! curl -sL "$resolved_url" -o "$TMPDIR/module.zip"; then
+            echo "ERROR: Failed to download module from $resolved_url" >&2
+            continue
+        fi
+
+        # List the contents of the zip to get the actual module name
+        FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | grep -E "^[[:space:]]*[0-9].*\/$" | head -1 | awk '{print $NF}' | cut -d'/' -f1)
+        
+        if [ -z "$FOLDER_NAME" ]; then
+            echo "ERROR: Could not determine folder name from $resolved_url" >&2
+            rm -f "$TMPDIR/module.zip"
+            continue
+        fi
+        
+        # Normalize the module name
+        MODULE_NAME=$(normalize_module_name "$FOLDER_NAME")
+        
+        if [ -z "$MODULE_NAME" ]; then
+            echo "ERROR: Could not normalize module name from folder '$FOLDER_NAME'" >&2
+            rm -f "$TMPDIR/module.zip"
+            continue
+        fi
+        
+        echo "Extracted folder: $FOLDER_NAME -> Module name: $MODULE_NAME"
+        
+        MODULE_DIR="/var/www/html/volume/modules/$MODULE_NAME"
+
+        if [ -d "$MODULE_DIR" ]; then
+            echo "Module '$MODULE_NAME' already exists. Skipping."
+            rm -f "$TMPDIR/module.zip"
+            continue
+        fi
+
+        echo "Installing module: $MODULE_NAME"
+        
+        # Extract to temp location first
+        unzip -oq "$TMPDIR/module.zip" -d "$TMPDIR/extract"
+        
+        # Move the extracted folder to the correct module name
+        if [ -d "$TMPDIR/extract/$FOLDER_NAME" ]; then
+            mv "$TMPDIR/extract/$FOLDER_NAME" "/var/www/html/volume/modules/$MODULE_NAME"
+            echo "Successfully installed module: $MODULE_NAME"
+        else
+            echo "ERROR: Expected folder '$FOLDER_NAME' not found after extraction" >&2
+            rm -rf "$TMPDIR/extract"
+            rm -f "$TMPDIR/module.zip"
+            continue
+        fi
+        
+        rm -rf "$TMPDIR/extract"
+    done
+
+    rm -rf "$TMPDIR"
+    echo "Module installation complete."
 else
-  echo "No module URLs provided. Skipping module installation."
+    echo "No module URLs provided. Skipping module installation."
 fi
 
 # Run the original Docker PHP entrypoint (ref. file https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/docker-php-entrypoint)

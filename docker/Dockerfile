@@ -26,6 +26,7 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
     libpng-dev \
     libjpeg-dev \
     libmemcached-dev \
+    libzip-dev \
     zlib1g-dev \
     imagemagick \
     libmagickwand-dev \
@@ -38,7 +39,7 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
 
 # Install the PHP extensions we need
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
-RUN docker-php-ext-install -j$(nproc) iconv pdo pdo_mysql mysqli gd
+RUN docker-php-ext-install -j$(nproc) iconv pdo pdo_mysql mysqli gd opcache sodium
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -47,6 +48,9 @@ RUN yes | pecl install imagick && docker-php-ext-enable imagick
 # Support for more languages, e.g. for date formatting and month names
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
+
+# install zip extension
+RUN docker-php-ext-install zip
 
 # Add the Omeka-S PHP code
 # Latest Omeka version, check: https://omeka.org/s/download/

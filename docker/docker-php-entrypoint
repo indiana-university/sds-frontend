@@ -252,6 +252,20 @@ if [ -n "$OMEKA_MODULES" ]; then
         if [ -d "$TMPDIR/extract/$FOLDER_NAME" ]; then
             mv "$TMPDIR/extract/$FOLDER_NAME" "/var/www/html/volume/modules/$MODULE_NAME"
             echo "Successfully installed module: $MODULE_NAME"
+            
+            # Check if composer.json exists and run composer install
+            if [ -f "/var/www/html/volume/modules/$MODULE_NAME/composer.json" ]; then
+                echo "Found composer.json in $MODULE_NAME, installing dependencies..."
+                cd "/var/www/html/volume/modules/$MODULE_NAME"
+                if composer install --no-interaction --no-ansi --no-progress --optimize-autoloader; then
+                    echo "Successfully installed composer dependencies for $MODULE_NAME"
+                else
+                    echo "WARNING: Failed to install composer dependencies for $MODULE_NAME" >&2
+                fi
+                cd - > /dev/null
+            else
+                echo "No composer.json found in $MODULE_NAME, skipping dependency installation"
+            fi
         else
             echo "ERROR: Expected folder '$FOLDER_NAME' not found after extraction" >&2
             rm -rf "$TMPDIR/extract"

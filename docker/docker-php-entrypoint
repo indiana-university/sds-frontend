@@ -216,7 +216,8 @@ if [ -n "$OMEKA_MODULES" ]; then
         fi
 
         # List the contents of the zip to get the actual module name
-        FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | grep -E "^[[:space:]]*[0-9].*\/$" | head -1 | awk '{print $NF}' | cut -d'/' -f1)
+        # Extract folder name from the first file/directory entry (skip the header lines)
+        FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | awk 'NR>3 && NF>=4 {print $NF}' | head -1 | cut -d'/' -f1)
         
         if [ -z "$FOLDER_NAME" ]; then
             echo "ERROR: Could not determine folder name from $resolved_url" >&2

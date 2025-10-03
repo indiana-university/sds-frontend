@@ -294,10 +294,30 @@ if [ -n "$OMEKA_MODULES" ]; then
             if [ -f "/var/www/html/volume/modules/$MODULE_NAME/composer.json" ]; then
                 echo "Found composer.json in $MODULE_NAME, installing dependencies..."
                 cd "/var/www/html/volume/modules/$MODULE_NAME"
+                
+                # First try normal composer install
                 if composer install --no-interaction --no-ansi --no-progress --optimize-autoloader; then
                     echo "Successfully installed composer dependencies for $MODULE_NAME"
                 else
-                    echo "WARNING: Failed to install composer dependencies for $MODULE_NAME" >&2
+                    echo "Initial composer install failed, trying to resolve compatibility issues..."
+                    
+                    # Remove lock file if it exists (may have incompatible PHP version constraints)
+                    if [ -f "composer.lock" ]; then
+                        echo "Removing composer.lock to resolve PHP version compatibility issues..."
+                        rm composer.lock
+                    fi
+                    
+                    # Try installing again without lock file
+                    if composer install --no-interaction --no-ansi --no-progress --optimize-autoloader; then
+                        echo "Successfully installed composer dependencies for $MODULE_NAME after removing lock file"
+                    else
+                        echo "Trying composer update to resolve all dependencies..."
+                        if composer update --no-interaction --no-ansi --no-progress --optimize-autoloader; then
+                            echo "Successfully updated composer dependencies for $MODULE_NAME"
+                        else
+                            echo "WARNING: Failed to install composer dependencies for $MODULE_NAME" >&2
+                        fi
+                    fi
                 fi
                 cd - > /dev/null
             else

@@ -197,9 +197,30 @@ if [ -n "$OMEKA_MODULES" ]; then
     echo "Installing modules..."
     TMPDIR=$(mktemp -d)
 
-    echo "$OMEKA_MODULES" | while IFS= read -r module_url; do
-        echo "Processing module URL: '$module_url'"
-        [ -z "$module_url" ] && continue
+    echo "$OMEKA_MODULES" | while IFS= read -r module_line; do
+        # Skip empty lines and lines with only whitespace
+        if [ -z "$module_line" ] || echo "$module_line" | grep -q '^[[:space:]]*$'; then
+            continue
+        fi
+        
+        echo "Processing module line: '$module_line'"
+
+        # Parse ModuleName: URL format
+        if echo "$module_line" | grep -q ':'; then
+            MODULE_NAME=$(echo "$module_line" | cut -d':' -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            module_url=$(echo "$module_line" | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        else
+            # Fallback: treat the whole line as URL and extract module name
+            module_url="$module_line"
+            MODULE_NAME=""
+        fi
+
+        if [ -z "$module_url" ]; then
+            echo "ERROR: Could not parse module URL from '$module_line'" >&2
+            continue
+        fi
+
+        echo "Module: $MODULE_NAME, URL: $module_url"
 
         # Resolve download URL
         resolved_url=$(process_download "$module_url" "module" 2>/dev/null)
@@ -215,26 +236,38 @@ if [ -n "$OMEKA_MODULES" ]; then
             continue
         fi
 
-        # List the contents of the zip to get the actual module name
-        # Extract folder name from the first file/directory entry (skip the header lines)
-        FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | awk 'NR>3 && NF>=4 {print $NF}' | head -1 | cut -d'/' -f1)
-        
-        if [ -z "$FOLDER_NAME" ]; then
-            echo "ERROR: Could not determine folder name from $resolved_url" >&2
-            rm -f "$TMPDIR/module.zip"
-            continue
-        fi
-        
-        # Normalize the module name
-        MODULE_NAME=$(normalize_module_name "$FOLDER_NAME")
-        
+        # If MODULE_NAME was not specified in the format, extract and normalize from ZIP
         if [ -z "$MODULE_NAME" ]; then
-            echo "ERROR: Could not normalize module name from folder '$FOLDER_NAME'" >&2
-            rm -f "$TMPDIR/module.zip"
-            continue
+            FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | awk 'NR>3 && NF>=4 {print $NF}' | head -1 | cut -d'/' -f1)
+            
+            if [ -z "$FOLDER_NAME" ]; then
+                echo "ERROR: Could not determine folder name from $resolved_url" >&2
+                rm -f "$TMPDIR/module.zip"
+                continue
+            fi
+            
+            # Normalize the module name
+            MODULE_NAME=$(normalize_module_name "$FOLDER_NAME")
+            
+            if [ -z "$MODULE_NAME" ]; then
+                echo "ERROR: Could not normalize module name from folder '$FOLDER_NAME'" >&2
+                rm -f "$TMPDIR/module.zip"
+                continue
+            fi
+            
+            echo "Extracted folder: $FOLDER_NAME -> Module name: $MODULE_NAME"
+        else
+            # Get the actual folder name from ZIP for extraction (but use MODULE_NAME for final folder)
+            FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | awk 'NR>3 && NF>=4 {print $NF}' | head -1 | cut -d'/' -f1)
+            
+            if [ -z "$FOLDER_NAME" ]; then
+                echo "ERROR: Could not determine extraction folder name from $resolved_url" >&2
+                rm -f "$TMPDIR/module.zip"
+                continue
+            fi
+            
+            echo "Using specified module name: $MODULE_NAME (will extract from folder: $FOLDER_NAME)"
         fi
-        
-        echo "Extracted folder: $FOLDER_NAME -> Module name: $MODULE_NAME"
         
         MODULE_DIR="/var/www/html/volume/modules/$MODULE_NAME"
 
@@ -249,9 +282,12 @@ if [ -n "$OMEKA_MODULES" ]; then
         # Extract to temp location first
         unzip -oq "$TMPDIR/module.zip" -d "$TMPDIR/extract"
         
-        # Move the extracted folder to the correct module name
-        if [ -d "$TMPDIR/extract/$FOLDER_NAME" ]; then
-            mv "$TMPDIR/extract/$FOLDER_NAME" "/var/www/html/volume/modules/$MODULE_NAME"
+        # Find the actual extracted folder (might be different from what we expected)
+        EXTRACTED_FOLDER=$(find "$TMPDIR/extract" -maxdepth 1 -type d ! -path "$TMPDIR/extract" | head -1)
+        
+        if [ -n "$EXTRACTED_FOLDER" ]; then
+            # Move the extracted folder to the specified module name
+            mv "$EXTRACTED_FOLDER" "/var/www/html/volume/modules/$MODULE_NAME"
             echo "Successfully installed module: $MODULE_NAME"
             
             # Check if composer.json exists and run composer install
@@ -268,7 +304,7 @@ if [ -n "$OMEKA_MODULES" ]; then
                 echo "No composer.json found in $MODULE_NAME, skipping dependency installation"
             fi
         else
-            echo "ERROR: Expected folder '$FOLDER_NAME' not found after extraction" >&2
+            echo "ERROR: No folder found after extraction from $resolved_url" >&2
             rm -rf "$TMPDIR/extract"
             rm -f "$TMPDIR/module.zip"
             continue

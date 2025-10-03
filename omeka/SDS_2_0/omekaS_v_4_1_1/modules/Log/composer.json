@@ -27,7 +27,7 @@
     "require": {
         "php": ">=7.4",
         "grimmlink/webui-popover": "^1.2",
-        "laminas/laminas-db": "^2.15",
+        "laminas/laminas-db": "^2.16",
         "oomphinc/composer-installers-extender": "^2.0"
     },
     "replace": {

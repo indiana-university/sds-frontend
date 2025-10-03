@@ -49,9 +49,12 @@ class Adapter implements AdapterInterface, Profiler\ProfilerAwareInterface
     /** @var ResultSet\ResultSetInterface */
     protected $queryResultSetPrototype;
 
-    /** @var Driver\StatementInterface */
+    /**
+     * @deprecated
+     *
+     * @var Driver\StatementInterface
+     */
     protected $lastPreparedStatement;
-
     /**
      * @param Driver\DriverInterface|array $driver
      * @throws Exception\InvalidArgumentException
@@ -177,18 +180,17 @@ class Adapter implements AdapterInterface, Profiler\ProfilerAwareInterface
         }
 
         if ($mode === self::QUERY_MODE_PREPARE) {
-            $this->lastPreparedStatement = null;
-            $this->lastPreparedStatement = $this->driver->createStatement($sql);
-            $this->lastPreparedStatement->prepare();
+            $lastPreparedStatement = $this->driver->createStatement($sql);
+            $lastPreparedStatement->prepare();
             if (is_array($parameters) || $parameters instanceof ParameterContainer) {
                 if (is_array($parameters)) {
-                    $this->lastPreparedStatement->setParameterContainer(new ParameterContainer($parameters));
+                    $lastPreparedStatement->setParameterContainer(new ParameterContainer($parameters));
                 } else {
-                    $this->lastPreparedStatement->setParameterContainer($parameters);
+                    $lastPreparedStatement->setParameterContainer($parameters);
                 }
-                $result = $this->lastPreparedStatement->execute();
+                $result = $lastPreparedStatement->execute();
             } else {
-                return $this->lastPreparedStatement;
+                return $lastPreparedStatement;
             }
         } else {
             $result = $this->driver->getConnection()->execute($sql);
@@ -210,7 +212,7 @@ class Adapter implements AdapterInterface, Profiler\ProfilerAwareInterface
      * Create statement
      *
      * @param  string $initialSql
-     * @param  ParameterContainer $initialParameters
+     * @param  null|ParameterContainer|array $initialParameters
      * @return Driver\StatementInterface
      */
     public function createStatement($initialSql = null, $initialParameters = null)

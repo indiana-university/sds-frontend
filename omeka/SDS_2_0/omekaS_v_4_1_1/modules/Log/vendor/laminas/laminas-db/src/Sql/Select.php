@@ -6,11 +6,11 @@ use Closure;
 use Laminas\Db\Adapter\Driver\DriverInterface;
 use Laminas\Db\Adapter\ParameterContainer;
 use Laminas\Db\Adapter\Platform\PlatformInterface;
+use Laminas\Db\Sql\Predicate\PredicateInterface;
 
 use function array_key_exists;
 use function count;
 use function current;
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_int;
@@ -269,7 +269,7 @@ class Select extends AbstractPreparableSql
     /**
      * Create where clause
      *
-     * @param Where|Closure|string|array|Predicate\PredicateInterface $predicate
+     * @param Where|Closure|string|array|PredicateInterface $predicate
      * @param  string $combination One of the OP_* constants from Predicate\PredicateSet
      * @return $this Provides a fluent interface
      * @throws Exception\InvalidArgumentException
@@ -303,7 +303,7 @@ class Select extends AbstractPreparableSql
     /**
      * Create having clause
      *
-     * @param Where|Closure|string|array $predicate
+     * @param Having|Closure|string|array|PredicateInterface $predicate
      * @param  string $combination One of the OP_* constants from Predicate\PredicateSet
      * @return $this Provides a fluent interface
      */
@@ -353,7 +353,7 @@ class Select extends AbstractPreparableSql
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects parameter to be numeric, "%s" given',
                 __METHOD__,
-                is_object($limit) ? get_class($limit) : gettype($limit)
+                is_object($limit) ? $limit::class : gettype($limit)
             ));
         }
 
@@ -372,7 +372,7 @@ class Select extends AbstractPreparableSql
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects parameter to be numeric, "%s" given',
                 __METHOD__,
-                is_object($offset) ? get_class($offset) : gettype($offset)
+                is_object($offset) ? $offset::class : gettype($offset)
             ));
         }
 

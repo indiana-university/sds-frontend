@@ -7,7 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'OomphInc\\ComposerInstallersExtender\\' => array($vendorDir . '/oomphinc/composer-installers-extender/src'),
+    'OmekaTestHelper\\' => array($vendorDir . '/biblibre/omeka-s-test-helper/src'),
     'Log\\' => array($baseDir . '/src'),
+    'LogTest\\' => array($baseDir . '/test/LogTest'),
     'Laminas\\Db\\' => array($vendorDir . '/laminas/laminas-db/src'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
 );

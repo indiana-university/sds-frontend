@@ -3,7 +3,7 @@
         'name' => 'daniel-km/omeka-s-module-log',
         'pretty_version' => 'dev-copilot/fix-db731639-f095-475d-add0-e012a91c6a8d',
         'version' => 'dev-copilot/fix-db731639-f095-475d-add0-e012a91c6a8d',
-        'reference' => 'a9bbf97bc9f40e592c38e11da789e8da6364ab0d',
+        'reference' => '8daee88f65fc215f57db002e008d98005229a3a2',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -33,7 +33,7 @@
         'daniel-km/omeka-s-module-log' => array(
             'pretty_version' => 'dev-copilot/fix-db731639-f095-475d-add0-e012a91c6a8d',
             'version' => 'dev-copilot/fix-db731639-f095-475d-add0-e012a91c6a8d',
-            'reference' => 'a9bbf97bc9f40e592c38e11da789e8da6364ab0d',
+            'reference' => '8daee88f65fc215f57db002e008d98005229a3a2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

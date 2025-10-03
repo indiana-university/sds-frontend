@@ -311,7 +311,7 @@
             "extra": {
                 "class": "OomphInc\\ComposerInstallersExtender\\Plugin"
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "OomphInc\\ComposerInstallersExtender\\": "src/"

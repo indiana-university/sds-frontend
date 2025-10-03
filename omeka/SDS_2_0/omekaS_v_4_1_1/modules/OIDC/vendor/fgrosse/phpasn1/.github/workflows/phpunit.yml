@@ -1,0 +1,31 @@
+name: PHPUnit
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php:
+        - '7.1'
+        - '8.2'
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: gmp, bcmath
+          tools: composer
+      - uses: actions/checkout@v2
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - run: composer install --ignore-platform-req=php+
+      - run: vendor/bin/phpunit

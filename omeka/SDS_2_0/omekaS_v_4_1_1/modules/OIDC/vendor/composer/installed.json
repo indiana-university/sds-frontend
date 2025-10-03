@@ -26,7 +26,7 @@
             },
             "time": "2021-08-15T20:50:18+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Brick\\Math\\": "src/"
@@ -313,7 +313,7 @@
                     "dev-master": "2.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "FG\\": "lib/"
@@ -1062,7 +1062,7 @@
                     "dev-master": "1.1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Psr\\Http\\Message\\": "src/"
@@ -1119,7 +1119,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Psr\\Http\\Server\\": "src/"
@@ -1179,7 +1179,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Psr\\Http\\Server\\": "src/"
@@ -1237,7 +1237,7 @@
                     "dev-master": "3.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Psr\\SimpleCache\\": "src/"
@@ -1290,7 +1290,7 @@
             },
             "time": "2019-03-08T08:55:37+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "src/getallheaders.php"
@@ -1341,7 +1341,7 @@
             },
             "time": "2020-11-03T09:10:25+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Base64Url\\": "src/"
@@ -1559,7 +1559,7 @@
             },
             "time": "2021-03-17T14:55:52+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Jose\\Component\\Checker\\": ""
@@ -1608,6 +1608,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "web-token/jwt-library",
             "install-path": "../web-token/jwt-checker"
         },
         {
@@ -1638,7 +1639,7 @@
             },
             "time": "2021-03-17T14:55:52+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Jose\\Component\\Core\\": ""
@@ -1687,6 +1688,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "web-token/jwt-library",
             "install-path": "../web-token/jwt-core"
         },
         {
@@ -1720,7 +1722,7 @@
             },
             "time": "2021-03-17T14:55:52+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Jose\\Component\\Encryption\\": ""
@@ -1769,6 +1771,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "web-token/jwt-library",
             "install-path": "../web-token/jwt-encryption"
         },
         {
@@ -1800,7 +1803,7 @@
             },
             "time": "2021-03-17T14:55:52+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Jose\\Component\\KeyManagement\\": ""
@@ -1849,6 +1852,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "web-token/jwt-library",
             "install-path": "../web-token/jwt-key-mgmt"
         },
         {
@@ -1879,7 +1883,7 @@
             },
             "time": "2021-03-01T19:55:28+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Jose\\Component\\Signature\\": ""
@@ -1928,6 +1932,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "web-token/jwt-library",
             "install-path": "../web-token/jwt-signature"
         },
         {
@@ -1956,7 +1961,7 @@
             },
             "time": "2021-01-21T19:18:03+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Jose\\Component\\Signature\\Algorithm\\": ""
@@ -2005,6 +2010,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "web-token/jwt-library",
             "install-path": "../web-token/jwt-signature-algorithm-rsa"
         }
     ],

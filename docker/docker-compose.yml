@@ -11,6 +11,7 @@ services:
     env_file: "development.env"
     environment:
       OMEKA_MODULES: |
+        Common: https://github.com/Daniel-KM/Omeka-S-module-Common
         BulkEdit: https://gitlab.com/Daniel-KM/Omeka-S-module-BulkEdit
         BulkExport: https://gitlab.com/Daniel-KM/Omeka-S-module-BulkExport
         CSVImport: https://github.com/Omeka-s-modules/CSVImport

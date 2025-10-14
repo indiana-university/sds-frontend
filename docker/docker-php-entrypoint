@@ -11,14 +11,14 @@ fi
 
 # Configure database.ini using environment variables
 {
-  echo "user     = ${MYSQL_USER:-}"
-  echo "password = ${MYSQL_PASSWORD:-}"
-  echo "dbname   = ${MYSQL_DATABASE:-}"
-  echo "host     = ${MYSQL_HOST:-}"
-  echo "port     = ${MYSQL_TCP_PORT:-3306}"
+  echo "user     = \"${MYSQL_USER:-}\""
+  echo "password = \"${MYSQL_PASSWORD:-}\""
+  echo "dbname   = \"${MYSQL_DATABASE:-}\""
+  echo "host     = \"${MYSQL_HOST:-}\""
+  echo "port     = \"${MYSQL_TCP_PORT:-3306}\""
 
   if [ -n "${MYSQL_UNIX_PORT:-}" ]; then
-    echo "unix_socket = ${MYSQL_UNIX_PORT}"
+    echo "unix_socket = \"${MYSQL_UNIX_PORT}\""
   else
     echo ";unix_socket ="
   fi

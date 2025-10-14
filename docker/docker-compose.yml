@@ -2,13 +2,11 @@ services:
 
   omekas:
     build: .
-    depends_on:
-      - omekas_db
     container_name: omekas
     ports:
       - "8000:80"
     restart: unless-stopped
-    env_file: "development.env"
+    env_file: ".development.env"
     # environment:
     #   OMEKA_MODULES: |
     #     Common: https://github.com/Daniel-KM/Omeka-S-module-Common
@@ -30,14 +28,5 @@ services:
     volumes:
       - omekas:/var/www/html/volume:Z
 
-  omekas_db:
-    image: mysql:latest
-    container_name: omekas_db
-    restart: unless-stopped
-    volumes:
-      - omeka_db:/var/lib/mysql:Z
-    env_file: "development.env"
-  
 volumes:
-  omeka_db:
   omekas:

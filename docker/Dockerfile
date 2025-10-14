@@ -72,10 +72,13 @@ RUN rm /var/www/html/config/database.ini \
 && ln -s /var/www/html/volume/config/database.ini /var/www/html/config/database.ini \
 && rm /var/www/html/config/local.config.php \
 && ln -s /var/www/html/volume/config/local.config.php /var/www/html/config/local.config.php \
+&& cp -r /var/www/html/files/* /var/www/html/volume/files/ 2>/dev/null || true \
 && rm -Rf /var/www/html/files/ \
 && ln -s /var/www/html/volume/files/ /var/www/html/files \
+&& cp -r /var/www/html/modules/* /var/www/html/volume/modules/ 2>/dev/null || true \
 && rm -Rf /var/www/html/modules/ \
 && ln -s /var/www/html/volume/modules/ /var/www/html/modules \
+&& cp -r /var/www/html/logs/* /var/www/html/volume/logs/ 2>/dev/null || true \
 && rm -Rf /var/www/html/logs/ \
 && ln -s /var/www/html/volume/logs/ /var/www/html/logs \
 && chown -R www-data:www-data /var/www/html/ \

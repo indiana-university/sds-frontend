@@ -75,6 +75,9 @@ RUN rm /var/www/html/config/database.ini \
 && cp -r /var/www/html/files/* /var/www/html/volume/files/ 2>/dev/null || true \
 && rm -Rf /var/www/html/files/ \
 && ln -s /var/www/html/volume/files/ /var/www/html/files \
+&& cp -r /var/www/html/themes/* /var/www/html/volume/themes/ 2>/dev/null || true \
+&& rm -Rf /var/www/html/themes/ \
+&& ln -s /var/www/html/volume/themes/ /var/www/html/themes \
 && cp -r /var/www/html/modules/* /var/www/html/volume/modules/ 2>/dev/null || true \
 && rm -Rf /var/www/html/modules/ \
 && ln -s /var/www/html/volume/modules/ /var/www/html/modules \

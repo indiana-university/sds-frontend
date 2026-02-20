@@ -55,6 +55,24 @@ fi
 chmod 600 /var/www/html/volume/config/database.ini
 chown www-data:www-data /var/www/html/volume/config/database.ini
 
+# Update OIDC configuration in local.config.php using environment variables
+if [ -n "${OIDC_CLIENT_ID:-}" ] && [ -n "${OIDC_CLIENT_SECRET:-}" ]; then
+  echo "Configuring OIDC settings..."
+  # Escape special characters for sed
+  ESCAPED_CLIENT_ID=$(echo "$OIDC_CLIENT_ID" | sed 's/[&/\]/\\&/g')
+  ESCAPED_CLIENT_SECRET=$(echo "$OIDC_CLIENT_SECRET" | sed 's/[&/\]/\\&/g')
+  
+  sed -i "s|^\([[:space:]]*\)'client_id' => '.*'|\1'client_id' => '${ESCAPED_CLIENT_ID}'|" /var/www/html/volume/config/local.config.php
+  sed -i "s|^\([[:space:]]*\)'client_secret' => '.*'|\1'client_secret' => '${ESCAPED_CLIENT_SECRET}'|" /var/www/html/volume/config/local.config.php
+  
+  chmod 600 /var/www/html/volume/config/local.config.php
+  chown www-data:www-data /var/www/html/volume/config/local.config.php
+  
+  echo "OIDC configuration updated successfully."
+else
+  echo "OIDC environment variables not set. Skipping OIDC configuration."
+fi
+
 # Automatically download and install themes if provided
 if [ -n "$OMEKA_THEMES" ]; then
   echo "Installing themes..."

@@ -30,4 +30,8 @@ return [
             'Omeka\File\Thumbnailer' => 'Omeka\File\Thumbnailer\ImageMagick',
         ],
     ],
+    'oidc' => [
+    'client_id' => '*****',
+    'client_secret' => '*****',
+    ],
 ];

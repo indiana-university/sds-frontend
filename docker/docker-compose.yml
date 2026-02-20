@@ -8,6 +8,10 @@ services:
       - "8000:80"
     restart: unless-stopped
     env_file: ".development.env"
+    environment:
+      OMEKA_MODULES: |
+        OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+        PageBlocks: https://github.com/ivyrze/omeka-s-module-pageblocks/
     # environment:
     #   OMEKA_MODULES: |
     #     Common: https://github.com/Daniel-KM/Omeka-S-module-Common
@@ -25,7 +29,6 @@ services:
     #     Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps
     #     Statistics: https://github.com/Daniel-KM/Omeka-s-module-Statistics
     #     ValueSuggest: https://github.com/omeka-s-modules/ValueSuggest
-    #     OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
     volumes:
       - omekas:/var/www/html/volume:Z
 
@@ -33,6 +36,8 @@ services:
     image: mysql:latest
     container_name: omekas_db
     restart: unless-stopped
+    ports:
+      - "3306:3306"
     volumes:
       - omeka_db:/var/lib/mysql:Z
     env_file: "development.env"

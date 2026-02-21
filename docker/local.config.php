@@ -1,8 +1,8 @@
 <?php
 return [
     'logger' => [
-        'log' => true,
-        'priority' => \Zend\Log\Logger::NOTICE,
+        'log' => false,
+        'priority' => \Laminas\Log\Logger::NOTICE,
     ],
     'http_client' => [
         'sslcapath' => null,
@@ -30,8 +30,8 @@ return [
             'Omeka\File\Thumbnailer' => 'Omeka\File\Thumbnailer\ImageMagick',
         ],
     ],
-    'oidc' => [
+ 'oidc' => [
     'client_id' => '*****',
     'client_secret' => '*****',
-    ],
+],
 ];

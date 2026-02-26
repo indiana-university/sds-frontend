@@ -6,11 +6,12 @@
 set -e  # Exit on error
 
 OMEKA_VERSION="4.1.1"
+#OMEKA_VERSION="4.2.0"
 OMEKA_ZIP="omeka-s-${OMEKA_VERSION}.zip"
 OMEKA_DIR="omeka-s"
 OMEKA_URL="https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ZIP}"
 #CUSTOM_SOURCE="../omeka/SDS_2_0/omekaS_v_4_1_1"
-CUSTOM_SOURCE="/Users/wang208/Projects/testing/IEEE_SciVis_Contest"
+CUSTOM_SOURCE=~/Projects/testing/IEEE_SciVis_Contest
 OUTPUT_ZIP="omeka-s.zip"
 
 echo "=== Omeka-S Build Script ==="

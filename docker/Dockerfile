@@ -1,4 +1,5 @@
-FROM php:8.2-apache-bookworm
+#FROM php:8.2-apache-bookworm
+FROM php:8.4-apache-trixie
 
 # Omeka-S web publishing platform for digital heritage collections (https://omeka.org/s/)
 # Previous maintainers: Oldrich Vykydal (o1da) - Klokan Technologies GmbH  / Eric Dodemont <eric.dodemont@skynet.be>
@@ -19,31 +20,47 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
 
 RUN apt-get -qq update && apt-get -qq -y upgrade
 RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
-    unzip \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libmcrypt-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libmemcached-dev \
-    libzip-dev \
-    zlib1g-dev \
-    imagemagick \
-    libmagickwand-dev \
-    jq \
-    wget \
-    ghostscript \
-    poppler-utils \
-    libsodium-dev \
-    libicu-dev
+        # Utils needed later
+        unzip \
+        wget \
+        jq \
+        ghostscript \
+        poppler-utils \
+        netcat-openbsd \
+        # PHP Extension Runtime/Build-time Libs (-dev packages needed for compilation)
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        # libjpeg-dev # Likely redundant with libjpeg62-turbo-dev
+        libpng-dev \
+        zlib1g-dev \
+        libicu-dev \
+        libsodium-dev \
+        # For Imagick extension
+        imagemagick \
+        libmagickwand-dev \
+        zip \
+        unzip \
+    # Cleanup apt cache
+    && apt-get clean
 
-# Install the PHP extensions we need
-RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
-RUN docker-php-ext-install -j$(nproc) iconv pdo pdo_mysql mysqli gd opcache sodium
 
-# Install Composer globally
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN yes | pecl install imagick && docker-php-ext-enable imagick 
+    # Install Composer
+    COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+    # Install PHP extension installer tool
+    ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+    # Install PHP extensions using the tool
+    # It will handle installing/removing temporary build dependencies (like build-essential)
+    RUN install-php-extensions \
+        gd \
+        iconv \
+        pdo \
+        pdo_mysql \
+        mysqli \
+        imagick \
+        intl \
+        xsl
 
 # Support for more languages, e.g. for date formatting and month names
 RUN docker-php-ext-configure intl
@@ -52,50 +69,14 @@ RUN docker-php-ext-install intl
 # install zip extension
 RUN docker-php-ext-install zip
 
-# Add the Omeka-S PHP code
-# Latest Omeka version, check: https://omeka.org/s/download/
-#RUN wget --no-verbose "https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip" -O /var/www/latest_omeka_s.zip
-COPY ./omeka-s.zip /var/www/latest_omeka_s.zip
-RUN unzip -q /var/www/latest_omeka_s.zip -d /var/www/ \
-&&  rm /var/www/latest_omeka_s.zip \
-&&  rm -rf /var/www/html/ \
-&&  mv /var/www/omeka-s/ /var/www/html/
 
-COPY ./imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
-
-# Create one volume for files, config, themes, modules and logs
-RUN mkdir -p /var/www/html/volume/config/ && mkdir -p /var/www/html/volume/files/ && mkdir -p /var/www/html/volume/modules/ && mkdir -p /var/www/html/volume/themes/ && mkdir -p /var/www/html/volume/logs/
-
-COPY ./database.ini /var/www/html/volume/config/
-COPY ./local.config.php /var/www/html/volume/config/
-RUN rm /var/www/html/config/database.ini \
-&& ln -s /var/www/html/volume/config/database.ini /var/www/html/config/database.ini \
-&& rm /var/www/html/config/local.config.php \
-&& ln -s /var/www/html/volume/config/local.config.php /var/www/html/config/local.config.php \
-&& cp -r /var/www/html/files/* /var/www/html/volume/files/ 2>/dev/null || true \
-&& rm -Rf /var/www/html/files/ \
-&& ln -s /var/www/html/volume/files/ /var/www/html/files \
-&& cp -r /var/www/html/themes/* /var/www/html/volume/themes/ 2>/dev/null || true \
-&& rm -Rf /var/www/html/themes/ \
-&& ln -s /var/www/html/volume/themes/ /var/www/html/themes \
-&& cp -r /var/www/html/modules/* /var/www/html/volume/modules/ 2>/dev/null || true \
-&& rm -Rf /var/www/html/modules/ \
-&& ln -s /var/www/html/volume/modules/ /var/www/html/modules \
-&& cp -r /var/www/html/logs/* /var/www/html/volume/logs/ 2>/dev/null || true \
-&& rm -Rf /var/www/html/logs/ \
-&& ln -s /var/www/html/volume/logs/ /var/www/html/logs \
-&& chown -R www-data:www-data /var/www/html/ \
-&& chmod 600 /var/www/html/volume/config/database.ini \
-&& chmod 600 /var/www/html/volume/config/local.config.php \
-&& chmod 600 /var/www/html/.htaccess
 
 VOLUME /var/www/html/volume/
 
-
 # Overwrite the original Docker PHP entrypoint
-COPY docker-php-entrypoint /usr/local/bin/
+#COPY docker-php-entrypoint /usr/local/bin/
 
 # Copy the automatic installation script
-COPY install_cli.php /var/www/html/
+#COPY install_cli.php /var/www/html/
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

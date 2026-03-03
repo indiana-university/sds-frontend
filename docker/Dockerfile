@@ -44,34 +44,71 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
     && apt-get clean
 
 
-    # Install Composer
-    COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-    # Install PHP extension installer tool
-    ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# Install PHP extension installer tool
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-    # Install PHP extensions using the tool
-    # It will handle installing/removing temporary build dependencies (like build-essential)
-    RUN install-php-extensions \
-        gd \
-        iconv \
-        pdo \
-        pdo_mysql \
-        mysqli \
-        imagick \
-        intl \
-        xsl
+# Install PHP extensions using the tool
+# It will handle installing/removing temporary build dependencies (like build-essential)
+RUN install-php-extensions \
+    gd \
+    iconv \
+    pdo \
+    pdo_mysql \
+    mysqli \
+    imagick \
+    intl \
+    xsl \
+    zip
+
+# Install Omeka-S-CLI
+ADD https://github.com/GhentCDH/Omeka-S-Cli/releases/latest/download/omeka-s-cli.phar /usr/local/bin/omeka-s-cli
+RUN chmod +x /usr/local/bin/omeka-s-cli
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Omeka S version configuration
+ARG OMEKA_VERSION=4.2.0
+
+# Download, extract, and configure Omeka S in a single layer
+RUN set -x && \
+    \
+    # 1. Download and extract Omeka S
+    if [ "$OMEKA_VERSION" = "develop" ]; then \
+      OMEKA_S_URL="https://github.com/omeka/omeka-s/archive/develop.tar.gz"; \
+    else \
+      OMEKA_S_URL="https://github.com/omeka/omeka-s/tarball/refs/tags/${OMEKA_VERSION}"; \
+    fi && \
+    echo "Downloading Omeka S from: $OMEKA_S_URL" && \
+    curl -L "$OMEKA_S_URL" | tar xz --strip-components=1 -C . && \
+    \
+    # 2. Create the volume structure for persistent data
+    mkdir -p volume/config \
+             volume/files \
+             volume/modules \
+             volume/themes \
+             volume/logs && \
+    \
+    # 3. Create symbolic links to the volume directories
+    rm -rf config files modules themes logs && \
+    ln -s volume/config . && \
+    ln -s volume/files . && \
+    ln -s volume/modules . && \
+    ln -s volume/themes . && \
+    ln -s volume/logs . && \
+    \
+    # 4. Set final permissions
+    chown -R  www-data:www-data volume . /usr/local/bin/omeka-s-cli
 
 # Support for more languages, e.g. for date formatting and month names
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install intl
+#RUN docker-php-ext-configure intl
+#RUN docker-php-ext-install intl
 
 # install zip extension
-RUN docker-php-ext-install zip
-
-
-
-VOLUME /var/www/html/volume/
+#RUN docker-php-ext-install zip
 
 # Overwrite the original Docker PHP entrypoint
 #COPY docker-php-entrypoint /usr/local/bin/

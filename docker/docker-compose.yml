@@ -51,4 +51,4 @@ services:
 
 volumes:
   omeka_db:
-  omekas:
+  omekas_volume:

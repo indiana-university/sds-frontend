@@ -1,3 +1,8 @@
+# Notes:
+The new method is based on [Omeka-S-Cli](https://github.com/GhentCDH/Omeka-S-Cli)
+Omeka S version 4.2.0
+Php version 8.4
+
 # Docker
 
 Build docker image from the offical Omekas release [Omeka S v4.1.1](https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip)
@@ -39,4 +44,4 @@ Modify development.env and database.ini for db setup if necessary
 ## 4. Test
 http://localhost:8000
 
-reference: https://github.com/giocomai/omeka-s-docker 
+reference: https://github.com/giocomai/omeka-s-docker

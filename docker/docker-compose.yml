@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:80"
     restart: unless-stopped
-    env_file: "development.env"
+    env_file: ".development.env"
     environment:
       OMEKA_MODULES: |
         Common
@@ -47,7 +47,7 @@ services:
       - "3306:3306"
     volumes:
       - omeka_db:/var/lib/mysql:Z
-    env_file: "development.env"
+    env_file: ".development.env"
 
 volumes:
   omeka_db:

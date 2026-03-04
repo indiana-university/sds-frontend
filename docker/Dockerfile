@@ -108,6 +108,8 @@ RUN set -x && \
     # 4. Set final permissions
     chown -R  www-data:www-data volume . /usr/local/bin/omeka-s-cli
 
+COPY ./database.ini /var/www/html/config/
+COPY ./local.config.php /var/www/html/config/
 # Ensure .htaccess is present (not included in GitHub source archive)
 COPY .htaccess /var/www/html/.htaccess
 

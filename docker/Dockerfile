@@ -85,7 +85,7 @@ RUN set -x && \
     if [ "$OMEKA_VERSION" = "develop" ]; then \
       OMEKA_S_URL="https://github.com/omeka/omeka-s/archive/develop.tar.gz"; \
     else \
-      OMEKA_S_URL="https://github.com/omeka/omeka-s/tarball/refs/tags/${OMEKA_VERSION}"; \
+      OMEKA_S_URL="https://github.com/omeka/omeka-s/archive/refs/tags/v${OMEKA_VERSION}.tar.gz"; \
     fi && \
     echo "Downloading Omeka S from: $OMEKA_S_URL" && \
     curl -L "$OMEKA_S_URL" | tar xz --strip-components=1 -C . && \

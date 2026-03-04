@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:80"
     restart: unless-stopped
-    env_file: ".development.env"
+    env_file: "development.env"
     environment:
       OMEKA_MODULES: |
         Common

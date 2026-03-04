@@ -108,6 +108,9 @@ RUN set -x && \
     # 4. Set final permissions
     chown -R  www-data:www-data volume . /usr/local/bin/omeka-s-cli
 
+# Ensure .htaccess is present (not included in GitHub source archive)
+COPY .htaccess /var/www/html/.htaccess
+
 # Overwrite the original Docker PHP entrypoint
 COPY docker-php-entrypoint /usr/local/bin/
 

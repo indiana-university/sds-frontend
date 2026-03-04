@@ -111,6 +111,9 @@ RUN set -x && \
 # Ensure .htaccess is present (not included in GitHub source archive)
 COPY .htaccess /var/www/html/.htaccess
 
+# Install Composer dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
 # Overwrite the original Docker PHP entrypoint
 COPY docker-php-entrypoint /usr/local/bin/
 

@@ -61,13 +61,13 @@ if [ -n "${OIDC_CLIENT_ID:-}" ] && [ -n "${OIDC_CLIENT_SECRET:-}" ]; then
   # Escape special characters for sed
   ESCAPED_CLIENT_ID=$(echo "$OIDC_CLIENT_ID" | sed 's/[&/\]/\\&/g')
   ESCAPED_CLIENT_SECRET=$(echo "$OIDC_CLIENT_SECRET" | sed 's/[&/\]/\\&/g')
-  
+
   sed -i "s|^\([[:space:]]*\)'client_id' => '.*'|\1'client_id' => '${ESCAPED_CLIENT_ID}'|" /var/www/html/volume/config/local.config.php
   sed -i "s|^\([[:space:]]*\)'client_secret' => '.*'|\1'client_secret' => '${ESCAPED_CLIENT_SECRET}'|" /var/www/html/volume/config/local.config.php
-  
+
   chmod 600 /var/www/html/volume/config/local.config.php
   chown www-data:www-data /var/www/html/volume/config/local.config.php
-  
+
   echo "OIDC configuration updated successfully."
 else
   echo "OIDC environment variables not set. Skipping OIDC configuration."
@@ -112,20 +112,20 @@ get_gitlab_zip_url() {
     # URL encode the owner/repo path
     encoded_path=$(echo "${owner}/${repo}" | sed 's|/|%2F|g')
     api_url="https://gitlab.com/api/v4/projects/${encoded_path}/releases"
-    
+
     # Try to get the latest release
     latest_release=$(curl -s "$api_url" | jq -r '.[0]')
-    
+
     if [ "$latest_release" != "null" ] && [ -n "$latest_release" ]; then
         # Get tag name from latest release
         tag_name=$(echo "$latest_release" | jq -r '.tag_name' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        
+
         if [ -n "$tag_name" ] && [ "$tag_name" != "null" ]; then
             echo "https://gitlab.com/${owner}/${repo}/-/archive/${tag_name}/${repo}-${tag_name}.zip"
             return 0
         fi
     fi
-    
+
     # No release found, fall back to the default branch
     echo "WARNING: No release found for $repo_url, using default branch" >&2
     echo "https://gitlab.com/${owner}/${repo}/-/archive/master/${repo}-master.zip"
@@ -148,7 +148,7 @@ get_github_zip_url() {
     fi
 
     api_url="https://api.github.com/repos/${owner}/${repo}/releases/latest"
-    
+
     # Try to get ZIP asset from release first (trim whitespace)
     download_url=$(curl -s "$api_url" | jq -r '.assets[] | select(.name | endswith(".zip")) | .browser_download_url' | head -n 1 | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
@@ -157,15 +157,15 @@ get_github_zip_url() {
         echo "$download_url"
         return 0
     fi
-    
+
     # No ZIP asset found, try to get the source code zipball from the latest release tag
     tag_name=$(curl -s "$api_url" | jq -r '.tag_name' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-    
+
     if [ -n "$tag_name" ] && [ "$tag_name" != "null" ]; then
         echo "https://github.com/${owner}/${repo}/archive/refs/tags/${tag_name}.zip"
         return 0
     fi
-    
+
     # No release found, fall back to the default branch (usually main or master)
     echo "WARNING: No release found for $repo_url, using default branch" >&2
     echo "https://github.com/${owner}/${repo}/archive/refs/heads/main.zip"
@@ -175,31 +175,31 @@ get_github_zip_url() {
 # Function to normalize module name from folder name
 normalize_module_name() {
     folder_name="$1"
-    
+
     # Remove common prefixes and suffixes using basic sed
     normalized="$folder_name"
-    
+
     # Remove Omeka-S-module- prefix (case insensitive)
     normalized=$(echo "$normalized" | sed 's/^[Oo]meka-[Ss]-module-//')
-    
-    # Remove omeka-s-module- prefix (case insensitive)  
+
+    # Remove omeka-s-module- prefix (case insensitive)
     normalized=$(echo "$normalized" | sed 's/^omeka-s-module-//')
-    
+
     # Remove -master suffix
     normalized=$(echo "$normalized" | sed 's/-master$//')
-    
+
     # Remove -main suffix
     normalized=$(echo "$normalized" | sed 's/-main$//')
-    
+
     # Remove version suffixes like -v1.2.3 or -1.2.3
     normalized=$(echo "$normalized" | sed 's/-v\?[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$//')
     normalized=$(echo "$normalized" | sed 's/-v\?[0-9][0-9]*\.[0-9][0-9]*$//')
-    
+
     # Remove other common branch suffixes
     normalized=$(echo "$normalized" | sed 's/-develop$//')
     normalized=$(echo "$normalized" | sed 's/-dev$//')
     normalized=$(echo "$normalized" | sed 's/-stable$//')
-    
+
     echo "$normalized"
 }
 
@@ -228,155 +228,49 @@ process_download() {
     esac
 }
 
+# install items from names
+install_items_from_names() {
+    local kind="$1"
+    local env_var="$2"
+    local names
+
+    names=$(eval "echo \${$env_var:-}")
+    [ -z "$names" ] && echo "No $kind to install. Skipping." && return
+
+    for name in $names; do
+        [ -z "$name" ] && continue
+        echo "Processing $name..."
+        if omeka-s-cli "${kind%s}:download" "$name"; then
+            if [ "$kind" = "modules" ]; then
+                if omeka-s-cli "${kind%s}:install" "$name"; then
+                    echo "$kind installed successfully: $name"
+                else
+                    echo "ERROR: Failed to install $kind: $name" >&2
+                fi
+            fi
+        else
+            echo "ERROR: Failed to download $kind: $name" >&2
+        fi
+    done
+}
+
+
+# Ensure a module is present (download+install if missing).
+ensure_module() {
+    local name="$1"
+    if omeka-s-cli module:list | awk '{print $2}' | grep -qx "$name"; then
+        echo "Module already installed: $name"
+        return 0
+    fi
+    echo "Installing module: $name"
+    omeka-s-cli module:download "$name" && omeka-s-cli module:install "$name"
+}
+
 # Automatically download and install modules
 echo "Checking for modules to install..."
 echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
 
-if [ -n "$OMEKA_MODULES" ]; then
-    echo "Installing modules..."
-    TMPDIR=$(mktemp -d)
-
-    echo "$OMEKA_MODULES" | while IFS= read -r module_line; do
-        # Skip empty lines and lines with only whitespace
-        if [ -z "$module_line" ] || echo "$module_line" | grep -q '^[[:space:]]*$'; then
-            continue
-        fi
-        
-        echo "Processing module line: '$module_line'"
-
-        # Parse ModuleName: URL format
-        if echo "$module_line" | grep -q ':'; then
-            MODULE_NAME=$(echo "$module_line" | cut -d':' -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-            module_url=$(echo "$module_line" | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        else
-            # Fallback: treat the whole line as URL and extract module name
-            module_url="$module_line"
-            MODULE_NAME=""
-        fi
-
-        if [ -z "$module_url" ]; then
-            echo "ERROR: Could not parse module URL from '$module_line'" >&2
-            continue
-        fi
-
-        echo "Module: $MODULE_NAME, URL: $module_url"
-
-        # Resolve download URL
-        resolved_url=$(process_download "$module_url" "module" 2>/dev/null)
-        if [ -z "$resolved_url" ]; then
-            echo "ERROR: Could not resolve download URL for $module_url" >&2
-            continue
-        fi
-        echo "Resolved module URL: $resolved_url"
-
-        echo "Downloading module from $resolved_url"
-        if ! curl -sL "$resolved_url" -o "$TMPDIR/module.zip"; then
-            echo "ERROR: Failed to download module from $resolved_url" >&2
-            continue
-        fi
-
-        # If MODULE_NAME was not specified in the format, extract and normalize from ZIP
-        if [ -z "$MODULE_NAME" ]; then
-            FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | awk 'NR>3 && NF>=4 {print $NF}' | head -1 | cut -d'/' -f1)
-            
-            if [ -z "$FOLDER_NAME" ]; then
-                echo "ERROR: Could not determine folder name from $resolved_url" >&2
-                rm -f "$TMPDIR/module.zip"
-                continue
-            fi
-            
-            # Normalize the module name
-            MODULE_NAME=$(normalize_module_name "$FOLDER_NAME")
-            
-            if [ -z "$MODULE_NAME" ]; then
-                echo "ERROR: Could not normalize module name from folder '$FOLDER_NAME'" >&2
-                rm -f "$TMPDIR/module.zip"
-                continue
-            fi
-            
-            echo "Extracted folder: $FOLDER_NAME -> Module name: $MODULE_NAME"
-        else
-            # Get the actual folder name from ZIP for extraction (but use MODULE_NAME for final folder)
-            FOLDER_NAME=$(unzip -l "$TMPDIR/module.zip" | awk 'NR>3 && NF>=4 {print $NF}' | head -1 | cut -d'/' -f1)
-            
-            if [ -z "$FOLDER_NAME" ]; then
-                echo "ERROR: Could not determine extraction folder name from $resolved_url" >&2
-                rm -f "$TMPDIR/module.zip"
-                continue
-            fi
-            
-            echo "Using specified module name: $MODULE_NAME (will extract from folder: $FOLDER_NAME)"
-        fi
-        
-        MODULE_DIR="/var/www/html/volume/modules/$MODULE_NAME"
-
-        if [ -d "$MODULE_DIR" ]; then
-            echo "Module '$MODULE_NAME' already exists. Skipping."
-            rm -f "$TMPDIR/module.zip"
-            continue
-        fi
-
-        echo "Installing module: $MODULE_NAME"
-        
-        # Extract to temp location first
-        unzip -oq "$TMPDIR/module.zip" -d "$TMPDIR/extract"
-        
-        # Find the actual extracted folder (might be different from what we expected)
-        EXTRACTED_FOLDER=$(find "$TMPDIR/extract" -maxdepth 1 -type d ! -path "$TMPDIR/extract" | head -1)
-        
-        if [ -n "$EXTRACTED_FOLDER" ]; then
-            # Move the extracted folder to the specified module name
-            mv "$EXTRACTED_FOLDER" "/var/www/html/volume/modules/$MODULE_NAME"
-            echo "Successfully installed module: $MODULE_NAME"
-            
-            # Check if composer.json exists and run composer install
-            if [ -f "/var/www/html/volume/modules/$MODULE_NAME/composer.json" ]; then
-                echo "Found composer.json in $MODULE_NAME, installing dependencies..."
-                cd "/var/www/html/volume/modules/$MODULE_NAME"
-                
-                # First try normal composer install
-                if composer install --no-interaction --no-ansi --no-progress --optimize-autoloader; then
-                    echo "Successfully installed composer dependencies for $MODULE_NAME"
-                else
-                    echo "Initial composer install failed, trying to resolve compatibility issues..."
-                    
-                    # Remove lock file if it exists (may have incompatible PHP version constraints)
-                    if [ -f "composer.lock" ]; then
-                        echo "Removing composer.lock to resolve PHP version compatibility issues..."
-                        rm composer.lock
-                    fi
-                    
-                    # Try installing again without lock file
-                    if composer install --no-interaction --no-ansi --no-progress --optimize-autoloader; then
-                        echo "Successfully installed composer dependencies for $MODULE_NAME after removing lock file"
-                    else
-                        echo "Trying composer update to resolve all dependencies..."
-                        if composer update --no-interaction --no-ansi --no-progress --optimize-autoloader; then
-                            echo "Successfully updated composer dependencies for $MODULE_NAME"
-                        else
-                            echo "WARNING: Failed to install composer dependencies for $MODULE_NAME" >&2
-                        fi
-                    fi
-                fi
-                cd - > /dev/null
-            else
-                echo "No composer.json found in $MODULE_NAME, skipping dependency installation"
-            fi
-        else
-            echo "ERROR: No folder found after extraction from $resolved_url" >&2
-            rm -rf "$TMPDIR/extract"
-            rm -f "$TMPDIR/module.zip"
-            continue
-        fi
-        
-        rm -rf "$TMPDIR/extract"
-    done
-
-    rm -rf "$TMPDIR"
-    echo "Module installation complete."
-else
-    echo "No module URLs provided. Skipping module installation."
-fi
+install_items_from_names "modules" "OMEKA_MODULES"
 
 chown -R www-data:www-data /var/www/html/volume/modules
 

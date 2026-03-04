@@ -10,15 +10,14 @@ services:
     env_file: ".development.env"
     environment:
       OMEKA_MODULES: |
-        Common: https://github.com/Daniel-KM/Omeka-S-module-Common
-        OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
-        PageBlocks: https://github.com/ivyrze/omeka-s-module-pageblocks/
-        CSVImport: https://github.com/Omeka-s-modules/CSVImport
-        HideProperties: https://github.com/zerocrates/HideProperties
-        Log: https://gitlab.com/Daniel-KM/Omeka-S-module-Log
-        CustomOntology: https://gitlab.com/Daniel-KM/Omeka-S-module-CustomOntology
-        Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps
-        Shortcode: https://github.com/Daniel-KM/Omeka-S-module-Shortcode
+        Common
+        PageBlocks
+        CSVImport
+        HideProperties
+        Log
+        CustomOntology
+        Sitemaps
+        Shortcode
     # environment:
     #   OMEKA_MODULES: |
     #     Common: https://github.com/Daniel-KM/Omeka-S-module-Common
@@ -36,8 +35,9 @@ services:
     #     Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps
     #     Statistics: https://github.com/Daniel-KM/Omeka-s-module-Statistics
     #     ValueSuggest: https://github.com/omeka-s-modules/ValueSuggest
+    #     OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
     volumes:
-      - omekas:/var/www/html/volume:Z
+      - omekas_volume:/var/www/html/volume:Z
 
   omekas_db:
     image: mysql:latest

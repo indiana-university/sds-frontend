@@ -1,6 +1,7 @@
 #FROM php:8.2-apache-bookworm
 FROM php:8.4-apache-trixie
 
+
 # Omeka-S web publishing platform for digital heritage collections (https://omeka.org/s/)
 # Previous maintainers: Oldrich Vykydal (o1da) - Klokan Technologies GmbH  / Eric Dodemont <eric.dodemont@skynet.be>
 # MAINTAINER Giorgio Comai <g@giorgiocomai.eu>
@@ -46,6 +47,10 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+# Install Composer dependencies
+# error: Composer could not find a composer.json file in /var/www/html
+#To initialize a project, please create a composer.json file. See https://getcomposer.org/basic-usage
+#RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install PHP extension installer tool
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -103,17 +108,10 @@ RUN set -x && \
     # 4. Set final permissions
     chown -R  www-data:www-data volume . /usr/local/bin/omeka-s-cli
 
-# Support for more languages, e.g. for date formatting and month names
-#RUN docker-php-ext-configure intl
-#RUN docker-php-ext-install intl
-
-# install zip extension
-#RUN docker-php-ext-install zip
-
 # Overwrite the original Docker PHP entrypoint
-#COPY docker-php-entrypoint /usr/local/bin/
+COPY docker-php-entrypoint /usr/local/bin/
 
 # Copy the automatic installation script
-#COPY install_cli.php /var/www/html/
+COPY install_cli.php /var/www/html/
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

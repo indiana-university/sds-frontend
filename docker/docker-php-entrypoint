@@ -94,6 +94,42 @@ else
   echo "No theme URLs provided. Skipping theme installation."
 fi
 
+# Install IUTheme from bundled zip using omeka-s-cli
+IUTHEME_ZIP="/sds-frontend/omeka/IUTheme.zip"
+IUTHEME_NAME="IUTheme"
+IUTHEME_DIR="/var/www/html/volume/themes/$IUTHEME_NAME"
+
+if [ -f "$IUTHEME_ZIP" ]; then
+  if [ ! -d "$IUTHEME_DIR" ]; then
+    echo "Installing IUTheme from $IUTHEME_ZIP..."
+    # Snapshot existing theme directories before extraction
+    _iutheme_existing=$(find /var/www/html/volume/themes -maxdepth 1 -mindepth 1 -type d -exec basename {} \; 2>/dev/null | sort)
+    if ! unzip -oq "$IUTHEME_ZIP" -d /var/www/html/volume/themes/; then
+      echo "ERROR: Failed to extract IUTheme from $IUTHEME_ZIP" >&2
+    else
+      # Rename the newly extracted directory to IUTheme if it differs
+      for dir in /var/www/html/volume/themes/*/; do
+        dir_name=$(basename "$dir")
+        if ! echo "$_iutheme_existing" | grep -qx "$dir_name" && \
+           [ "$dir_name" != "$IUTHEME_NAME" ]; then
+          echo "Renaming theme directory from '$dir_name' to '$IUTHEME_NAME'..."
+          mv "$dir" "$IUTHEME_DIR"
+          break
+        fi
+      done
+      if omeka-s-cli theme:install "$IUTHEME_NAME"; then
+        echo "IUTheme installed successfully."
+      else
+        echo "WARNING: omeka-s-cli theme:install failed for IUTheme; the theme files are present but may need manual activation." >&2
+      fi
+    fi
+  else
+    echo "IUTheme already installed. Skipping."
+  fi
+else
+  echo "IUTheme zip not found at $IUTHEME_ZIP. Skipping IUTheme installation."
+fi
+
 # Function to get download URL from GitLab repository URL
 get_gitlab_zip_url() {
     repo_url="$1"

@@ -108,18 +108,22 @@ RUN set -x && \
     # 4. Set final permissions
     chown -R  www-data:www-data volume . /usr/local/bin/omeka-s-cli
 
-COPY ./database.ini /var/www/html/config/
-COPY ./local.config.php /var/www/html/config/
+COPY docker/database.ini /var/www/html/config/
+COPY docker/local.config.php /var/www/html/config/
 # Ensure .htaccess is present (not included in GitHub source archive)
-COPY .htaccess /var/www/html/.htaccess
+COPY docker/.htaccess /var/www/html/.htaccess
 
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Overwrite the original Docker PHP entrypoint
-COPY docker-php-entrypoint /usr/local/bin/
+COPY docker/docker-php-entrypoint /usr/local/bin/
 
 # Copy the automatic installation script
-COPY install_cli.php /var/www/html/
+COPY docker/install_cli.php /var/www/html/
+
+# Bundle IUTheme zip for installation at container startup
+RUN mkdir -p /sds-frontend/omeka
+COPY omeka/IUTheme.zip /sds-frontend/omeka/IUTheme.zip
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

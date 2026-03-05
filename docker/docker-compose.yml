@@ -1,6 +1,8 @@
 services:
   omekas:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     depends_on:
       - omekas_db
     container_name: omekas

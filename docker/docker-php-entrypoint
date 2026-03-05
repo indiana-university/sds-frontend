@@ -290,6 +290,15 @@ install_module_from_url() {
         return 1
     fi
 
+    # Run composer install if the module has PHP dependencies
+    if [ -f "$modules_dir/$name/composer.json" ]; then
+        echo "Running composer install for module '$name'..."
+        if ! composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$modules_dir/$name"; then
+            echo "ERROR: composer install failed for module '$name'" >&2
+            return 1
+        fi
+    fi
+
     # Install the module via omeka-s-cli
     echo "Installing module '$name' via omeka-s-cli..."
     if omeka-s-cli module:install "$name"; then

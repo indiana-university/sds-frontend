@@ -228,28 +228,115 @@ process_download() {
     esac
 }
 
-# install items from names
+# Function to download, extract, and install a module from a URL (GitHub, GitLab, or direct zip)
+install_module_from_url() {
+    local name="$1"
+    local url="$2"
+    local modules_dir="/var/www/html/volume/modules"
+    local tmpdir zip_url existing_dirs new_dir
+
+    # Skip if the module directory already exists
+    if [ -d "$modules_dir/$name" ]; then
+        echo "Module '$name' already exists. Skipping."
+        return 0
+    fi
+
+    # Resolve the actual ZIP download URL via the existing helper
+    zip_url=$(process_download "$url" "module") || return 1
+    if [ -z "$zip_url" ]; then
+        echo "ERROR: Could not determine download URL for module '$name'" >&2
+        return 1
+    fi
+
+    echo "Downloading module '$name' from $zip_url..."
+    tmpdir=$(mktemp -d)
+    if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
+        echo "ERROR: Failed to download module '$name' from $zip_url" >&2
+        rm -rf "$tmpdir"
+        return 1
+    fi
+
+    # Record existing module directories before extraction
+    existing_dirs=$(find "$modules_dir" -maxdepth 1 -mindepth 1 -type d -exec basename {} \; 2>/dev/null | sort)
+
+    # Extract zip to the modules directory
+    if ! unzip -oq "$tmpdir/module.zip" -d "$modules_dir"; then
+        echo "ERROR: Failed to extract module zip for '$name'" >&2
+        rm -rf "$tmpdir"
+        return 1
+    fi
+    rm -rf "$tmpdir"
+
+    # Find the newly extracted directory (directories not present before extraction)
+    new_dir=""
+    for dir in "$modules_dir"/*/; do
+        [ -d "$dir" ] || continue
+        dir_name=$(basename "$dir")
+        if ! echo "$existing_dirs" | grep -qx "$dir_name"; then
+            if [ -n "$new_dir" ]; then
+                echo "WARNING: Multiple new directories found after extraction; using '$new_dir', ignoring '$dir_name'" >&2
+            else
+                new_dir="$dir_name"
+            fi
+        fi
+    done
+
+    # Rename extracted directory to the expected module name if needed
+    if [ -n "$new_dir" ] && [ "$new_dir" != "$name" ]; then
+        echo "Renaming module directory from '$new_dir' to '$name'..."
+        mv "$modules_dir/$new_dir" "$modules_dir/$name"
+    elif [ -z "$new_dir" ] && [ ! -d "$modules_dir/$name" ]; then
+        echo "ERROR: Could not find extracted module directory for '$name'" >&2
+        return 1
+    fi
+
+    # Install the module via omeka-s-cli
+    echo "Installing module '$name' via omeka-s-cli..."
+    if omeka-s-cli module:install "$name"; then
+        echo "Module installed successfully: $name"
+    else
+        echo "ERROR: Failed to install module '$name' via omeka-s-cli" >&2
+        return 1
+    fi
+}
+
+# install items from names or "name: url" pairs
 install_items_from_names() {
     local kind="$1"
     local env_var="$2"
-    local names
+    local items name url
 
-    names=$(eval "echo \${$env_var:-}")
-    [ -z "$names" ] && echo "No $kind to install. Skipping." && return
+    eval "items=\${$env_var:-}"
+    [ -z "$items" ] && echo "No $kind to install. Skipping." && return
 
-    for name in $names; do
-        [ -z "$name" ] && continue
-        echo "Processing $name..."
-        if omeka-s-cli "${kind%s}:download" "$name"; then
+    printf '%s\n' "$items" | while IFS= read -r line; do
+        # Trim leading/trailing whitespace and skip empty lines
+        line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        [ -z "$line" ] && continue
+
+        # Check for "name: url" format (line contains ": http")
+        if echo "$line" | grep -q ": http"; then
+            name=$(echo "$line" | sed 's/:[[:space:]]*http.*//' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            url=$(echo "$line" | sed 's/^[^:]*:[[:space:]]*//')
+            echo "Processing $kind from URL: $name ($url)..."
             if [ "$kind" = "modules" ]; then
-                if omeka-s-cli "${kind%s}:install" "$name"; then
-                    echo "$kind installed successfully: $name"
-                else
-                    echo "ERROR: Failed to install $kind: $name" >&2
-                fi
+                install_module_from_url "$name" "$url"
             fi
         else
-            echo "ERROR: Failed to download $kind: $name" >&2
+            # Simple name - use omeka-s-cli download
+            name="$line"
+            echo "Processing $name..."
+            if omeka-s-cli "${kind%s}:download" "$name"; then
+                if [ "$kind" = "modules" ]; then
+                    if omeka-s-cli "${kind%s}:install" "$name"; then
+                        echo "$kind installed successfully: $name"
+                    else
+                        echo "ERROR: Failed to install $kind: $name" >&2
+                    fi
+                fi
+            else
+                echo "ERROR: Failed to download $kind: $name" >&2
+            fi
         fi
     done
 }

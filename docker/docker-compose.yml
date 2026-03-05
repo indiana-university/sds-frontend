@@ -18,6 +18,7 @@ services:
         CustomOntology
         Sitemaps
         Shortcode
+        OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
     # environment:
     #   OMEKA_MODULES: |
     #     Common: https://github.com/Daniel-KM/Omeka-S-module-Common

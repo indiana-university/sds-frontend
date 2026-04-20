@@ -5,7 +5,7 @@ Php version 8.4
 
 # Docker
 
-Build docker image from the offical Omekas release [Omeka S v4.1.1](https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip)
+Build docker image from the official Omekas release [Omeka S v4.1.1](https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip)
 
 ## Omeka Modules:
 | Module           | Repository Link                                                           | Notes              |
@@ -35,7 +35,7 @@ omeka/SDS_2_0/omekaS_v_4_1_1
 * application/view/omeka
 * themes/default
 
-## 1. Pakcage omeka
+## 1. Package omeka
 Run ./zip_omekas.sh to generate omeka-s.zip 
 ## 2. Setup database
 Modify development.env and database.ini for db setup if necessary

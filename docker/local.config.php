@@ -30,8 +30,8 @@ return [
             'Omeka\File\Thumbnailer' => 'Omeka\File\Thumbnailer\ImageMagick',
         ],
     ],
- 'oidc' => [
-    'client_id' => '*****',
-    'client_secret' => '*****',
-],
+    'oidc' => [
+        'client_id' => getenv('OIDC_CLIENT_ID') ?: '',
+        'client_secret' => getenv('OIDC_CLIENT_SECRET') ?: '',
+    ],
 ];

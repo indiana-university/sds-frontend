@@ -59,9 +59,8 @@ chown www-data:www-data /var/www/html/volume/config/database.ini
 if [ -n "${OIDC_CLIENT_ID:-}" ] && [ -n "${OIDC_CLIENT_SECRET:-}" ]; then
   echo "Configuring OIDC settings..."
   # Escape special characters for sed
-  ESCAPED_CLIENT_ID=$(echo "$OIDC_CLIENT_ID" | sed 's/[&/\]/\\&/g')
-  ESCAPED_CLIENT_SECRET=$(echo "$OIDC_CLIENT_SECRET" | sed 's/[&/\]/\\&/g')
-
+  ESCAPED_CLIENT_ID=$(echo "$OIDC_CLIENT_ID" | sed 's/[\/&\\]/\\&/g')
+  ESCAPED_CLIENT_SECRET=$(echo "$OIDC_CLIENT_SECRET" | sed 's/[\/&\\]/\\&/g')
   sed -i "s|^\([[:space:]]*\)'client_id' => '.*'|\1'client_id' => '${ESCAPED_CLIENT_ID}'|" /var/www/html/volume/config/local.config.php
   sed -i "s|^\([[:space:]]*\)'client_secret' => '.*'|\1'client_secret' => '${ESCAPED_CLIENT_SECRET}'|" /var/www/html/volume/config/local.config.php
 
@@ -162,9 +161,20 @@ get_gitlab_zip_url() {
         fi
     fi
 
-    # No release found, fall back to the default branch
-    echo "WARNING: No release found for $repo_url, using default branch" >&2
-    echo "https://gitlab.com/${owner}/${repo}/-/archive/master/${repo}-master.zip"
+    # No release found, resolve the project's default branch for the fallback archive URL
+    project_api_url="https://gitlab.com/api/v4/projects/${encoded_path}"
+    default_branch=$(curl -s "$project_api_url" | jq -r '.default_branch' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+    if [ -z "$default_branch" ] || [ "$default_branch" = "null" ]; then
+        default_branch="main"
+    fi
+
+    if [ -z "$default_branch" ]; then
+        default_branch="master"
+    fi
+
+    echo "WARNING: No release found for $repo_url, using default branch ${default_branch}" >&2
+    echo "https://gitlab.com/${owner}/${repo}/-/archive/${default_branch}/${repo}-${default_branch}.zip"
     return 0
 }
 
@@ -416,21 +426,21 @@ if [ -n "${OMEKA_ADMIN_EMAIL:-}" ] && [ -n "${OMEKA_ADMIN_NAME:-}" ] && \
 #       check_db_availability "$MYSQL_HOST" 3306
 #   fi
 
-  CMD="php install_cli.php \
-    --email=\"$OMEKA_ADMIN_EMAIL\" \
-    --name=\"$OMEKA_ADMIN_NAME\" \
-    --password=\"$OMEKA_ADMIN_PASSWORD\" \
-    --title=\"$OMEKA_SITE_TITLE\""
+  set -- php install_cli.php \
+    "--email=$OMEKA_ADMIN_EMAIL" \
+    "--name=$OMEKA_ADMIN_NAME" \
+    "--password=$OMEKA_ADMIN_PASSWORD" \
+    "--title=$OMEKA_SITE_TITLE"
 
   if [ -n "${OMEKA_TIMEZONE:-}" ]; then
-    CMD="$CMD --timezone=\"$OMEKA_TIMEZONE\""
+    set -- "$@" "--timezone=$OMEKA_TIMEZONE"
   fi
 
   if [ -n "${OMEKA_LOCALE:-}" ]; then
-    CMD="$CMD --locale=\"$OMEKA_LOCALE\""
+    set -- "$@" "--locale=$OMEKA_LOCALE"
   fi
 
-  eval "$CMD"
+  "$@"
 else
   echo "[Entrypoint] Skipping Omeka S install: missing required environment variables (OMEKA_ADMIN_EMAIL, OMEKA_ADMIN_NAME, OMEKA_ADMIN_PASSWORD, OMEKA_SITE_TITLE)"
 fi

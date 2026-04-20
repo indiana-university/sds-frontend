@@ -244,13 +244,13 @@ if [ -n "$OMEKA_MODULES" ]; then
         
         echo "Processing module line: '$module_line'"
 
-        # Parse ModuleName: URL format
-        if echo "$module_line" | grep -q ':'; then
+        # Parse only strict "ModuleName: URL" lines; otherwise treat the whole line as the URL.
+        if echo "$module_line" | grep -Eq '^[^:[:space:]]+:[[:space:]]*https?://'; then
             MODULE_NAME=$(echo "$module_line" | cut -d':' -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
             module_url=$(echo "$module_line" | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
         else
-            # Fallback: treat the whole line as URL and extract module name
-            module_url="$module_line"
+            # Fallback: treat the whole line as URL
+            module_url=$(echo "$module_line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
             MODULE_NAME=""
         fi
 

@@ -166,10 +166,6 @@ get_gitlab_zip_url() {
     default_branch=$(curl -s "$project_api_url" | jq -r '.default_branch' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
     if [ -z "$default_branch" ] || [ "$default_branch" = "null" ]; then
-        default_branch="main"
-    fi
-
-    if [ -z "$default_branch" ]; then
         default_branch="master"
     fi
 

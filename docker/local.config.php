@@ -1,8 +1,8 @@
 <?php
 return [
     'logger' => [
-        'log' => true,
-        'priority' => \Zend\Log\Logger::NOTICE,
+        'log' => false,
+        'priority' => \Laminas\Log\Logger::NOTICE,
     ],
     'http_client' => [
         'sslcapath' => null,
@@ -29,5 +29,9 @@ return [
             'Omeka\File\Store' => 'Omeka\File\Store\Local',
             'Omeka\File\Thumbnailer' => 'Omeka\File\Thumbnailer\ImageMagick',
         ],
+    ],
+    'oidc' => [
+        'client_id' => getenv('OIDC_CLIENT_ID') ?: '',
+        'client_secret' => getenv('OIDC_CLIENT_SECRET') ?: '',
     ],
 ];

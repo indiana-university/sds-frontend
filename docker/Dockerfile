@@ -26,9 +26,11 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
     libpng-dev \
     libjpeg-dev \
     libmemcached-dev \
+    libzip-dev \
     zlib1g-dev \
     imagemagick \
     libmagickwand-dev \
+    jq \
     wget \
     ghostscript \
     poppler-utils \
@@ -37,7 +39,7 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
 
 # Install the PHP extensions we need
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
-RUN docker-php-ext-install -j$(nproc) iconv pdo pdo_mysql mysqli gd
+RUN docker-php-ext-install -j$(nproc) iconv pdo pdo_mysql mysqli gd opcache sodium
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -46,6 +48,9 @@ RUN yes | pecl install imagick && docker-php-ext-enable imagick
 # Support for more languages, e.g. for date formatting and month names
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
+
+# install zip extension
+RUN docker-php-ext-install zip
 
 # Add the Omeka-S PHP code
 # Latest Omeka version, check: https://omeka.org/s/download/
@@ -67,8 +72,16 @@ RUN rm /var/www/html/config/database.ini \
 && ln -s /var/www/html/volume/config/database.ini /var/www/html/config/database.ini \
 && rm /var/www/html/config/local.config.php \
 && ln -s /var/www/html/volume/config/local.config.php /var/www/html/config/local.config.php \
+&& cp -r /var/www/html/files/* /var/www/html/volume/files/ 2>/dev/null || true \
 && rm -Rf /var/www/html/files/ \
 && ln -s /var/www/html/volume/files/ /var/www/html/files \
+&& cp -r /var/www/html/themes/* /var/www/html/volume/themes/ 2>/dev/null || true \
+&& rm -Rf /var/www/html/themes/ \
+&& ln -s /var/www/html/volume/themes/ /var/www/html/themes \
+&& cp -r /var/www/html/modules/* /var/www/html/volume/modules/ 2>/dev/null || true \
+&& rm -Rf /var/www/html/modules/ \
+&& ln -s /var/www/html/volume/modules/ /var/www/html/modules \
+&& cp -r /var/www/html/logs/* /var/www/html/volume/logs/ 2>/dev/null || true \
 && rm -Rf /var/www/html/logs/ \
 && ln -s /var/www/html/volume/logs/ /var/www/html/logs \
 && chown -R www-data:www-data /var/www/html/ \
@@ -81,5 +94,8 @@ VOLUME /var/www/html/volume/
 
 # Overwrite the original Docker PHP entrypoint
 COPY docker-php-entrypoint /usr/local/bin/
+
+# Copy the automatic installation script
+COPY install_cli.php /var/www/html/
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

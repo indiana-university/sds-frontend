@@ -125,10 +125,21 @@ get_gitlab_zip_url() {
             return 0
         fi
     fi
-    
-    # No release found, fall back to the default branch
-    echo "WARNING: No release found for $repo_url, using default branch" >&2
-    echo "https://gitlab.com/${owner}/${repo}/-/archive/master/${repo}-master.zip"
+
+    # No release found, resolve the project's default branch for the fallback archive URL
+    project_api_url="https://gitlab.com/api/v4/projects/${encoded_path}"
+    default_branch=$(curl -s "$project_api_url" | jq -r '.default_branch' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+    if [ -z "$default_branch" ] || [ "$default_branch" = "null" ]; then
+        default_branch="main"
+    fi
+
+    if [ -z "$default_branch" ]; then
+        default_branch="master"
+    fi
+
+    echo "WARNING: No release found for $repo_url, using default branch ${default_branch}" >&2
+    echo "https://gitlab.com/${owner}/${repo}/-/archive/${default_branch}/${repo}-${default_branch}.zip"
     return 0
 }
 

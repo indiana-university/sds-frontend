@@ -1,6 +1,6 @@
 # Docker
 
-Build docker image from the offical Omekas release [Omeka S v4.1.1](https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip)
+Build docker image from the official Omekas release [Omeka S v4.1.1](https://github.com/omeka/omeka-s/releases/download/v4.1.1/omeka-s-4.1.1.zip)
 
 ## Omeka Modules:
 | Module           | Repository Link                                                           | Notes              |

@@ -163,7 +163,12 @@ get_gitlab_zip_url() {
 
     # No release found, resolve the project's default branch for the fallback archive URL
     project_api_url="https://gitlab.com/api/v4/projects/${encoded_path}"
-    default_branch=$(curl -s "$project_api_url" | jq -r '.default_branch' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    if project_response=$(curl -fsS "$project_api_url" 2>/dev/null); then
+        default_branch=$(echo "$project_response" | jq -r '.default_branch' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    else
+        echo "WARNING: Failed to resolve default branch from GitLab API for $repo_url, falling back to master" >&2
+        default_branch="master"
+    fi
 
     if [ -z "$default_branch" ] || [ "$default_branch" = "null" ]; then
         default_branch="master"

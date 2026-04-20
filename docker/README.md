@@ -30,7 +30,7 @@ omeka/SDS_2_0/omekaS_v_4_1_1
 * application/view/omeka
 * themes/default
 
-## 1. Pakcage omeka
+## 1. Package omeka
 Run ./zip_omekas.sh to generate omeka-s.zip 
 ## 2. Setup database
 Modify development.env and database.ini for db setup if necessary

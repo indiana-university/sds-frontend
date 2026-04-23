@@ -1,0 +1,26 @@
+<?php
+$translate = $this->plugin('translate');
+$hyperlink = $this->plugin('hyperlink');
+$urlHelper = $this->plugin('url');
+$this->headLink()->prependStylesheet($this->assetUrl('css/user-bar.css', 'Omeka'));
+$this->headLink()->prependStylesheet('//fonts.googleapis.com/css?family=Source+Code+Pro|Lato:400,400italic,700,700italic');
+?>
+<div id="user-bar" role="region" aria-label="User Information">
+<?php if ($user): ?>
+	<div class="site-links">
+    
+	</div>
+
+	<div class="user-links">
+	    <span class="user-id">
+	        <?php
+	        $url = $this->url('top', ['action' => 'index']);
+	        echo sprintf($translate('Signed in as %s'), $hyperlink($user->getName(), $url));
+	        ?>
+	    </span>
+        <?php echo $hyperlink($translate('Logout'), $urlHelper('logout'), ['class' => 'logout']); ?>
+	</div>
+<?php else: ?>
+    <?php echo $hyperlink($translate('Log in'), $urlHelper('login'), ['class' => 'login']); ?>
+<?php endif; ?>
+</div>

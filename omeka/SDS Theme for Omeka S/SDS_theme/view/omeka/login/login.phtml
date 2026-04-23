@@ -1,0 +1,246 @@
+<?php
+$translate = $this->plugin('translate');
+$this->htmlElement('body')->appendAttribute('class', 'login');
+?>
+<!--
+*****Adds Omeka Admin Login to page when OIDC is not enabled******
+<h1><?php echo $translate('Log in'); ?></h1>
+<?php echo $this->form($form); ?>
+<p class="forgot-password"><?php echo $this->hyperlink($translate('Forgot password?'), $this->url('forgot-password')); ?></p>
+-->
+<?php
+$translate = $this->plugin('translate');
+$this->htmlElement('body')->appendAttribute('class', 'login');
+?>
+
+  <meta content="text/html; charset=" http-equiv="content-type" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="Login page for Omeka S SDS instance.  ">
+  <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://uits.iu.edu/services/accounts-and-email/google" />
+  <link rel="shortcut icon" href="https://assets.iu.edu/favicon.ico" type="image/x-icon">
+  
+    <!-- Open Graph Meta-->
+  <meta property="og:title" content="Indiana Spatial Data Portal">
+  <meta property="og:description" content="Access ISDP.  ">
+  <meta property="og:url" content="https://uits.iu.edu/services/">
+    
+    <link as="font" crossorigin="" href="https://fonts.iu.edu/fonts/benton-sans-regular.woff" rel="preload" type="font/woff2" />
+    <link as="font" crossorigin="" href="https://fonts.iu.edu/fonts/benton-sans-bold.woff" rel="preload" type="font/woff2" />
+    <link href="https://unpkg.com/rivet-core@2.0.0-alpha.3/css/rivet.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet" />
+    <link href="https://coreapis.sitehost.iu.edu/feedback/static/css/rivet-footer-iu-edu.css" rel="stylesheet"/>
+
+ <link href="/rivetlandingpagescripts/styles.css" rel="stylesheet"/>
+ <link href="/rivetlandingpagescripts/microsite.css" rel="stylesheet"/>
+    
+
+<div class="rvt-c-hero rvt-c-hero--subtle">
+        <div class="rvt-container-lg">
+            <div class="rvt-row rvt-row--loose">
+                <div class="rvt-cols-8-md">
+                    <span class="rvt-c-hero__eyebrow">University Information Technology Services</span>
+                    <h1 class="rvt-c-hero__title [ rvt-text-bold rvt-ts-36 rvt-lh-title ]">Scholarly Data Share Site Title</h1>
+                    <div style="color: #000;" class="rvt-c-hero__teaser [ rvt-m-top-lg rvt-m-bottom-none rvt-ts-18 ]">
+                       Description of instance.
+                    </div>
+                    <div style="background-color: #F5BB17;">
+                        <p>The infrastructure for [Site title] will be under maintenance from [datse]. Downloads will be unavailable during this time.</p>
+                     <!--  <p>The file storage system for ISDP is undergoing emergency maintenance. The site will unavailable until the emergency maintenance is finished.</p> -->
+                        </div>
+                        <div class="rvt-m-top-lg rvt-m-top-xl-md-up">
+                            <a href="https://gis.iu.edu/oidc/login" class="rvt-button rvt-button--link rvt-m-right-md" >Log in to ISDP</a>
+                  <!--    Please contact uitsgis@iu.edu for assistance with downloads. </div>
+-->
+                        <div class="snippet hero-bottom">
+                                                <br>
+                                                <p class="hero__guest-account">Need an IU Guest account? <a href="https://login.iu.edu/guest?serviceName=isdp3"><strong>Create one now</strong></a></p>
+                                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="rvt-container-lg [ rvt-p-top-xl rvt-m-top-xl rvt-p-bottom-xxl rvt-m-bottom-xxl ]"  >
+
+
+<div class="rvt-row rvt-row--loose ">
+
+    <div class="rvt-cols-9-md [ rvt-m-top-xl rvt-m-top-none-md-up ]">
+
+    <div class="rvt-row rvt-row--loose">
+        <div class="rvt-cols-12-md [ rvt-p-bottom-lg ]">
+            <div class="rvt-c-text-intro rvt-p-right-md-md-up">
+                    <h2 class="rvt-c-text-intro__heading">Accessing Geospatial Data at IU </h2>
+
+                    <div class="rvt-c-text-intro__text rvt-c-typeset">
+                        <p>Log in to [site title] using your IU email address, <a rel="noopener noreferrer" href="https://kb.iu.edu/d/ajgc" target="_blank">IU username</a> and <a rel="noopener noreferrer" href="https://kb.iu.edu/d/acpu" target="_blank">passphrase</a>. Individuals with no formal relationship with Indiana University can create an <a rel="noopener noreferrer" href="https://kb.iu.edu/d/alqt" target="_blank">IU Guest Account</a> with their email address.</p>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="rvt-row rvt-m-top-lg">
+        <div class="rvt-cols-12-md [ rvt-p-bottom-lg ]">
+            <div class="rvt-c-text-intro rvt-p-right-md-md-up">
+                    <h2 class="rvt-c-text-intro__heading">Get more out of GIS at IU </h2>
+
+                    <div class="rvt-c-text-intro__text rvt-c-typeset">
+                        Check these IU Knowledge Base articles for information on:
+<ul>
+</ul>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--Render Container If required-->
+    <!--Check Heading typr-->
+
+
+    </div>
+</div>
+
+</div>
+
+
+
+
+    </div>
+</main>
+
+<div aria-label="University Information Technology Services social media channels" class="section bg-mahogany dark belt" role="complementary">
+        <div class="row pad">
+            <h2 class="visually-hidden">University Information Technology Services social media channels</h2>
+            <div class="invert border">
+                <ul class="social">
+
+                    <li>
+                        <a aria-label="Twitter" class="icon-twitter" href="https://www.twitter.com/insideuits">Twitter</a>
+                    </li>
+
+                    <li>
+                        <a aria-label="Facebook" class="icon-facebook" href="https://www.facebook.com/iu.uits">Facebook</a>
+                    </li>
+
+                    <li>
+                        <a aria-label="Instagram" class="icon-instagram" href="https://www.instagram.com/uitsatiu">Instagram</a>
+                    </li>
+
+                    <li>
+                        <a aria-label="YouTube" class="icon-youtube" href="https://www.youtube.com/user/uitsatiu">YouTube</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+ <div aria-label="Additional links and resources" class="section bg-mahogany bg-dark skirt" role="complementary">
+        <div class="row pad">
+            <h2 class="show-for-sr">Additional links and resources</h2>
+            <div class="rvt-container-xl">
+                <div class="rvt-row">
+                    <div class="rvt-cols-4-md">
+                        <h3 class="rvt-footer-resources__heading">Connect with UITS</h3>
+                        <a class="rvt-button rvt-c-button--reverse rvt-m-top-sm rvt-p-left-xl rvt-p-right-xl" href="https://kb.iu.edu/d/abxl">Contact us</a>
+                        <ul class="rvt-list-plain rvt-hero--crimson">
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://uits.iu.edu/askiu">Have a question? AskIU</a>
+                            </li>
+                            <li class="rvt-footer-resources__link" data-feedback-form="https://coreapis.sitehost.iu.edu/static/feedback/form/basic-form.html">Feedback</li>
+                        </ul>
+                    </div>
+                    <div class="rvt-cols-2-md">
+                        <h3 class="rvt-footer-resources__heading">Find</h3>
+                        <ul class="rvt-footer-resources__list">
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://directory.iu.edu/">Staff directory</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://hr.uits.iu.edu/">Careers</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://uits.iu.edu/about/facilities/index.html">Facilities</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rvt-cols-2-md">
+                        <h3 class="rvt-footer-resources__heading">Services</h3>
+                        <ul class="rvt-footer-resources__list">
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://one.iu.edu/">One.IU</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://canvas.iu.edu/">Canvas</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://uits.iu.edu/services/technology-for-teaching/instruction-and-assessment-tools/zoom/index.html">Zoom</a>
+                            </li>
+                        </ul>
+                    </div>
+                  <div class="rvt-cols-2-md">
+                        <h3 class="rvt-footer-resources__heading">Resources</h3>
+                        <ul class="rvt-footer-resources__list">
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://kb.iu.edu/">Knowledge Base</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://uits.iu.edu/services/software-and-platforms/wcms">Web Content Management System</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://ittraining.iu.edu/explore-topics/">IT Training</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rvt-cols-2-md">
+                        <h3 class="rvt-footer-resources__heading">Email</h3>
+                        <ul class="rvt-footer-resources__list">
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://kb.iu.edu/d/apfi">About email at IU</a>
+                            </li>
+                            <li class="rvt-footer-resources__list-item">
+                                <a href="https://uits.iu.edu/services/accounts-and-email/exchange/index.html">Exchange</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!--<footer id="footer" role="contentinfo" itemscope="itemscope" itemtype="http://schema.org/CollegeOrUniversity">
+        <div class="row pad">
+            <p class="signature">
+                <a href="https://www.iu.edu/index.html" class="signature-link signature-img">
+                    <img src="//assets.iu.edu/brand/3.3.x/iu-sig-formal.svg" alt="Indiana University"/>
+                </a>
+            </p>
+
+            <p class="copyright">
+                <span class="line-break">
+                    <a href="https://accessibility.iu.edu/assistance/index.html" id="accessibility-link" title="Having trouble accessing this web page content? Please visit this page for assistance.">Accessibility</a>
+                     |
+                    <a href="https://uits.iu.edu/privacy/" id="privacy-policy-link">Privacy Notice</a>
+                </span>
+                <span class="hide-on-mobile"> | </span>
+                <a href="https://www.iu.edu/copyright/index.html">Copyright</a>
+                 &#169; 2025
+                <span class="line-break-small">
+                    The Trustees of
+                    <a href="https://www.iu.edu/index.html" itemprop="url">
+                        <span itemprop="name">Indiana University</span>
+                    </a>
+                </span>
+            </p>
+        </div>
+    </footer>
+
+--!>
+
+

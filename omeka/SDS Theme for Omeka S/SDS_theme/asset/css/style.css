@@ -1,0 +1,634 @@
+@media screen{*{box-sizing:border-box}html{height:100%;padding:0;margin:0}body{background-color:#fff;font-family:"Open Sans",sans-serif;font-size:20px;line-height:30px;margin:0;word-wrap:break-word; max-width: 1700px;}a:link{text-decoration:none;color:#990000}a:visited{color:#7b0202}a:active,a:hover{color:#990000}h1{font-size:40px;line-height:60px}h2{font-size:30px;line-height:45px}h3{font-size:25px;line-height:45px}h4{font-size:22.5px}img{max-width:100%;height:auto}input,textarea,button,.button,.resource-list.preview+a,select{font-family:"Open Sans",sans-serif;font-size:20px;line-height:30px;margin:0;vertical-align:top}input[type=text],input[type=password],input[type=email],input[type=url],textarea{-webkit-appearance:none;appearance:none;border-radius:0;height:45px;border:1px solid #dedede;padding:6.5px 1.6949152542%;margin:0}textarea{height:90px}input[type=file]{line-height:1;vertical-align:bottom;font-size:15px}button,a.button,.resource-list.preview+a,[type=submit]{background-color:#512A44;color: #fff; border-radius:2px;padding:7.5px;display:inline-block;appearance:none;-webkit-appearance:none;-moz-appearance:none;border:0;cursor:pointer}select{background-color:#fff;padding:7.5px;border-color:#dedede;height:45px}::-webkit-input-placeholder{font-style:italic}:-moz-placeholder{font-style:italic}::-moz-placeholder{font-style:italic}:-ms-input-placeholder{font-style:italic}.field{margin:30px 0;display:flex;flex-wrap:wrap}.field .inputs input[type=checkbox]{vertical-align:bottom}.field .field-meta{padding:7.5px 45px 7.5px 0;position:relative;width:100%}.field.multi-value .label,.field.multi-value .field-description{margin-right:7.5px}.field.required .field-meta:after{content:"";font-family:"Font Awesome 5 Free";font-size:15px}.field .add-value{position:absolute;right:.25rem;top:0;width:45px}.field .value:not(:last-child){margin-bottom:15px}.field-description{font-size:15px}.field .inputs{width:100%}.field .value *{max-width:100%}.field .value select{width:100%;margin-bottom:7.5px}#skipnav{position:fixed;top:30px;left:50%;border:1px solid #ababab;transform:translateX(-50%);z-index:-5;padding:7.5px;background-color:#fff;opacity:0}#skipnav:focus{z-index:1000;opacity:1}header h1{margin:0}header nav{position:relative;padding:0}header nav.closed ul{height:0;overflow:hidden;margin:0}header nav:before{font-family:"Font Awesome 5 Free";content:"";display:block;width:37.5px;height:37.5px;border:1px solid #dedede;text-align:center;border-radius:2px;position:absolute;right:1.6949152542%;top:-48.75px;cursor:pointer;line-height:37.5px}header nav.open{margin:15px 0 -1px}header nav.open:before{content:""}header nav ul{padding-left:0;list-style:none;position:relative;margin:0 auto}header nav ul a{display:inline-block;width:100%;padding:7.5px}header nav ul a:hover{border-bottom:0;background-color:#512A44;color:#FFF;}header nav ul li{border-top:1px solid #dedede;position:relative}header nav ul li li:last-of-type{padding-bottom:0}header nav ul li.active{font-weight:bold;color:#FFF;}header nav ul li.parent{position:relative}header nav ul .parent-link{display:flex}header nav ul .parent-link>a{width:calc(100% - 60px)}header nav ul .child-toggle{color:#dedede;width:60px;text-align:center;background-color:#fff;border-left:1px solid #dedede;-webkit-appearance:none;appearance:none}header nav ul .child-toggle:before{font-family:"Font Awesome 5 Free";content:""}header nav>ul>li:last-child{border-bottom:1px solid #dedede;padding-bottom:-1px}header nav>ul ul li{height:0;overflow:hidden;border:0}header nav ul.open>li{height:auto;border-top:1px solid #dedede;padding-top:-1px;color:#FFF;}header nav>ul>li>ul>li.active>a{margin-left:-1.5em;color:#FFF;}header nav>ul>li>ul>li.active>a:before{content:">";display:inline-block;width:1.5em}header nav>ul>li>ul>li a{padding-left:30px;color:#FFF;}header nav>ul>li>ul>li>ul>li a{padding-left:60px;color:#FFF;}header nav>ul>li>ul>li>ul>li>ul>li a{padding-left:90px}.sub-menu ul{padding-left:0;list-style-type:none;margin-top:15px}.sub-menu li{font-size:15px;font-weight:bold;border-bottom:1px solid #dedede;padding:7.5px 0 6.5px}.sub-menu li:first-of-type{border-top:1px solid #dedede;padding-top:6.5px}nav.pagination{margin-bottom:30px;font-size:20px;line-height:45px}.pagination input{text-align:center}.resource-list+.pagination{border-color:transparent}.pagination form{min-width:90px}.pagination form,.pagination .button,.pagination .resource-list.preview+a,.pagination button,.pagination .page-count{display:inline-block;vertical-align:top;height:45px}.pagination .button,.pagination .resource-list.preview+a{border:1px solid #dedede;background-color:#512A44;width:45px;text-align:center;padding:7.5px;border-radius:2px;color:#fff;line-height:30px;margin-right:5%;}.pagination .inactive.button,.pagination .resource-list.preview+a.inactive{opacity:.5;color:#ababab;background-color:#fff}.pagination form,.pagination .last{margin-right:7.5px}.pagination input{width:60px}.breadcrumbs{font-size:15px;margin:30px 0 -15px}h1.site-title{font-size:35px;line-height:30px;margin-bottom: 5%;padding-right:45px;padding-left:1.6949152542%; /*margin-top: -5%*/;background-color: #fff;}header{margin:0 0 75px;background-color:#fff;border-bottom:1px solid #dedede;position:relative}header>*{max-width:1700px;margin-left:auto;margin-right:auto;display:block}.site-title:hover,.site-title:active{border-bottom:0}.site-title h1{margin:0}button.o-icon-search{display:none}#search{position:absolute;top:100%;left:0;right:0;background-color:#fff;border-bottom:1px solid #dedede;border-top:1px solid #dedede;padding:7.5px 1.6949152542%}#search form{display:flex;flex-wrap:nowrap}#search form input[type=text]{width:100%}#search form button[type=submit]{height:45px;width:45px;text-indent:-9999px;position:relative;border-radius:0 3px 3px 0}#search form button[type=submit]:before{content:"";font-family:"Font Awesome 5 Free";position:absolute;top:0;left:0;right:0;text-align:center;text-indent:0;line-height:45px}.banner{position:relative;display:flex;align-items:center;overflow:hidden;z-index:-1}.banner img{width:100%}footer{/*max-width:1700px;margin-left:auto;margin-right:auto;*/padding:0 1.6949152542% 30px;clear:both}#content{max-width:1700px;/*margin-left:auto;margin-right:auto;*/padding:0 1.6949152542% 30px}.resource-list.preview+a{color:#000}.resource-list.preview+a:hover{background-color:#787878;border-bottom-width:0px;color:#fff}ul.resource-list{list-style-type:none;padding-left:0}ul.resource-list .resource{border-bottom:1px solid #dedede;padding-bottom:29px;margin:30px 0;overflow:hidden;position:relative}ul.resource-list .resource>*:last-child{margin-bottom:0}ul.resource-list .resource:first-child{border-top:1px solid #dedede;padding-top:29px}ul.resource-list .resource img{height:auto;width:60px;float:right;margin-left:15px}ul.resource-list .resource h4{margin-top:0}ul.resource-list .resource .description{max-height:90px;overflow:hidden;position:relative}ul.resource-list .resource .description:after{content:"";position:absolute;top:52.5px;left:0;right:0;height:37.5px;background:linear-gradient(to top, #f8f8f8, rgba(248, 248, 248, 0))}ul.resource-list .resource img~*{width:calc(100% - 75px)}.search-filters{margin-bottom:30px}.filter-label,.filter-value{display:inline-block;border:1px solid #dedede;padding:6.5px}.filter-label{background-color:#512A44;color:#fff}.filter-value{margin-left:-5px}.browse-controls{display:flex;justify-content:space-between;flex-wrap:wrap}.advanced-search{line-height:45px}.expand:after,.collapse:after{font-family:"Font Awesome 5 Free";font-weight:900}.expand:after{content:""}.collapse:after{content:""}.collapsible{display:none}.collapse+.collapsible{display:block;border-left:3px solid #ababab;padding:7.5px 30px;margin:15px 0;width:100%}body.resource #content>h2:first-of-type+h3{font-size:15px;text-transform:uppercase;margin:-30px 0 30px}.property{margin-bottom:30px}.property:last-child{margin-bottom:0}.property h4{margin-bottom:0;font-size:20px; font-weight: bold; /*float: left;*/ margin-right: 10px; min-width: 30%;}.property h4:first-child{margin-top:0}.value{display:flex;flex-wrap:wrap;align-items:center}.value:not(:last-child){margin-bottom:15px}.value-content:not(:only-child){margin-right:7.5px}.resource-link img{width:auto;height:45px;display:inline-block;vertical-align:middle;margin-right:7.5px}.property .value a{display:inline-block;vertical-align:bottom}.property .value:not(:last-child) img{margin-bottom:7.5px}.property .value:not(:last-child) img+a{margin-bottom:7.5px}.property .value .language{background-color:#d1d1d1;padding:0 7.5px;font-size:15px;margin-right:7.5px}.property .private:after{content:"";font-family:"Font Awesome 5 Free";font-size:15px}.media-list .resource-link{width:100%;display:block}.media-list .resource-link:not(:last-child){margin-bottom:15px}#content .media.resource{display:inline-block;text-align:center;vertical-align:bottom;margin-right:7.5px}#content .media.resource:hover{border-bottom:0}#content .media.resource img{vertical-align:top;margin-bottom:15px}.media-render>*{max-width:100%}#linked-resources caption{text-align:left;font-weight:bold;border-bottom:3px solid #ababab;padding:7.5px 15px 4.5px}#linked-filter h4{margin-bottom:15px}#linked-resources .resource-link{margin-bottom:0;display:flex;align-items:center}#advanced-search .value:not(:last-child){margin-bottom:15px}.remove-value{position:relative;width:45px;margin-left:7.5px}.results{margin-bottom:60px; margin-top: 15px; clear:both}.results ul{list-style:none;padding-left:0}.results .result-title{font-weight:bold}.results>ul{margin:15px 0 0 0}.results .result-site,.results ul ul{display:block;padding-left:15px}.results>ul>li{margin-bottom:30px}.pagination+.results{margin:30px 0 0;clear:both}.sitewide-search-form{display:none}.sitewide-search-form~.results+.pagination{margin-top:0}.sitewide-search-form~.advanced-search{display:block}.sitewide-search-form~h2{width:50%;float:left}.sitewide-search-form~.pagination{margin:37.5px 0 30px;text-align:right;width:50%;float:right}.sitewide-search-form~p{clear:both}.index.search .results ul li{margin-bottom:7.5px;padding-bottom:7.5px;border-bottom:1px solid #ababab}.items.search #search{display:none}a.metadata-browse-link{font-size:15px}}@media screen and (min-width: 800px){#content{padding:0 3.3898305085% 30px}table{margin:30px 0;border-collapse:collapse}th,td{text-align:left;padding:7.5px 15px;padding-bottom:6.5px;border-bottom:1px solid #ababab}.field .field-meta{width:30%;align-self:flex-start}.field .inputs{width:70%;padding-left:1.6949152542%}.field .value select{width:initial;margin-bottom:0}header{position:relative;padding:15px 0 0;margin-bottom:60px}header>*{padding:0 3.3898305085%}h1.site-title{margin:17.5px auto;/*padding:0 3.3898305085%*/}.banner{margin-top:-60px}footer{padding:0 3.3898305085% 30px}header nav{margin:0 auto !important;position:static;padding:0 3.3898305085%}header nav:before{content:"";border:0;display:none}header nav ul a{padding:0;color:#FFF;}header nav ul li{position:static}header nav ul a:hover{background-color:transparent;color:#FFF;}header nav ul li,header nav>ul li:last-child,header nav>ul ul:hover>li{border:0} body > header:nth-child(17) > nav > ul > li:nth-child(4) {margin-left:25px} header nav ul.navigation{margin-left:-55.5px;position:static;display:flex;align-items:flex-end;height:auto; background-color: #512A44; min-width: 120%;}header nav ul.navigation li ul:before{display:none}header nav ul.navigation>li {margin-left:25px}header nav ul.navigation>li>ul{position:absolute;top:100%;left:-9999px;background-color:#512A44;padding:0;list-style:none;width:100%;padding:14px 0 6.5px;display:flex;flex-direction:row;flex-flow:row wrap;z-index:1}header nav ul.navigation ul ul{height:0}header nav ul.navigation>li:hover>ul{max-width:1700px;margin-left:auto;margin-right:auto;padding:15px 3.3898305085%;left:0;right:0;border-bottom:0;border-color:#dedede;height:auto}header nav ul.navigation>li:hover>ul:after{content:"";left:-9999px;right:-9999px;background-color:#512A44;position:absolute;top:0;bottom:0;border-bottom:1px solid #dedede;border-top:1px solid #dedede;z-index:-1}header nav ul.navigation>li>ul>li{width:25%;font-size:15px;font-weight:bold;padding-bottom:30px}header nav ul.navigation>li>ul>li ul{font-weight:normal;padding:0;list-style-type:none;height:auto}header nav ul.navigation li.parent{position:static}header nav>ul>li>a{margin:9.5px}header nav>ul>li>.parent-link{display:inline-block;width:100%;color:#FFF;}header nav>ul>li>.parent-link>a{margin:7.5px;width:100%;color:#FFF;}header nav>ul>li>.parent-link a:after{font-family:"Font Awesome 5 Free";content:"";display:inline-block;margin-left:7.5px}header nav>ul li:hover ul li{height:auto;padding:0}.child-toggle{display:none}header .parent ul a{padding-left:0;color:#FFF;}header .parent .parent .parent ul a{padding-left:15px}.sub-menu ul{border-bottom:1px solid #dedede;padding-bottom:14px}.sub-menu li{display:inline-block;border:0;padding:0;margin-right:15px}.sub-menu li:first-of-type{border:0;padding:0}#search{left:75%;border-left:1px solid #dedede;padding:7.5px}#search form input[type=text],#search form button[type=submit]{height:30px;font-size:15px;line-height:30px}#search form button[type=submit]{width:30px;height:30px;padding:0}#search form button[type=submit]:before{line-height:30px}.items.search #search{display:block}ul.resource-list .resource img{width:150px;height:auto;float:left;margin-left:15px; margin-right: 15px;}ul.resource-list .resource img~*{width:calc(100% - 135px)}body.item-set.item #content{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:flex-end}body.item-set.item #content>h2,body.item-set.item #content>h3{width:100%}body.item-set .metadata{width:100%;/*border-left:5px solid #dedede;*/padding-left:1.6949152542%;margin-right:1.6949152542%; margin-bottom: 4%;}body.item-set .metadata h4:first-of-type{margin-top:0}body.item-set #content .metadata~*{width:100%;/*border-left:1px solid #dedede;padding-left:1.6949152542%*/}body.item-set .item-set-items h3{margin-top:0}body.item-set .metadata~nav.pagination:first-of-type{margin-bottom:0}.results>ul{display:flex;flex-wrap:wrap}.results>ul>li{width:calc(50% - 30px)}.results>ul>li:nth-child(2n){margin-left:30px}.preview-block{clear:both}ul.preview.resource-list li:first-of-type{border-top:1px solid #dedede;padding-top:29px}}
+
+
+/*Custom CSS for SDS and IU Branding*/
+
+
+body > header > nav > ul > li > a {
+color: #fff!important;
+background-color: #512A44;
+
+}
+
+body > header > h1 > a {
+color: #000!important;
+}
+
+body > header.rvt-header-wrapper > div > div > div > div > a > div.rvt-lockup__body > span {
+color: #000!important;
+}
+#main-content > div > div > div > div > div > div.rvt-m-top-lg.rvt-m-top-xl-md-up > a {
+color: #fff!important;
+}
+
+body.minimal {
+/*changes to margin and width in main style.css*/
+}
+
+body > div.rvt-header-global > div > div > div > a > div.rvt-lockup__body {
+color: #000;
+
+}
+
+body > div.rvt-header-global{
+1px solid #e2e7e9; }
+
+.title {
+margin-bottom: 15px!important;
+}
+
+.user-links a {
+text-decoration: none;
+}
+
+#content a {
+text-decoration: underline;
+}
+
+
+/*Accordion Metadata*/
+.accordion {
+  background-color: #F8F9FA;
+  color: #000!important;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  font-weight: bold;
+
+}
+
+.accordion1 {
+  background-color: #F8F9FA;
+  color: #000!important;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  font-weight: bold!important;
+}
+
+.accordion2 {
+  background-color: #F8F9FA;
+  color: #000!important;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  font-weight: bold;
+
+}
+.button > accordion1:hover .button >.accordion2:hover {
+  background-color: #000; 
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+  margin-left: 50px;
+}
+
+.accordion-icon {
+	float: right;
+	margin-top: -30px;
+}
+
+button.accordion1.active {
+background-color: #512A44;
+color: #fff!important;
+}
+
+button.accordion1.h4 {
+color: #fff!important;
+font-weight: bold;
+}
+
+.panel .property {
+float: left;
+min-width: 100%;
+}
+
+/*Desktop Metadata CSS*/
+
+@media screen and (min-width: 451px) {
+
+.value-heading {
+float: left;
+width: 22%;
+/*padding: 12px;*/
+text-align: left;
+font-weight: bold;
+}
+
+. values {
+float: left;
+/*padding: 12px;*/
+text-align: left;
+}
+
+.property h4 {
+max-width: 100%;
+float: left;
+}
+}
+
+/*Mobile Metadata CSS*/
+
+@media screen and (max-width: 450px) {
+.value-heading {
+padding: 12px;
+text-align: left;
+font-weight: bold;
+}
+
+. values {
+padding: 12px;
+text-align: left;
+}
+
+. value {
+padding: 12px;
+text-align: left;
+}
+
+.property h4 {
+max-width: 100%;
+float: none;
+}
+}
+
+
+.media-embeds {
+max-width: 40%;
+margin-right: 15%;
+margin-bottom: 2%;
+margin-top: 3%;
+}
+
+
+/*IU Footer CSS*/
+@media only screen and (min-width: 40em) {
+    #branding-bar .show-on-tablet {
+        display:inline
+    }
+
+    #branding-bar .show-on-desktop, #branding-bar .show-on-mobile {
+        display:none
+    }
+
+    #footer {
+        text-align: left;
+        border-top: 6px solid maroon;
+        padding: 32px 0 24px;
+    }
+
+    #footer p {
+        line-height:2.25rem
+    }
+
+    #footer .signature {
+        float: left;
+        text-align: left;
+        height:36px
+    }
+
+    #footer .copyright {
+        float: right;
+        clear: right;
+        text-align:right
+    }
+
+    #footer .tagline {
+        font-size: 1.5rem;
+        position: absolute;
+        left: 50%;
+        margin: 0 -200px 0 0;
+        top: -55px;
+        padding: 0 24px;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform:translateX(-50%)
+    }
+
+    #footer .tagline.bicentennial {
+        padding:0 16px
+    }
+    
+    
+    #branding-bar .row.pad, #footer .row.pad {
+    padding-left: .9375rem;
+    padding-right: .9375rem;
+    width:100%
+}
+
+@font-face {
+    font-family: BentonSansRegular;
+    src: url("https://fonts.iu.edu/fonts/benton-sans-regular.eot");
+    src: url("https://fonts.iu.edu/fonts/benton-sans-regular.eot?#iefix") format("embedded-opentype"), url("https://fonts.iu.edu/fonts/benton-sans-regular.woff") format("woff"), url("https://fonts.iu.edu/fonts/benton-sans-regular.ttf") format("truetype"), url("https://fonts.iu.edu/fonts/benton-sans-regular.svg#BentonSansRegular") format("svg");
+    font-display: swap;
+    font-style: normal;
+    font-weight:400
+}
+
+@font-face {
+    font-family: BentonSansBold;
+    src: url("https://fonts.iu.edu/fonts/benton-sans-bold.eot");
+    src: url("https://fonts.iu.edu/fonts/benton-sans-bold.eot?#iefix") format("embedded-opentype"), url("https://fonts.iu.edu/fonts/benton-sans-bold.woff") format("woff"), url("https://fonts.iu.edu/fonts/benton-sans-bold.ttf") format("truetype"), url("https://fonts.iu.edu/fonts/benton-sans-bold.svg#BentonSansBold") format("svg");
+    font-display: swap;
+    font-style: normal;
+    font-weight:400
+}
+
+@font-face {
+    font-family: BentonSansCondRegular;
+    src: url("https://fonts.iu.edu/fonts/benton-sans-cond-regular.eot");
+    src: url("https://fonts.iu.edu/fonts/benton-sans-cond-regular.eot?#iefix") format("embedded-opentype"), url("https://fonts.iu.edu/fonts/benton-sans-cond-regular.woff") format("woff"), url("https://fonts.iu.edu/fonts/benton-sans-cond-regular.ttf") format("truetype"), url("https://fonts.iu.edu/fonts/benton-sans-cond-regular.svg#BentonSansCondRegular") format("svg");
+    font-display: swap;
+    font-style: normal;
+    font-weight:400
+}
+
+@font-face {
+    font-family: BentonSansCondBold;
+    src: url("https://fonts.iu.edu/fonts/benton-sans-cond-bold.eot");
+    src: url("https://fonts.iu.edu/fonts/benton-sans-cond-bold.eot?#iefix") format("embedded-opentype"), url("https://fonts.iu.edu/fonts/benton-sans-cond-bold.woff") format("woff"), url("https://fonts.iu.edu/fonts/benton-sans-cond-bold.ttf") format("truetype"), url("https://fonts.iu.edu/fonts/benton-sans-cond-bold.svg#BentonSansCondBold") format("svg");
+    font-display: swap;
+    font-style: normal;
+    font-weight:400
+}
+
+@font-face {
+    font-family: GeorgiaProBoldItalic;
+    src: url("https://fonts.iu.edu/fonts/georgia-pro-bold-italic.eot");
+    src: url("https://fonts.iu.edu/fonts/georgia-pro-bold-italic.eot?#iefix") format("embedded-opentype"), url("https://fonts.iu.edu/fonts/georgia-pro-bold-italic.woff") format("woff"), url("https://fonts.iu.edu/fonts/georgia-pro-bold-italic.ttf") format("truetype"), url("https://fonts.iu.edu/fonts/georgia-pro-bold-italic.svg#GeorgiaProBoldItalic") format("svg");
+    font-display: swap;
+    font-style: normal;
+    font-weight:400
+}
+
+.visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border:0
+}
+
+#branding-bar, #footer {
+    -webkit-font-smoothing: initial;
+    -moz-font-smoothing: initial;
+    font-smoothing:initial
+}
+
+#branding-bar *, #footer * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing:border-box
+}
+
+#branding-bar .row, #footer .row {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 64rem;
+    position:relative;
+    background-color: #fff;
+}
+
+#branding-bar .row:after, #branding-bar .row:before, #footer .row:after, #footer .row:before {
+    content: " ";
+    display:table
+}
+
+#branding-bar .row:after, #footer .row:after {
+    clear:both
+}
+
+#branding-bar .row.pad, #footer .row.pad {
+    padding-left: .9375rem;
+    padding-right: .9375rem;
+    width:100%
+}
+
+#branding-bar {
+    position: fixed;
+    line-height: 1.5;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: #fff;
+    margin-bottom: 0;
+    padding-bottom: 1rem;
+    border-bottom:1px solid #e2e7e9
+}
+
+#branding-bar .show-on-mobile {
+    display:inline
+}
+
+#branding-bar .show-on-desktop, #branding-bar .show-on-tablet {
+    display:none
+}
+
+#branding-bar:after {
+    content: "";
+    bottom: -3px;
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: 0 0;
+    z-index:8
+}
+
+#branding-bar img {
+    top: 10px;
+    width: 36px;
+    position: absolute;
+    left: .9375rem;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    transition: all .5s;
+    z-index:9
+}
+
+#branding-bar #iu-campus, #branding-bar h1 {
+    font-family: BentonSansBold, Arial, serif;
+    position: relative;
+    top: .55rem;
+    padding-left: 48px;
+    font-weight: 400;
+    color: #243142;
+    font-size: 18px;
+    float: left;
+    line-height: 45px;
+    margin: 0;
+    text-transform: uppercase;
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    transition:all .25s
+}
+
+#branding-bar #iu-campus a, #branding-bar h1 a {
+    color: #243142;
+    text-decoration:none
+}
+
+#branding-bar #iu-campus span, #branding-bar h1 span {
+    font-family: BentonSansBold, sans-serif;
+    text-transform:none
+}
+
+#branding-bar #iu-campus .show-on-mobile, #branding-bar #iu-campus .show-on-tablet, #branding-bar h1 .show-on-mobile, #branding-bar h1 .show-on-tablet {
+    font-size:17px
+}
+
+#branding-bar a:focus {
+    outline:0
+}
+
+#branding-bar a:focus span {
+    outline: .125rem solid #990000;
+    outline-offset: .125rem;
+    padding:2px
+}
+
+#branding-bar.iupuc #iu-campus, #branding-bar.iupui #iu-campus {
+    font-size:1.5rem
+}
+
+#branding-bar.iupuc #iu-campus .show-on-mobile, #branding-bar.iupuc #iu-campus .show-on-tablet, #branding-bar.iupui #iu-campus .show-on-mobile, #branding-bar.iupui #iu-campus .show-on-tablet {
+    font-size:1.5rem
+}
+
+#footer {
+    padding: 24px 0;
+    text-align: center;
+    position: relative;
+    font-family: BentonSansRegular, Arial, serif;
+    font-weight: 400;
+    background-color: #fff!important;
+}
+
+#footer a {
+    color: #900;
+    text-decoration:underline;
+}
+
+#footer a:hover {
+    text-decoration:underline
+}
+
+#footer a:focus {
+    outline: .125rem solid #990000;
+    outline-offset:.125rem
+}
+
+#footer .signature {
+    text-align:center
+}
+
+#footer .signature-link {
+    background: url("iu-sig-formal.svg") no-repeat left top;
+    background-size: contain;
+    display: inline-block;
+    height: 0;
+    padding-top: 36px;
+    overflow: hidden;
+    width:240px
+}
+
+#footer .signature-link.signature-img {
+    background-image: none;
+    height: auto;
+    width: 15rem;
+    padding-top:0
+}
+
+#footer p {
+    font-size: .75rem;
+    line-height: 24px;
+    margin: 0;
+    clear:left
+}
+
+#footer .tagline {
+    font-family: BentonSansCondBold, Arial, serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    background: #7a1705;
+    color: #fff;
+    font-size: 1.375rem;
+    line-height: 2.5rem;
+    margin: -24px -.9375rem 24px -.9375rem;
+    text-transform: uppercase;
+    letter-spacing:.2em
+}
+
+#footer .tagline span {
+    text-transform: lowercase;
+    font-family: GeorgiaProBoldItalic, Georgia, serif;
+    font-size: 1rem;
+    vertical-align: 2px;
+    letter-spacing: 0;
+    margin-left:-4px
+}
+
+#footer .tagline a:focus {
+    outline-color:#fff
+}
+
+#footer .tagline.bicentennial {
+    font-family: inherit;
+    letter-spacing:.1em
+}
+
+#footer .tagline.bicentennial.celebration {
+    font-size: inherit;
+    padding-bottom:2px
+}
+
+#footer .tagline.celebration a {
+    color: #fff;
+    text-decoration:none
+}
+
+#footer .tagline.celebration svg {
+    vertical-align:middle
+}
+
+@media screen and (max-width: 350px) {
+    #footer .line-break-small {
+        display:block
+    }
+}
+
+@media screen and (max-width: 420px) {
+    #footer .line-break {
+        display:block
+    }
+
+    #footer .hide-on-mobile {
+        display:none
+    }
+}
+
+@media only screen and (min-width: 40em) {
+    #branding-bar .show-on-tablet {
+        display:inline
+    }
+
+    #branding-bar .show-on-desktop, #branding-bar .show-on-mobile {
+        display:none
+    }
+
+    #footer {
+        text-align: left;
+        border-top: 6px solid maroon;
+        padding: 32px 0 24px;
+    }
+
+    #footer p {
+        line-height:2.25rem
+    }
+
+    #footer .signature {
+        float: left;
+        text-align: left;
+        height:36px
+    }
+
+    #footer .copyright {
+        float: right;
+        clear: right;
+        text-align:right
+    }
+
+    #footer .tagline {
+        font-size: 1.5rem;
+        position: absolute;
+        left: 50%;
+        margin: 0 -200px 0 0;
+        top: -55px;
+        padding: 0 24px;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform:translateX(-50%)
+    }
+
+    #footer .tagline.bicentennial {
+        padding:0 16px
+    }
+}
+
+@media only screen and (min-width: 1025px) {
+    #branding-bar {
+        padding-bottom: 1.6rem;
+        position:relative
+    }
+
+    #branding-bar:after {
+        height:0
+    }
+
+    #branding-bar img {
+        position: absolute;
+        width: 2.5rem;
+        top:1rem
+    }
+
+    #branding-bar #iu-campus, #branding-bar h1 {
+        line-height: inherit;
+        top: 0;
+        padding-top: 1.45rem;
+        padding-left: 3.4rem;
+        font-size:1.25rem
+    }
+
+    #branding-bar .search {
+        margin-top: 6px;
+        float: right;
+        width:250px
+    }
+
+    #branding-bar input[type=text] {
+        width: 80%;
+        float: left;
+        margin-bottom:0
+    }
+
+    #branding-bar input[type=submit].button {
+        width: 20%;
+        float: left;
+        border-radius:0
+    }
+}
+
+@media only screen and (min-width: 1025px) {
+    #branding-bar .show-on-desktop {
+        display:inline !important
+    }
+
+    #branding-bar .show-on-desktop, #branding-bar .show-on-tablet {
+        display: none
+    }
+}

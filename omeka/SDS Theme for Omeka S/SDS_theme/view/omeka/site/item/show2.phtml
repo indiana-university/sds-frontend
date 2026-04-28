@@ -1,0 +1,201 @@
+<?php
+//Default Omeka S Item Show Code
+
+
+$translate = $this->plugin('translate');
+$this->headLink()->appendStylesheet($this->assetUrl('css/resource-page-blocks.css', 'Omeka'));
+$this->htmlElement('body')->appendAttribute('class', 'item resource show');
+$filterLocale = (bool) $this->siteSetting('filter_locale_values');
+$lang = $this->lang();
+$valueLang = $filterLocale ? [$lang, ''] : null;
+?>
+<?php echo $this->pageTitle($item->displayTitle(null, $valueLang), 2); ?>
+<!--<h3><?php echo $translate('Item'); ?></h3>-->
+<?php $this->trigger('view.show.before'); ?>
+<?php echo $this->resourcePageBlocks($item)->getBlocks(); ?>
+<?php $this->trigger('view.show.after'); ?>
+
+
+
+
+
+
+
+<!--
+<?php
+//ISDP Item Show Code
+
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'item resource show');
+$embedMedia = $this->siteSetting('item_media_embed', false);
+$itemMedia = $item->media();
+
+$filterLocale = (bool) $this->siteSetting('filter_locale_values');
+$lang = $this->lang();
+$downloadTerm = 'rdsisdp:downloadURL';	
+$downloadMetadataTerm = 'rdsisdp:downloadMetadata';
+$archivesizeTerm = 'rdsisdp:filesizeMB';	
+$multipartTerm = 'rdsisdp:multipleArchives';
+$coverageTerm = 'rdsisdp:coverage';
+$downloadMetadata = $downloadMetadataTerm ? $item->value($downloadMetadataTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$download = $downloadTerm ? $item->value($downloadTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$archivesize = $archivesizeTerm ? $item->value($archivesizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$multipart = $multipartTerm ? $item->value($multipartTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$coverage = $coverageTerm ? $item->value($coverageTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+
+$doqqNETerm = 'rdsisdp:quarterQuadNE';
+$doqqNWTerm = 'rdsisdp:quarterQuadNW'; 
+$doqqSETerm = 'rdsisdp:quarterQuadSE'; 
+$doqqSWTerm = 'rdsisdp:quarterQuadSW'; 
+$doqqNESizeTerm = 'rdsisdp:quarterQuadNEFileSize'; 
+$doqqNWSizeTerm = 'rdsisdp:quarterQuadNWFileSize'; 
+$doqqSESizeTerm = 'rdsisdp:quarterQuadSEFileSize'; 
+$doqqSWSizeTerm = 'rdsisdp:quarterQuadSWFileSize'; 
+$doqqNE = $doqqNETerm ? $item->value($doqqNETerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqNW = $doqqNWTerm ? $item->value($doqqNWTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqSE = $doqqSETerm ? $item->value($doqqSETerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqSW = $doqqSWTerm ? $item->value($doqqSWTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqNEsize = $doqqNESizeTerm ? $item->value($doqqNESizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqNWsize = $doqqNWSizeTerm ? $item->value($doqqNWSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqSEsize = $doqqSESizeTerm ? $item->value($doqqSESizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$doqqSWsize = $doqqSWSizeTerm ? $item->value($doqqSWSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+
+
+
+$part1DownloadurlTerm ='rdsisdp:part1Downloadurl';
+$part1FileSizeTerm ='rdsisdp:part1FileSize';
+$part2DownloadurlTerm ='rdsisdp:part2Downloadurl';
+$part2FileSizeTerm ='rdsisdp:part2FileSize';
+$part3DownloadurlTerm ='rdsisdp:part3Downloadurl';
+$part3FileSizeTerm ='rdsisdp:part3FileSize';
+$part4DownloadurlTerm ='rdsisdp:part4Downloadurl';
+$part4FileSizeTerm ='rdsisdp:part4FileSize';
+
+$part1Downloadurl= $part1DownloadurlTerm ? $item->value($part1DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part1FileSize= $part1FileSizeTerm ? $item->value($part1FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part2Downloadurl= $part2DownloadurlTerm ? $item->value($part2DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part2FileSize= $part2FileSizeTerm ? $item->value($part2FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part3Downloadurl= $part3DownloadurlTerm ? $item->value($part3DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part3FileSize= $part3FileSizeTerm ? $item->value($part3FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part4Downloadurl= $part4DownloadurlTerm ? $item->value($part4DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part4FileSize= $part4FileSizeTerm ? $item->value($part4FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+
+
+?>
+
+<?php echo $this->pageTitle($item->displayTitle(null, ($filterLocale ? $lang : null)), 2); ?>
+<?php $this->trigger('view.show.before'); ?>
+<?php if ($embedMedia && $itemMedia): ?>
+    <div class="media-embeds">
+    <?php foreach ($itemMedia as $media):
+        echo $media->render();
+    endforeach;
+    ?>
+    </div>
+<?php endif; ?>
+
+
+<div><br/>
+<?php
+// User Connection
+
+	$user = $this->identity();
+
+    if ($user != null) {
+    $useremail = $user->getEmail();
+	     }   ?>
+	</div>
+
+
+<!-- Metadata Structure-->
+<!--
+<div class="property">
+
+
+<?php 
+/*
+	if ($user == null):
+		echo "<div style=\"margin-left:2%;\">";
+		echo "Please <a href=\"https://nflperim.iu.edu/oidc/login\">login</a> to submit a download request.";
+	endif;
+
+	if ($user != null) {
+ */	
+/*	if ($multipart == "Yes") {
+	
+		echo "<div style=\"margin-left:2%;\">";
+      	echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$part1Downloadurl."&uid=".$useremail." target=blank>Dataset Part 1 (".$part1FileSize.")</a><br>";
+      	echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$part2Downloadurl."&uid=".$useremail." target=blank>Dataset Part 2 (".$part2FileSize.")</a><br>";
+    	if ($part3Downloadurl): 	
+      		echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$part3Downloadurl."&uid=".$useremail." target=blank>Dataset Part 3 (".$part3FileSize.")</a><br>";
+   		if ($part4Downloadurl): 	
+			echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$part4Downloadurl."&uid=".$useremail." target=blank>Dataset Part 4 (".$part4FileSize.")</a><br>";
+    endif;
+   */
+/*    if ($coverage == 'Quarter Quad') {
+  		 echo "<div style=\"margin-left:2%;\">";
+    		if ($doqqNE):
+      			echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$doqqNE."&uid=".$useremail." target=blank>NE Quarter Quad dataset (".$doqqNEsize." MB)</a><br>";
+      		endif;
+      		if ($doqqNW):
+      			echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$doqqNW."&uid=".$useremail." target=blank>NW Quarter Quad dataset (".$doqqNWsize." MB)</a><br>";
+      		endif;
+      		if ($doqqSE):
+      			echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$doqqSE."&uid=".$useremail." target=blank>SE Quarter Quad dataset (".$doqqSEsize." MB)</a><br>";
+      		endif;
+      		if ($doqqSW):
+      			echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$doqqSW."&uid=".$useremail." target=blank>SW Quarter Quad dataset (".$doqqSWsize." MB)</a><br>";
+      		endif;
+   }
+    elseif ($user == 'siscan') {
+				echo "<p>Downloads are not currently available to your account. Please contact UITS GIS (uitsgis@iu.edu) for assistance.</p>";
+		}
+		
+	else {
+				
+      	echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$download."&uid=".$useremail." target=blank>Click here to download dataset (".$archivesize." MB)</a>";
+	}
+echo "</div>";
+	}
+	
+?>
+ /*
+<?php if ($user == 'siscan') {
+           echo "<p>Downloads are not currently available to your account. Please contact UITS GIS (uitsgis@iu.edu) for assistance.</p>";
+                }
+
+        elseif ($user != null) {
+/*
+        echo "<a href=https://rds-sds-prd-1.uits.iu.edu:8080/isdp/pull?p=".$downloadMetadata."&uid=".$useremail." target=blank>Click here to download metadata</a>";
+	}*/
+?>
+<br/>
+<br/>
+<?php echo $item->displayValues(); ?>
+<div class="property">
+
+</div>
+   
+<?php if (($this->siteSetting('show_attached_pages', true)) && ($sitePages = $item->sitePages($site->id()))): ?>
+<div class="property">
+    <h4><?php echo $translate('Site pages'); ?></h4>
+    <div class="values">
+        <?php foreach ($sitePages as $sitePage): ?>
+        <div class="value"><?php echo $sitePage->link($sitePage->title()); ?></div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+<?php if (!$embedMedia && $itemMedia): ?>
+<div class="media-list">
+    <?php foreach ($itemMedia as $media): ?>
+        <?php echo $media->linkPretty(); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+
+
+<?php $this->trigger('view.show.after'); ?>
+-->

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: omekas-volume-pvc
+  namespace: sdsfrontend
 spec:
   accessModes:
     - ReadWriteOnce
@@ -13,6 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: omekas
+  namespace: sdsfrontend
 spec:
   replicas: 1
   selector:
@@ -60,6 +62,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: omekas
+  namespace: sdsfrontend
 spec:
   type: LoadBalancer # OrbStack automatically provisions an external IP for LoadBalancer
   ports:

@@ -8,8 +8,11 @@ echo "Building Omeka S Docker image for Kubernetes..."
 # Build the image locally so OrbStack's Kubernetes can pull it (imagePullPolicy: IfNotPresent)
 docker build -t omekas:latest -f docker/Dockerfile .
 
+echo "Creating namespace 'sdsfrontend'..."
+kubectl create namespace sdsfrontend --dry-run=client -o yaml | kubectl apply -f -
+
 echo "Creating ConfigMap from docker/.development.env..."
-kubectl create configmap omekas-env --from-env-file=docker/.development.env -o yaml --dry-run=client | kubectl apply -f -
+kubectl create configmap omekas-env --namespace=sdsfrontend --from-env-file=docker/.development.env -o yaml --dry-run=client | kubectl apply -n sdsfrontend -f -
 
 echo "Applying MySQL manifests..."
 kubectl apply -f docker/k8s/mysql.yaml
@@ -18,8 +21,8 @@ echo "Applying Omeka S manifests..."
 kubectl apply -f docker/k8s/omekas.yaml
 
 echo "Waiting for deployments to roll out..."
-kubectl rollout status deployment/omekasmysql
-kubectl rollout status deployment/omekas
+kubectl rollout status deployment/omekasmysql -n sdsfrontend
+kubectl rollout status deployment/omekas -n sdsfrontend
 
 echo "--------------------------------------------------------"
 echo "Deployment successful!"
@@ -28,5 +31,5 @@ echo "Since you are using OrbStack, the LoadBalancer service will be mapped to l
 echo "Access Omeka S here: http://localhost:8000"
 echo ""
 echo "To view the logs for Omeka S, run:"
-echo "kubectl logs -f deployment/omekas"
+echo "kubectl logs -f deployment/omekas -n sdsfrontend"
 echo "--------------------------------------------------------"

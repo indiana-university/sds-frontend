@@ -122,6 +122,10 @@ COPY docker/docker-php-entrypoint /usr/local/bin/
 # Copy the automatic installation script
 COPY docker/install_cli.php /var/www/html/
 
+# Replace Omeka S core files with SDS customizations
+COPY ["omeka/SDS Core Code Files to Replace/application/", "/var/www/html/application/"]
+RUN chown -R www-data:www-data /var/www/html/application/
+
 # Bundle SDS_theme zip for installation at container startup
 RUN mkdir -p /sds-frontend/omeka
 COPY omeka/SDS_theme.zip /sds-frontend/omeka/SDS_theme.zip

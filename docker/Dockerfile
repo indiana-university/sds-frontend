@@ -122,8 +122,8 @@ COPY docker/docker-php-entrypoint /usr/local/bin/
 # Copy the automatic installation script
 COPY docker/install_cli.php /var/www/html/
 
-# Bundle IUTheme zip for installation at container startup
+# Bundle SDS_theme zip for installation at container startup
 RUN mkdir -p /sds-frontend/omeka
-COPY omeka/IUTheme.zip /sds-frontend/omeka/IUTheme.zip
+COPY omeka/SDS_theme.zip /sds-frontend/omeka/SDS_theme.zip
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

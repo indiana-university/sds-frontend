@@ -94,8 +94,8 @@ else
 fi
 
 # Install IUTheme from bundled zip using omeka-s-cli
-IUTHEME_ZIP="/sds-frontend/omeka/IUTheme.zip"
-IUTHEME_NAME="IUTheme"
+IUTHEME_ZIP="/sds-frontend/omeka/SDS_theme.zip"
+IUTHEME_NAME="SDS_theme"
 IUTHEME_DIR="/var/www/html/volume/themes/$IUTHEME_NAME"
 
 if [ -f "$IUTHEME_ZIP" ]; then

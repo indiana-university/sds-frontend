@@ -1,0 +1,50 @@
+<?php   
+
+$user = $this->identity();
+if ($user != null) {
+
+#$user = $this->identity();
+$useremail = $user->getEmail();
+
+$sql = "select * from userjobs where email=\"".$useremail."\" AND dateCreated > now() - interval 1 day ORDER BY dateCreated DESC"; // Replace with your actual SQL query
+$results = $this->myDatabaseHelper()->runQuery($sql);
+
+
+       
+		echo "<table class=\"table\">";
+        echo "<tr class=\"header\">";
+        echo "<td>Date</td>";
+        echo "<td>Size (MB)</td>";
+        echo "<td>Status</td>";
+        echo "<td>Collection</td>";
+        echo "<td>Download URL</td>";
+        echo "</tr>";
+                    
+               foreach ($results as $row) {
+                   echo "<tr>";
+                   echo "<td>".$row['dateCreated']."</td>";
+                   echo "<td>".$row['jobSize']."</td>";
+                   echo "<td>".$row['jobStatus']."</td>";
+                   echo "<td>".$row['collection']."</td>";
+
+                   
+                   if ($row['jobStatus']=="completed") {                		
+                   echo "<td><a href=\"".$row['downloadURL']."\">Click to download</a></td>";}
+                   elseif ($row['jobStatus']=="failed") {                		
+                   echo "<td>Please resubmit</td>";}
+                   	else { 
+                   	echo "<td>Pending</td>";
+                   	}
+                   	
+                   echo "</tr>";
+              }
+               
+                  echo "</table>";
+}
+
+
+if ($user == null) {
+     echo "<a href=\"https://gis.iu.edu/oidc/login\">Please login to view your download requests.</a>";
+}
+;
+?>

@@ -108,6 +108,11 @@ RUN set -x && \
     # 4. Set final permissions
     chown -R  www-data:www-data volume . /usr/local/bin/omeka-s-cli
 
+# Save config files to a template directory so they aren't lost when the volume is mounted in Kubernetes
+RUN mkdir -p /var/www/html/config_template
+COPY docker/database.ini /var/www/html/config_template/database.ini
+COPY docker/local.config.php /var/www/html/config_template/local.config.php
+
 COPY docker/database.ini /var/www/html/config/
 COPY docker/local.config.php /var/www/html/config/
 # Ensure .htaccess is present (not included in GitHub source archive)

@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: omekas-volume-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omekas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: omekas
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: omekas
+    spec:
+      containers:
+        - name: omekas
+          # Ensure you build the image locally and tag it as 'omekas:latest'
+          # e.g., docker build -t omekas:latest -f docker/Dockerfile .
+          image: omekas:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: omekas-env
+          env:
+            - name: OMEKA_MODULES
+              value: |
+                Common
+                PageBlocks
+                CSVImport
+                HideProperties
+                Log
+                CustomOntology
+                Sitemaps
+                Shortcode
+                OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+          volumeMounts:
+            - name: omekas-volume
+              mountPath: /var/www/html/volume
+      volumes:
+        - name: omekas-volume
+          persistentVolumeClaim:
+            claimName: omekas-volume-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: omekas
+spec:
+  type: LoadBalancer # OrbStack automatically provisions an external IP for LoadBalancer
+  ports:
+    - port: 8000
+      targetPort: 80
+  selector:
+    app: omekas

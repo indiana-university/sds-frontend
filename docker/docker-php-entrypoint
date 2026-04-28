@@ -30,6 +30,21 @@ if [ "$APPLICATION_ENV" = "development" ]; then
 #     cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 fi
 
+# When mounting a volume in Kubernetes, the target directory will be empty
+# so we need to initialize the expected Omeka S volume structure and copy default configs
+mkdir -p /var/www/html/volume/config
+mkdir -p /var/www/html/volume/files
+mkdir -p /var/www/html/volume/modules
+mkdir -p /var/www/html/volume/themes
+mkdir -p /var/www/html/volume/logs
+chown -R www-data:www-data /var/www/html/volume
+
+# If local.config.php does not exist in the mounted volume, copy it from the template
+if [ ! -f /var/www/html/volume/config/local.config.php ]; then
+    cp /var/www/html/config_template/local.config.php /var/www/html/volume/config/local.config.php
+    chown www-data:www-data /var/www/html/volume/config/local.config.php
+fi
+
 # Configure database.ini using environment variables
 {
   echo "user     = \"${MYSQL_USER:-}\""

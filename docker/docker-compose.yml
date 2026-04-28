@@ -4,7 +4,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     depends_on:
-      - omekas_db
+      - omekasmysql
     container_name: omekas
     ports:
       - "8000:80"
@@ -42,9 +42,9 @@ services:
     volumes:
       - omekas_volume:/var/www/html/volume:Z
 
-  omekas_db:
+  omekasmysql:
     image: mysql:latest
-    container_name: omekas_db
+    container_name: omekasmysql
     restart: unless-stopped
     ports:
       - "3306:3306"

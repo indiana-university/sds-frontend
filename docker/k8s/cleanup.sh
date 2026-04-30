@@ -8,7 +8,6 @@ echo "Cleaning up Omeka S Kubernetes deployment..."
 
 # Delete the resources defined in the manifests
 kubectl delete -f omekas.yaml --ignore-not-found -n sdsfrontend
-kubectl delete -f mysql.yaml --ignore-not-found -n sdsfrontend
 kubectl delete configmap omekas-env -n sdsfrontend --ignore-not-found
 
 echo "--------------------------------------------------------"

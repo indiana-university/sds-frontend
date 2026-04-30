@@ -3,13 +3,11 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    depends_on:
-      - omekasmysql
     container_name: omekas
     ports:
       - "8000:80"
     restart: unless-stopped
-    env_file: ".development.env"
+    env_file: ".sdsdb_dev.env"
     environment:
       OMEKA_MODULES: |
         Common
@@ -42,16 +40,5 @@ services:
     volumes:
       - omekas_volume:/var/www/html/volume:Z
 
-  omekasmysql:
-    image: mysql:latest
-    container_name: omekasmysql
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    volumes:
-      - omeka_db:/var/lib/mysql:Z
-    env_file: ".development.env"
-
 volumes:
-  omeka_db:
   omekas_volume:

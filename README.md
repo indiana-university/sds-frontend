@@ -14,7 +14,7 @@ Please review the resources needed to run Omeka S (https://omeka.org/s/docs/user
 ## Setup Omeka S Core Server Files
 
 1. Download Omeka S from the Omeka repository (https://omeka.org/s/).
-2. Replace the directories containing SDS's modifications to Omeka S from this repo. See [README](./omeka/README.md) for details.
+2. Replace the files and directories containing SDS's modifications to Omeka S from this repo. See [README](./omeka/README.md) for details.
 3. Fill in the database connection information in config/database.ini (host, database username, database name) and confirm the port number is correct for your system (if not, update it). Save and close the file.
 4. Open the .htaccess file and change the entry in the first line from 'SetEnv APPLICATION_ENV "production"' to 'SetEnv APPLICATION_ENV "development"' so that Omeka will provide more information on any errors you encounter during setup. Once the site dev is complete, change it back to production before taking the site live.
 5. Upload the SDS core files to your server.
@@ -24,25 +24,21 @@ Omeka should now be installed and will have created the necessary databases in y
 8. Login to the admin site (the login for the admin site is [yoursiteurl]/admin)
 9. Add necessary users to the site with appropriate roles as needed using the "User" tab under the ADMIN menu in the left sidebar.
 10. Navigate in the admin site to "Modules" then activate the following modules:
-- BulkExport
 - CSVExport
 - CSVImport
 - CustomOntology
 - HideProperties
 - Log
-- PageBlocks (IURT version download request tracking component, creates userjobs table in the database)
 - NumericDataTypes
 - Restricted Sites (if your instance requires user-level authorization to access data)
 - Shortcode
 - Sitemaps
 
-8. Point the instance to your server for downloads. In the server files, navigate to application/view/omeka/site/item and open show.phtml in a text or code editor.
+8. Point the instance to your server for downloads. In the server files, navigate to themes/SDS_Theme/view/omeka/site/item and open show.phtml in a text or code editor.
 - In line 149, replace 'downloadurl' with the address of the VM that will handle file downloads.
 - In line 151, replace 'loginURL' with the login url for your site.
 
-9. Add your database settings to the "My Downloads" section of the Page Blocks module in modules/PageBlocks/view/common/block-layout/mydownloads.phtml in line 10.
-
-10. Configure the OIDC Module
+9. Configure the OIDC Module
 - Navigate to [Omeka-s-module-OIDC](https://github.com/indiana-university/omeka-s-module-oidc) and follow the instructions to download and install the OIDC module.
 - In config/local.config.php, add the client_id and client_secret for your instance (see module documentation).
 - In the Omeka admin site, go to Modules-> OIDC and enter the 'Discover Document URL' for your OIDC connection.
@@ -82,7 +78,6 @@ Omeka should now be installed and will have created the necessary databases in y
 2. Use the importer to import each dataset (Note that only one Resource Template can be imported at once).
 3. Prior to import, confirm your column headings correspond to the auto-recognize format (Item Type Metadata: Date, etc.)
 4. If you find an error in an import, that entire import can be undone by navigating to 'Status' tab of the import page then clicking 'Undo' next to the import you want to undo.
-
 
 
 ## Optional Omeka S Design Components for SDS

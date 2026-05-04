@@ -5,10 +5,11 @@ All core code modifications occur in these files and the themes directory:
    - application/src/Site/BlockLayout/MyDownloadsBlock.php
    - application/src/View/Helper/MyDatabaseHelper.php
    - application/config/module.config.php
-   - themes/default/SDS_Theme_
+   - application/data/install/schema.sql
+   - themes/default/SDS_Theme
 
 
-After downloading the current core code from Omeka's repository (), you will need to replace the above files/directories with the ones from the SDS repo here.
+After downloading the current core code from Omeka's repository (https://github.com/omeka/omeka-s), you will need to replace and/or update the above files/directories with the ones from the SDS repo here.
 
 You will also need to install the following modules:
 - OIDC (RDS-managed module)
@@ -18,6 +19,7 @@ You will also need to install the following modules:
 - NumericDataTypes
 - Restricted Sites
 - Shortcode
--test
+- Sitemap
+
 
 

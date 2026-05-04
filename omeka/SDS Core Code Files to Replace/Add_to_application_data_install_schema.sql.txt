@@ -1,0 +1,15 @@
+/*Add the following creation statement to the end of the schema.sql file that creates the database tables for the install (after the last table creation statement but before the 'check for foreign keys' line*/
+
+
+CREATE TABLE `userjobs` (
+  `iduserjobs` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `jobid` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `dateCreated` datetime DEFAULT NULL,
+  `jobSize` int DEFAULT NULL,
+  `jobStatus` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `collection` varchar(1500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `downloadURL` varchar(1500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `sourceIP` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`iduserjobs`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

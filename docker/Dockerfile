@@ -118,6 +118,10 @@ COPY docker/local.config.php /var/www/html/config/
 # Ensure .htaccess is present (not included in GitHub source archive)
 COPY docker/.htaccess /var/www/html/.htaccess
 
+# Copy SDS static files referenced by existing phtml links
+COPY omeka/Static_files/rivetlandingpagescripts/ /var/www/html/rivetlandingpagescripts/
+RUN chown -R www-data:www-data /var/www/html/rivetlandingpagescripts/
+
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 

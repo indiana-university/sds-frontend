@@ -37,12 +37,12 @@ config:
   mysqlUser: sdsrdc_sdscore_adminuser
   mysqlHost: sasrdsmp02.uits.iu.edu
   applicationEnv: development
-  omekaAdminEmail: ""
-  omekaAdminName: ""
+  omekaAdminEmail: "wang208@iu.edu"
+  omekaAdminName: "Jun Wang"
   omekaSiteTitle: SDS Test Site
   omekaTimezone: America/New_York
-  oidcDomain: ""
-  oidcClientId: ""
+  oidcDomain: "https://rdslogin.us.auth0.com"
+  oidcClientId: "B4zbiUwAxVsWgBroKiRoCYJQs7O28QH9"
 
 # Sensitive credentials — override with --set or a secrets file; do NOT commit real values
 secrets:

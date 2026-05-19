@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omekas-env
+  namespace: {{ include "omekas.namespace" . }}
+  labels:
+    {{- include "omekas.labels" . | nindent 4 }}
+data:
+  MYSQL_DATABASE: {{ .Values.config.mysqlDatabase | quote }}
+  MYSQL_USER: {{ .Values.config.mysqlUser | quote }}
+  MYSQL_HOST: {{ .Values.config.mysqlHost | quote }}
+  APPLICATION_ENV: {{ .Values.config.applicationEnv | quote }}
+  OMEKA_ADMIN_EMAIL: {{ .Values.config.omekaAdminEmail | quote }}
+  OMEKA_ADMIN_NAME: {{ .Values.config.omekaAdminName | quote }}
+  OMEKA_SITE_TITLE: {{ .Values.config.omekaSiteTitle | quote }}
+  OMEKA_TIMEZONE: {{ .Values.config.omekaTimezone | quote }}
+  OIDC_DOMAIN: {{ .Values.config.oidcDomain | quote }}
+  OIDC_CLIENT_ID: {{ .Values.config.oidcClientId | quote }}

@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "omekas.fullname" . }}-volume-pvc
+  namespace: {{ include "omekas.namespace" . }}
+  labels:
+    {{- include "omekas.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.storageRequest | quote }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "omekas.fullname" . }}
+  namespace: {{ include "omekas.namespace" . }}
+  labels:
+    {{- include "omekas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.omekas.replicas }}
+  strategy:
+    type: {{ .Values.omekas.strategy.type | quote }}
+  selector:
+    matchLabels:
+      {{- include "omekas.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "omekas.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: omekas
+          image: {{ .Values.omekas.image.repository }}:{{ .Values.omekas.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.omekas.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: omekas-env
+            - secretRef:
+                name: omekas-secrets
+          env:
+            - name: OMEKA_MODULES
+              value: {{ .Values.omekas.modules | quote }}
+          volumeMounts:
+            - name: omekas-volume
+              mountPath: /var/www/html/volume
+      {{- with .Values.omekas.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.omekas.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.omekas.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: omekas-volume
+          persistentVolumeClaim:
+            claimName: {{ include "omekas.fullname" . }}-volume-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "omekas.fullname" . }}
+  namespace: {{ include "omekas.namespace" . }}
+  labels:
+    {{- include "omekas.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.omekas.service.type }}
+  selector:
+    {{- include "omekas.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.omekas.service.port }}
+      targetPort: {{ .Values.omekas.service.targetPort }}

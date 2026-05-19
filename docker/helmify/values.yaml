@@ -1,0 +1,52 @@
+nameOverride: ""
+fullnameOverride: ""
+namespace: sdsfrontend
+
+omekas:
+  replicas: 1
+  strategy:
+    type: Recreate
+  image:
+    repository: omekas
+    tag: latest
+    pullPolicy: IfNotPresent
+  modules: |
+    Common
+    PageBlocks
+    CSVImport
+    HideProperties
+    Log
+    CustomOntology
+    Sitemaps
+    Shortcode
+    OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+  service:
+    type: LoadBalancer
+    port: 8000
+    targetPort: 80
+  nodeSelector: {}
+  tolerations: []
+  topologySpreadConstraints: []
+
+pvc:
+  storageRequest: 10Gi
+
+# Non-sensitive configuration — safe to commit
+config:
+  mysqlDatabase: sdsrdc_sdscore_test
+  mysqlUser: sdsrdc_sdscore_adminuser
+  mysqlHost: sasrdsmp02.uits.iu.edu
+  applicationEnv: development
+  omekaAdminEmail: ""
+  omekaAdminName: ""
+  omekaSiteTitle: SDS Test Site
+  omekaTimezone: America/New_York
+  oidcDomain: ""
+  oidcClientId: ""
+
+# Sensitive credentials — override with --set or a secrets file; do NOT commit real values
+secrets:
+  mysqlRootPassword: ""
+  mysqlPassword: ""
+  omekaAdminPassword: ""
+  oidcClientSecret: ""

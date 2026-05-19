@@ -7,7 +7,7 @@ omekas:
   strategy:
     type: Recreate
   image:
-    repository: omekas
+    repository: registry.docker.iu.edu/rds/omekas-test
     tag: latest
     pullPolicy: IfNotPresent
   modules: |
@@ -29,7 +29,7 @@ omekas:
   topologySpreadConstraints: []
 
 pvc:
-  storageRequest: 10Gi
+  storageRequest: 2Gi
 
 # Non-sensitive configuration — safe to commit
 config:

@@ -46,6 +46,8 @@ config:
 
 # Sensitive credentials — override with --set or a secrets file; do NOT commit real values
 secrets:
+  # Set to false when the secret is managed externally (e.g. via kubectl) to skip Helm creating it
+  create: true
   mysqlPassword: ""
   omekaAdminPassword: ""
   oidcClientSecret: ""

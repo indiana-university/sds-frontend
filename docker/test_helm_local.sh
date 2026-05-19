@@ -40,7 +40,7 @@ kubectl create secret generic omekas-secrets \
 #    secrets.create=false tells the chart to skip rendering secret.yaml
 #    because the secret is already managed externally (step 2 above).
 # ---------------------------------------------------------------------------
-helm upgrade --install sds ./helmify \
+helm upgrade --install sds ./helm_local \
   --namespace sdsfrontend \
   --create-namespace \
   --set secrets.create=false

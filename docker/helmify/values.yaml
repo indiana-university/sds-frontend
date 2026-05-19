@@ -46,7 +46,6 @@ config:
 
 # Sensitive credentials — override with --set or a secrets file; do NOT commit real values
 secrets:
-  mysqlRootPassword: ""
   mysqlPassword: ""
   omekaAdminPassword: ""
   oidcClientSecret: ""

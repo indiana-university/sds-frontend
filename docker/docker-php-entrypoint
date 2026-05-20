@@ -504,6 +504,15 @@ else
   echo "[Entrypoint] Skipping Omeka S install: missing required environment variables (OMEKA_ADMIN_EMAIL, OMEKA_ADMIN_NAME, OMEKA_ADMIN_PASSWORD, OMEKA_SITE_TITLE)"
 fi
 
+if [ -n "${OIDC_DOMAIN:-}" ]; then
+  echo "[Entrypoint] Configuring OIDC discovery URI..."
+  if ! php configure_oidc.php; then
+    echo "WARNING: Failed to configure OIDC discovery URI." >&2
+  fi
+else
+  echo "[Entrypoint] OIDC_DOMAIN not set. Skipping OIDC discovery URI configuration."
+fi
+
 # Run the original Docker PHP entrypoint (ref. file https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/docker-php-entrypoint)
 # first argument is `-f` or another option
 if [ "${1#-}" != "$1" ]; then

@@ -152,6 +152,6 @@ RUN set -eux; \
     curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-CustomOntology/releases/download/3.4.6/CustomOntology-3.4.6.zip" -o /opt/omeka-module-zips/CustomOntology.zip; \
     curl -fsSL "https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps/releases/download/v1.1/Sitemaps-1.1.zip" -o /opt/omeka-module-zips/Sitemaps.zip; \
     curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Shortcode/releases/download/3.4.15/Shortcode-3.4.15.zip" -o /opt/omeka-module-zips/Shortcode.zip; \
-    curl -fsSL "https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/heads/main.zip" -o /opt/omeka-module-zips/OIDC.zip
+    curl -fsSL "https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/tags/0.1.zip" -o /opt/omeka-module-zips/OIDC.zip
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

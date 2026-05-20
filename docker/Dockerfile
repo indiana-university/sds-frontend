@@ -162,7 +162,7 @@ RUN set -eux; \
     unzip -q /opt/omeka-module-zips/OIDC.zip -d "$tmpdir"; \
     oidc_dir="$(find "$tmpdir" -mindepth 1 -maxdepth 1 -type d | head -n 1)"; \
     mv "$oidc_dir" "$tmpdir/OIDC"; \
-    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$tmpdir/OIDC"; \
+    COMPOSER_ALLOW_SUPERUSER=1 composer update --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$tmpdir/OIDC"; \
     rm -f /opt/omeka-module-zips/OIDC.zip; \
     (cd "$tmpdir" && zip -qr /opt/omeka-module-zips/OIDC.zip OIDC); \
     rm -rf "$tmpdir"

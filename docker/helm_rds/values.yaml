@@ -21,12 +21,21 @@ omekas:
     Shortcode
     OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
   service:
-    type: LoadBalancer
-    port: 8000
+    type: ClusterIP
+    port: 80
     targetPort: 80
   nodeSelector: {}
   tolerations: []
   topologySpreadConstraints: []
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  host: omekas-test.apps.iu.edu
+  path: /
+  pathType: Prefix
+  tls: []
 
 pvc:
   storageRequest: 2Gi

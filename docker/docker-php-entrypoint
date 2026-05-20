@@ -307,7 +307,7 @@ install_module_from_url() {
     local name="$1"
     local url="$2"
     local modules_dir="/var/www/html/volume/modules"
-    local tmpdir zip_url existing_dirs new_dir
+    local tmpdir zip_url existing_dirs new_dir cached_zip
 
     # Replace partial module directories left by failed downloads.
     if [ -d "$modules_dir/$name" ] && [ ! -f "$modules_dir/$name/Module.php" ]; then
@@ -336,9 +336,15 @@ install_module_from_url() {
     echo "Downloading module '$name' from $zip_url..."
     tmpdir=$(mktemp -d)
     if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
-        echo "ERROR: Failed to download module '$name' from $zip_url" >&2
-        rm -rf "$tmpdir"
-        return 1
+        cached_zip="/opt/omeka-module-zips/$name.zip"
+        if [ -f "$cached_zip" ]; then
+            echo "WARNING: Failed to download module '$name' from $zip_url; using cached build-time zip." >&2
+            cp "$cached_zip" "$tmpdir/module.zip"
+        else
+            echo "ERROR: Failed to download module '$name' from $zip_url and no cached zip exists at $cached_zip" >&2
+            rm -rf "$tmpdir"
+            return 1
+        fi
     fi
 
     # Record existing module directories before extraction

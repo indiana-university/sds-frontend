@@ -139,4 +139,19 @@ RUN chown -R www-data:www-data /var/www/html/application/
 RUN mkdir -p /sds-frontend/omeka
 COPY omeka/SDS_theme.zip /sds-frontend/omeka/SDS_theme.zip
 
+# Cache current remote module release zips at image build time. The Kubernetes
+# runtime may not have egress to GitHub release assets, so startup can seed from
+# this cache while still using remote-sourced module packages.
+RUN set -eux; \
+    mkdir -p /opt/omeka-module-zips; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Common/releases/download/3.4.85/Common-3.4.85.zip" -o /opt/omeka-module-zips/Common.zip; \
+    curl -fsSL "https://github.com/arepr/omeka-s-module-pageblocks/releases/download/1.3/PageBlocks.zip" -o /opt/omeka-module-zips/PageBlocks.zip; \
+    curl -fsSL "https://github.com/omeka-s-modules/CSVImport/releases/download/v2.6.2/CSVImport-2.6.2.zip" -o /opt/omeka-module-zips/CSVImport.zip; \
+    curl -fsSL "https://github.com/zerocrates/HideProperties/releases/download/v1.3.1/HideProperties-1.3.1.zip" -o /opt/omeka-module-zips/HideProperties.zip; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Log/releases/download/3.4.38/Log-3.4.38.zip" -o /opt/omeka-module-zips/Log.zip; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-CustomOntology/releases/download/3.4.6/CustomOntology-3.4.6.zip" -o /opt/omeka-module-zips/CustomOntology.zip; \
+    curl -fsSL "https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps/releases/download/v1.1/Sitemaps-1.1.zip" -o /opt/omeka-module-zips/Sitemaps.zip; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Shortcode/releases/download/3.4.15/Shortcode-3.4.15.zip" -o /opt/omeka-module-zips/Shortcode.zip; \
+    curl -fsSL "https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/heads/main.zip" -o /opt/omeka-module-zips/OIDC.zip
+
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

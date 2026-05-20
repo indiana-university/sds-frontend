@@ -10,18 +10,19 @@ omekas:
     repository: registry.docker.iu.edu/rds/omekas-test
     tag: latest
     pullPolicy: Always
+  rolloutToken: ""
   imagePullSecrets: []
   modules: |
-    Common
-    PageBlocks
-    CSVImport
-    HideProperties
-    Log
-    CustomOntology
-    Sitemaps
-    Shortcode
-    OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
-  installModulesOnStartup: false
+    Common: https://gitlab.com/Daniel-KM/Omeka-S-module-Common
+    PageBlocks: https://github.com/arepr/omeka-s-module-pageblocks
+    CSVImport: https://github.com/omeka-s-modules/CSVImport
+    HideProperties: https://github.com/zerocrates/HideProperties
+    Log: https://gitlab.com/Daniel-KM/Omeka-S-module-Log
+    CustomOntology: https://gitlab.com/Daniel-KM/Omeka-S-module-CustomOntology
+    Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps
+    Shortcode: https://gitlab.com/Daniel-KM/Omeka-S-module-Shortcode
+    OIDC: https://github.com/indiana-university/omeka-s-module-oidc
+  installModulesOnStartup: true
   service:
     type: ClusterIP
     port: 80
@@ -45,7 +46,7 @@ omekas:
       port: 80
     periodSeconds: 10
     timeoutSeconds: 2
-    failureThreshold: 60
+    failureThreshold: 180
   nodeSelector: {}
   tolerations: []
   topologySpreadConstraints: []

@@ -33,6 +33,10 @@ spec:
     metadata:
       labels:
         {{- include "omekas.selectorLabels" . | nindent 8 }}
+      {{- with .Values.omekas.rolloutToken }}
+      annotations:
+        sds.iu.edu/rollout-token: {{ . | quote }}
+      {{- end }}
     spec:
       {{- with .Values.omekas.imagePullSecrets }}
       imagePullSecrets:

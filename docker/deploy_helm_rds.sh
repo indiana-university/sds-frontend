@@ -22,9 +22,13 @@ OMEKA_ADMIN_PASSWORD=$(grep '^OMEKA_ADMIN_PASSWORD=' "$ENV_FILE" | cut -d= -f2-)
 OIDC_CLIENT_SECRET=$(grep '^OIDC_CLIENT_SECRET=' "$ENV_FILE" | cut -d= -f2-)
 
 NAMESPACE="ua-vpit--research-technologies--rds"
+RELEASE_NAME="sds"
+HELM_TIMEOUT="${HELM_TIMEOUT:-10m}"
+PVC_STORAGE_CLASS="${PVC_STORAGE_CLASS:-bl-sp-tkg-k8s-v2}"
+STATUS_INTERVAL="${STATUS_INTERVAL:-20}"
 
 # ---------------------------------------------------------------------------
-# 1. Create (or update) the secret imperatively from the local env file.
+# 1. Create the secret imperatively from the local env file when it is missing.
 #    Credentials are never stored in Helm release history or shell history.
 #    Key names must match what the Deployment's secretRef expects.
 # ---------------------------------------------------------------------------
@@ -46,9 +50,66 @@ SECRET_OUT=$(kubectl create secret generic omekas-secrets \
 # 2. Install / upgrade the Helm chart.
 #    secrets.create=false tells the chart to skip rendering secret.yaml
 #    because the secret is already managed externally (step 1 above).
+#
+#    This namespace does not grant this user read access to Kubernetes Secrets.
+#    Helm stores release metadata in Secrets by default, so use ConfigMaps for
+#    release storage and keep application credentials in the external secret.
 # ---------------------------------------------------------------------------
-helm upgrade --install sds ./helm_rds \
+export HELM_DRIVER=configmap
+set -- --set secrets.create=false --set "pvc.storageClassName=${PVC_STORAGE_CLASS}"
+
+echo "Using Helm release storage driver: ${HELM_DRIVER}"
+echo "Using PVC storage class: ${PVC_STORAGE_CLASS}"
+
+if ! kubectl get storageclass "$PVC_STORAGE_CLASS" >/dev/null 2>&1; then
+  echo "WARNING: Could not verify StorageClass ${PVC_STORAGE_CLASS}. Continuing with Helm deploy." >&2
+fi
+
+print_deploy_status() {
+  echo ""
+  echo "Waiting for Helm resources at $(date '+%Y-%m-%d %H:%M:%S')..."
+  kubectl get pvc "${RELEASE_NAME}-omekas-volume-pvc" -n "$NAMESPACE" 2>/dev/null || true
+  kubectl get deployment "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
+  kubectl get replicasets -n "$NAMESPACE" -l "app.kubernetes.io/instance=${RELEASE_NAME}" 2>/dev/null || true
+  kubectl get pods -n "$NAMESPACE" -l "app.kubernetes.io/instance=${RELEASE_NAME}" -o wide 2>/dev/null || true
+  kubectl get events -n "$NAMESPACE" --sort-by=.lastTimestamp 2>/dev/null | tail -n 8 || true
+}
+
+watch_deploy_status() {
+  while :; do
+    sleep "$STATUS_INTERVAL"
+    print_deploy_status >&2
+  done
+}
+
+stop_status_watcher() {
+  if [ -n "${STATUS_PID:-}" ]; then
+    kill "$STATUS_PID" 2>/dev/null || true
+    wait "$STATUS_PID" 2>/dev/null || true
+  fi
+}
+
+watch_deploy_status &
+STATUS_PID=$!
+trap stop_status_watcher EXIT INT TERM
+
+if ! helm upgrade --install "$RELEASE_NAME" "${SCRIPT_DIR}/helm_rds" \
   --namespace "$NAMESPACE" \
-  --set secrets.create=false \
-  --atomic \
-  --timeout 120s
+  "$@" \
+  --wait \
+  --rollback-on-failure \
+  --timeout "$HELM_TIMEOUT"; then
+  stop_status_watcher
+  echo "" >&2
+  echo "Helm deploy failed. If the PVC is still Pending, inspect storage provisioning with:" >&2
+  echo "  kubectl get pvc ${RELEASE_NAME}-omekas-volume-pvc -n ${NAMESPACE}" >&2
+  echo "  kubectl describe pvc ${RELEASE_NAME}-omekas-volume-pvc -n ${NAMESPACE}" >&2
+  echo "If the PVC is Bound but the Deployment is not progressing, inspect deployment events with:" >&2
+  echo "  kubectl describe deployment ${RELEASE_NAME}-omekas -n ${NAMESPACE}" >&2
+  echo "  kubectl get events -n ${NAMESPACE} --sort-by=.lastTimestamp" >&2
+  echo "To override the configured StorageClass, rerun this script with:" >&2
+  echo "  PVC_STORAGE_CLASS=<storage-class> ${SCRIPT_DIR}/deploy_helm_rds.sh" >&2
+  exit 1
+fi
+
+stop_status_watcher

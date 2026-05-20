@@ -10,6 +10,7 @@ omekas:
     repository: registry.docker.iu.edu/rds/omekas-test
     tag: latest
     pullPolicy: IfNotPresent
+  imagePullSecrets: []
   modules: |
     Common
     PageBlocks
@@ -26,8 +27,8 @@ omekas:
     targetPort: 80
   resources:
     requests:
-      cpu: 250m
-      memory: 512Mi
+      cpu: "0"
+      memory: "0"
     limits:
       cpu: "1"
       memory: 1Gi
@@ -37,8 +38,8 @@ omekas:
 
 ingress:
   enabled: true
-  annotations:
-    kubernetes.io/ingress.class: traefik
+  className: traefik
+  annotations: {}
   host: omekas-test.apps.iu.edu
   path: /
   pathType: Prefix
@@ -46,6 +47,7 @@ ingress:
 
 pvc:
   storageRequest: 2Gi
+  storageClassName: bl-sp-tkg-k8s-v2
 
 # Non-sensitive configuration — safe to commit
 config:

@@ -8,6 +8,9 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  {{- with .Values.pvc.storageClassName }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.pvc.storageRequest | quote }}
@@ -31,6 +34,10 @@ spec:
       labels:
         {{- include "omekas.selectorLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.omekas.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: omekas
           image: {{ .Values.omekas.image.repository }}:{{ .Values.omekas.image.tag | default .Chart.AppVersion }}
@@ -48,8 +55,10 @@ spec:
           volumeMounts:
             - name: omekas-volume
               mountPath: /var/www/html/volume
+          {{ with .Values.omekas.resources }}
           resources:
-            {{- toYaml .Values.omekas.resources | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- with .Values.omekas.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

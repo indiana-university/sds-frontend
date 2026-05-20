@@ -333,14 +333,15 @@ install_module_from_url() {
         return 1
     fi
 
-    echo "Downloading module '$name' from $zip_url..."
     tmpdir=$(mktemp -d)
-    if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
-        cached_zip="/opt/omeka-module-zips/$name.zip"
-        if [ -f "$cached_zip" ]; then
-            echo "WARNING: Failed to download module '$name' from $zip_url; using cached build-time zip." >&2
-            cp "$cached_zip" "$tmpdir/module.zip"
-        else
+    cached_zip="/opt/omeka-module-zips/$name.zip"
+
+    if [ -f "$cached_zip" ]; then
+        echo "Using cached build-time zip for module '$name'."
+        cp "$cached_zip" "$tmpdir/module.zip"
+    else
+        echo "Downloading module '$name' from $zip_url..."
+        if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
             echo "ERROR: Failed to download module '$name' from $zip_url and no cached zip exists at $cached_zip" >&2
             rm -rf "$tmpdir"
             return 1

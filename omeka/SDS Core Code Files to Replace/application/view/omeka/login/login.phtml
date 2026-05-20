@@ -1,5 +1,6 @@
 
 <?php
+$translate = $this->plugin('translate');
 $this->htmlElement("body")->appendAttribute("class", "login");
 ?>
     <meta charset="UTF-8" />
@@ -37,6 +38,21 @@ $this->htmlElement("body")->appendAttribute("class", "login");
                         The SciVis Contest is held each year as a part of the IEEE VIS Conference. This site preserves and shares the data, documentation, and submissions (where available) from past contests as a learning resource for students, scientists, and visualization professionals. </div>
                         <div class="rvt-m-top-lg rvt-m-top-xl-md-up">
                             <a href="/oidc/login" class="rvt-button rvt-button--link rvt-m-right-md" >Log in to IEEE SciVis Contest Share</a>
+                            <button
+                                type="button"
+                                class="rvt-button rvt-button--secondary"
+                                id="local-login-toggle"
+                                aria-expanded="false"
+                                aria-controls="local-login-panel"
+                            >
+                                Omeka admin login
+                            </button>
+                        </div>
+
+                        <div id="local-login-panel" class="rvt-m-top-lg" hidden>
+                            <h1><?php echo $translate('Log in'); ?></h1>
+                            <?php echo $this->form($form); ?>
+                            <p class="forgot-password"><?php echo $this->hyperlink($translate('Forgot password?'), $this->url('forgot-password')); ?></p>
                         </div>
 
                         <div class="snippet hero-bottom">
@@ -49,3 +65,20 @@ $this->htmlElement("body")->appendAttribute("class", "login");
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+        var toggle = document.getElementById('local-login-toggle');
+        var panel = document.getElementById('local-login-panel');
+
+        if (!toggle || !panel) {
+            return;
+        }
+
+        toggle.addEventListener('click', function () {
+            var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!isExpanded));
+            panel.hidden = isExpanded;
+        });
+    }());
+</script>

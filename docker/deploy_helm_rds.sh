@@ -24,28 +24,31 @@ OIDC_CLIENT_SECRET=$(grep '^OIDC_CLIENT_SECRET=' "$ENV_FILE" | cut -d= -f2-)
 NAMESPACE="ua-vpit--research-technologies--rds"
 
 # ---------------------------------------------------------------------------
-# 1. Ensure the namespace exists before creating the secret
-# ---------------------------------------------------------------------------
-kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
-
-# ---------------------------------------------------------------------------
-# 2. Create (or update) the secret imperatively from the local env file.
+# 1. Create (or update) the secret imperatively from the local env file.
 #    Credentials are never stored in Helm release history or shell history.
 #    Key names must match what the Deployment's secretRef expects.
 # ---------------------------------------------------------------------------
-kubectl create secret generic omekas-secrets \
+SECRET_OUT=$(kubectl create secret generic omekas-secrets \
   --namespace "$NAMESPACE" \
   --from-literal=MYSQL_PASSWORD="$MYSQL_PASSWORD" \
   --from-literal=OMEKA_ADMIN_PASSWORD="$OMEKA_ADMIN_PASSWORD" \
   --from-literal=OIDC_CLIENT_SECRET="$OIDC_CLIENT_SECRET" \
-  --dry-run=client -o yaml | kubectl apply -f -
+  2>&1) && echo "Secret created." || {
+  if echo "$SECRET_OUT" | grep -q "already exists"; then
+    echo "Secret already exists, skipping."
+  else
+    echo "ERROR creating secret: $SECRET_OUT" >&2
+    exit 1
+  fi
+}
 
 # ---------------------------------------------------------------------------
-# 3. Install / upgrade the Helm chart.
+# 2. Install / upgrade the Helm chart.
 #    secrets.create=false tells the chart to skip rendering secret.yaml
-#    because the secret is already managed externally (step 2 above).
+#    because the secret is already managed externally (step 1 above).
 # ---------------------------------------------------------------------------
 helm upgrade --install sds ./helm_rds \
   --namespace "$NAMESPACE" \
-  --create-namespace \
-  --set secrets.create=false
+  --set secrets.create=false \
+  --atomic \
+  --timeout 120s

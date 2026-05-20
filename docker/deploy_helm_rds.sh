@@ -119,6 +119,8 @@ print_deploy_status() {
   echo ""
   echo "Waiting for Helm resources at $(date '+%Y-%m-%d %H:%M:%S')..."
   kubectl get pvc "${RELEASE_NAME}-omekas-volume-pvc" -n "$NAMESPACE" 2>/dev/null || true
+  kubectl get ingress "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
+  kubectl get endpoints "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
   kubectl get deployment "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
   kubectl get replicasets -n "$NAMESPACE" -l "app.kubernetes.io/instance=${RELEASE_NAME}" 2>/dev/null || true
   kubectl get pods -n "$NAMESPACE" -l "app.kubernetes.io/instance=${RELEASE_NAME}" -o wide 2>/dev/null || true
@@ -159,6 +161,10 @@ if ! helm upgrade --install "$RELEASE_NAME" "${SCRIPT_DIR}/helm_rds" \
   echo "  kubectl get events -n ${NAMESPACE} --sort-by=.lastTimestamp" >&2
   echo "If the pod cannot pull the image, provide registry credentials with:" >&2
   echo "  IMAGE_REGISTRY_USERNAME=<username> IMAGE_REGISTRY_PASSWORD=<password> ${SCRIPT_DIR}/deploy_helm_rds.sh" >&2
+  echo "If the app is running but the ingress returns Bad Gateway, inspect routing with:" >&2
+  echo "  kubectl get ingress,endpoints,service ${RELEASE_NAME}-omekas -n ${NAMESPACE}" >&2
+  echo "  kubectl describe ingress ${RELEASE_NAME}-omekas -n ${NAMESPACE}" >&2
+  echo "  kubectl logs deployment/${RELEASE_NAME}-omekas -n ${NAMESPACE} --tail=100" >&2
   echo "To override the configured StorageClass, rerun this script with:" >&2
   echo "  PVC_STORAGE_CLASS=<storage-class> ${SCRIPT_DIR}/deploy_helm_rds.sh" >&2
   exit 1

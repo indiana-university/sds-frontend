@@ -9,7 +9,7 @@ omekas:
   image:
     repository: registry.docker.iu.edu/rds/omekas-test
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   imagePullSecrets: []
   modules: |
     Common
@@ -21,6 +21,7 @@ omekas:
     Sitemaps
     Shortcode
     OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+  installModulesOnStartup: false
   service:
     type: ClusterIP
     port: 80
@@ -32,6 +33,19 @@ omekas:
     limits:
       cpu: "1"
       memory: 1Gi
+  readinessProbe:
+    tcpSocket:
+      port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 6
+  startupProbe:
+    tcpSocket:
+      port: 80
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 60
   nodeSelector: {}
   tolerations: []
   topologySpreadConstraints: []

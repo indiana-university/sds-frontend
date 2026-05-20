@@ -424,11 +424,15 @@ ensure_module() {
     omeka-s-cli module:download "$name" && omeka-s-cli module:install "$name"
 }
 
-# Automatically download and install modules
-echo "Checking for modules to install..."
-echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
+if [ "${OMEKA_INSTALL_MODULES_ON_STARTUP:-true}" = "true" ]; then
+    # Automatically download and install modules
+    echo "Checking for modules to install..."
+    echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
 
-install_items_from_names "modules" "OMEKA_MODULES"
+    install_items_from_names "modules" "OMEKA_MODULES"
+else
+    echo "Skipping Omeka module installation at startup."
+fi
 
 chown -R www-data:www-data /var/www/html/volume/modules
 

@@ -307,7 +307,7 @@ install_module_from_url() {
     local name="$1"
     local url="$2"
     local modules_dir="/var/www/html/volume/modules"
-    local tmpdir zip_url existing_dirs new_dir cached_zip
+    local tmpdir zip_url existing_dirs new_dir cached_zip used_cached_zip
 
     # Replace partial module directories left by failed downloads or incomplete
     # composer installs.
@@ -342,6 +342,7 @@ install_module_from_url() {
     if [ -f "$cached_zip" ]; then
         echo "Using cached build-time zip for module '$name'."
         cp "$cached_zip" "$tmpdir/module.zip"
+        used_cached_zip=true
     else
         echo "Downloading module '$name' from $zip_url..."
         if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
@@ -349,6 +350,7 @@ install_module_from_url() {
             rm -rf "$tmpdir"
             return 1
         fi
+        used_cached_zip=false
     fi
 
     # Record existing module directories before extraction
@@ -386,7 +388,8 @@ install_module_from_url() {
     fi
 
     # Run composer install if the module has PHP dependencies
-    if [ -f "$modules_dir/$name/composer.json" ]; then
+    if [ -f "$modules_dir/$name/composer.json" ] && \
+       { [ "$used_cached_zip" != "true" ] || [ ! -f "$modules_dir/$name/vendor/autoload.php" ]; }; then
         echo "Running composer install for module '$name'..."
         export COMPOSER_ALLOW_SUPERUSER=1
         if ! composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$modules_dir/$name"; then

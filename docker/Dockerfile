@@ -154,4 +154,17 @@ RUN set -eux; \
     curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Shortcode/releases/download/3.4.15/Shortcode-3.4.15.zip" -o /opt/omeka-module-zips/Shortcode.zip; \
     curl -fsSL "https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/tags/0.1.1.zip" -o /opt/omeka-module-zips/OIDC.zip
 
+# OIDC's source archive does not include Composer dependencies. Install them at
+# image build time and replace the cached zip with a vendor-complete package so
+# Kubernetes startup does not need Packagist/GitHub egress.
+RUN set -eux; \
+    tmpdir="$(mktemp -d)"; \
+    unzip -q /opt/omeka-module-zips/OIDC.zip -d "$tmpdir"; \
+    oidc_dir="$(find "$tmpdir" -mindepth 1 -maxdepth 1 -type d | head -n 1)"; \
+    mv "$oidc_dir" "$tmpdir/OIDC"; \
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$tmpdir/OIDC"; \
+    rm -f /opt/omeka-module-zips/OIDC.zip; \
+    (cd "$tmpdir" && zip -qr /opt/omeka-module-zips/OIDC.zip OIDC); \
+    rm -rf "$tmpdir"
+
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

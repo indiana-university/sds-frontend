@@ -16,3 +16,15 @@ data:
   OMEKA_TIMEZONE: {{ .Values.config.omekaTimezone | quote }}
   OIDC_DOMAIN: {{ .Values.config.oidcDomain | quote }}
   OIDC_CLIENT_ID: {{ .Values.config.oidcClientId | quote }}
+  {{- with .Values.config.httpProxy }}
+  HTTP_PROXY: {{ . | quote }}
+  http_proxy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.config.httpsProxy }}
+  HTTPS_PROXY: {{ . | quote }}
+  https_proxy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.config.noProxy }}
+  NO_PROXY: {{ . | quote }}
+  no_proxy: {{ . | quote }}
+  {{- end }}

@@ -130,6 +130,8 @@ COPY docker/docker-php-entrypoint /usr/local/bin/
 
 # Copy the automatic installation script
 COPY docker/install_cli.php /var/www/html/
+COPY docker/configure_oidc.php /var/www/html/
+COPY docker/patch_oidc_module.php /usr/local/bin/patch_oidc_module.php
 
 # Replace Omeka S core files with SDS customizations
 COPY ["omeka/SDS Core Code Files to Replace/application/", "/var/www/html/application/"]
@@ -163,6 +165,7 @@ RUN set -eux; \
     oidc_dir="$(find "$tmpdir" -mindepth 1 -maxdepth 1 -type d | head -n 1)"; \
     mv "$oidc_dir" "$tmpdir/OIDC"; \
     COMPOSER_ALLOW_SUPERUSER=1 composer update --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$tmpdir/OIDC"; \
+    php /usr/local/bin/patch_oidc_module.php "$tmpdir/OIDC"; \
     rm -f /opt/omeka-module-zips/OIDC.zip; \
     (cd "$tmpdir" && zip -qr /opt/omeka-module-zips/OIDC.zip OIDC); \
     rm -rf "$tmpdir"

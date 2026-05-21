@@ -21,6 +21,37 @@ check_db_availability() {
     echo "\n\nGreat, $db_host is ready!"
 }
 
+check_oidc_discovery_availability() {
+    local discovery_uri="$1"
+    local result
+
+    [ -n "$discovery_uri" ] || return 0
+
+    case "$discovery_uri" in
+        */.well-known/*)
+            ;;
+        *)
+            discovery_uri="$(echo "$discovery_uri" | sed 's|/*$||')/.well-known/openid-configuration"
+            ;;
+    esac
+
+    if ! command -v curl >/dev/null 2>&1; then
+        echo "WARNING: curl is not available; skipping OIDC discovery reachability check." >&2
+        return 0
+    fi
+
+    echo "[Entrypoint] Checking OIDC discovery reachability: $discovery_uri"
+    if result=$(curl -sS -o /dev/null \
+        --connect-timeout 5 \
+        --max-time 15 \
+        -w 'http_code=%{http_code} dns=%{time_namelookup}s connect=%{time_connect}s tls=%{time_appconnect}s total=%{time_total}s' \
+        "$discovery_uri" 2>&1); then
+        echo "[Entrypoint] OIDC discovery check result: $result"
+    else
+        echo "WARNING: OIDC discovery check failed: $result" >&2
+    fi
+}
+
 
 # Set php.ini and .htaccess according to APPLICATION_ENV
 if [ "$APPLICATION_ENV" = "development" ]; then
@@ -321,6 +352,10 @@ install_module_from_url() {
     # Skip download when files already exist, but still ensure Omeka has it installed.
     if [ -d "$modules_dir/$name" ]; then
         echo "Module '$name' files already exist. Ensuring module is installed."
+        if [ "$name" = "OIDC" ] && [ -f /usr/local/bin/patch_oidc_module.php ]; then
+            php /usr/local/bin/patch_oidc_module.php "$modules_dir/$name" || \
+                echo "WARNING: Failed to patch existing OIDC module." >&2
+        fi
         if omeka-s-cli module:install "$name"; then
             echo "Module installed successfully: $name"
         else
@@ -396,6 +431,11 @@ install_module_from_url() {
             echo "ERROR: composer install failed for module '$name'" >&2
             return 1
         fi
+    fi
+
+    if [ "$name" = "OIDC" ] && [ -f /usr/local/bin/patch_oidc_module.php ]; then
+        php /usr/local/bin/patch_oidc_module.php "$modules_dir/$name" || \
+            echo "WARNING: Failed to patch OIDC module." >&2
     fi
 
     # Install the module via omeka-s-cli
@@ -502,6 +542,16 @@ if [ -n "${OMEKA_ADMIN_EMAIL:-}" ] && [ -n "${OMEKA_ADMIN_NAME:-}" ] && \
   )
 else
   echo "[Entrypoint] Skipping Omeka S install: missing required environment variables (OMEKA_ADMIN_EMAIL, OMEKA_ADMIN_NAME, OMEKA_ADMIN_PASSWORD, OMEKA_SITE_TITLE)"
+fi
+
+if [ -n "${OIDC_DOMAIN:-}" ]; then
+  echo "[Entrypoint] Configuring OIDC discovery URI..."
+  if ! php configure_oidc.php; then
+    echo "WARNING: Failed to configure OIDC discovery URI." >&2
+  fi
+  check_oidc_discovery_availability "$OIDC_DOMAIN"
+else
+  echo "[Entrypoint] OIDC_DOMAIN not set. Skipping OIDC discovery URI configuration."
 fi
 
 # Run the original Docker PHP entrypoint (ref. file https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/docker-php-entrypoint)

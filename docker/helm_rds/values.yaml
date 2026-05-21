@@ -74,8 +74,11 @@ config:
   omekaAdminName: "Jun Wang"
   omekaSiteTitle: SDS Test Site
   omekaTimezone: America/New_York
-  oidcDomain: "https://rdslogin.us.auth0.com"
+  oidcDomain: "https://rdslogin.us.auth0.com/.well-known/openid-configuration"
   oidcClientId: "B4zbiUwAxVsWgBroKiRoCYJQs7O28QH9"
+  httpProxy: "http://156.56.18.228:8080"
+  httpsProxy: "http://156.56.18.228:8443"
+  noProxy: "localhost,127.0.0.1,iu.edu,iupui.edu,indiana.edu"
 
 # Sensitive credentials — override with --set or a secrets file; do NOT commit real values
 secrets:

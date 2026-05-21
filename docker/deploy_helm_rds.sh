@@ -27,9 +27,10 @@ read_optional_env() {
 
 NAMESPACE="ua-vpit--research-technologies--rds"
 RELEASE_NAME="sds"
-HELM_TIMEOUT="${HELM_TIMEOUT:-10m}"
+HELM_TIMEOUT="${HELM_TIMEOUT:-30m}"
 PVC_STORAGE_CLASS="${PVC_STORAGE_CLASS:-bl-sp-tkg-k8s-v2}"
 STATUS_INTERVAL="${STATUS_INTERVAL:-20}"
+ROLLOUT_TOKEN="${ROLLOUT_TOKEN:-$(date -u '+%Y%m%d%H%M%S')}"
 IMAGE_REGISTRY_SERVER="${IMAGE_REGISTRY_SERVER:-registry.docker.iu.edu}"
 IMAGE_PULL_SECRET="${IMAGE_PULL_SECRET:-}"
 IMAGE_REGISTRY_USERNAME="${IMAGE_REGISTRY_USERNAME:-$(read_optional_env IMAGE_REGISTRY_USERNAME)}"
@@ -99,7 +100,10 @@ fi
 #    release storage and keep application credentials in the external secret.
 # ---------------------------------------------------------------------------
 export HELM_DRIVER=configmap
-set -- --set secrets.create=false --set "pvc.storageClassName=${PVC_STORAGE_CLASS}"
+set -- \
+  --set secrets.create=false \
+  --set "pvc.storageClassName=${PVC_STORAGE_CLASS}" \
+  --set-string "omekas.rolloutToken=${ROLLOUT_TOKEN}"
 
 if [ "$USE_IMAGE_PULL_SECRET" = true ]; then
   set -- "$@" --set "omekas.imagePullSecrets[0].name=${IMAGE_PULL_SECRET}"
@@ -107,6 +111,7 @@ fi
 
 echo "Using Helm release storage driver: ${HELM_DRIVER}"
 echo "Using PVC storage class: ${PVC_STORAGE_CLASS}"
+echo "Using rollout token: ${ROLLOUT_TOKEN}"
 if [ "$USE_IMAGE_PULL_SECRET" = true ]; then
   echo "Using image pull secret: ${IMAGE_PULL_SECRET}"
 fi
@@ -119,6 +124,8 @@ print_deploy_status() {
   echo ""
   echo "Waiting for Helm resources at $(date '+%Y-%m-%d %H:%M:%S')..."
   kubectl get pvc "${RELEASE_NAME}-omekas-volume-pvc" -n "$NAMESPACE" 2>/dev/null || true
+  kubectl get ingress "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
+  kubectl get endpoints "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
   kubectl get deployment "${RELEASE_NAME}-omekas" -n "$NAMESPACE" 2>/dev/null || true
   kubectl get replicasets -n "$NAMESPACE" -l "app.kubernetes.io/instance=${RELEASE_NAME}" 2>/dev/null || true
   kubectl get pods -n "$NAMESPACE" -l "app.kubernetes.io/instance=${RELEASE_NAME}" -o wide 2>/dev/null || true
@@ -159,6 +166,10 @@ if ! helm upgrade --install "$RELEASE_NAME" "${SCRIPT_DIR}/helm_rds" \
   echo "  kubectl get events -n ${NAMESPACE} --sort-by=.lastTimestamp" >&2
   echo "If the pod cannot pull the image, provide registry credentials with:" >&2
   echo "  IMAGE_REGISTRY_USERNAME=<username> IMAGE_REGISTRY_PASSWORD=<password> ${SCRIPT_DIR}/deploy_helm_rds.sh" >&2
+  echo "If the app is running but the ingress returns Bad Gateway, inspect routing with:" >&2
+  echo "  kubectl get ingress,endpoints,service ${RELEASE_NAME}-omekas -n ${NAMESPACE}" >&2
+  echo "  kubectl describe ingress ${RELEASE_NAME}-omekas -n ${NAMESPACE}" >&2
+  echo "  kubectl logs deployment/${RELEASE_NAME}-omekas -n ${NAMESPACE} --tail=100" >&2
   echo "To override the configured StorageClass, rerun this script with:" >&2
   echo "  PVC_STORAGE_CLASS=<storage-class> ${SCRIPT_DIR}/deploy_helm_rds.sh" >&2
   exit 1

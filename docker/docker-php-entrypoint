@@ -21,6 +21,37 @@ check_db_availability() {
     echo "\n\nGreat, $db_host is ready!"
 }
 
+check_oidc_discovery_availability() {
+    local discovery_uri="$1"
+    local result
+
+    [ -n "$discovery_uri" ] || return 0
+
+    case "$discovery_uri" in
+        */.well-known/*)
+            ;;
+        *)
+            discovery_uri="$(echo "$discovery_uri" | sed 's|/*$||')/.well-known/openid-configuration"
+            ;;
+    esac
+
+    if ! command -v curl >/dev/null 2>&1; then
+        echo "WARNING: curl is not available; skipping OIDC discovery reachability check." >&2
+        return 0
+    fi
+
+    echo "[Entrypoint] Checking OIDC discovery reachability: $discovery_uri"
+    if result=$(curl -sS -o /dev/null \
+        --connect-timeout 5 \
+        --max-time 15 \
+        -w 'http_code=%{http_code} dns=%{time_namelookup}s connect=%{time_connect}s tls=%{time_appconnect}s total=%{time_total}s' \
+        "$discovery_uri" 2>&1); then
+        echo "[Entrypoint] OIDC discovery check result: $result"
+    else
+        echo "WARNING: OIDC discovery check failed: $result" >&2
+    fi
+}
+
 
 # Set php.ini and .htaccess according to APPLICATION_ENV
 if [ "$APPLICATION_ENV" = "development" ]; then
@@ -228,9 +259,21 @@ get_github_zip_url() {
         return 0
     fi
 
-    # No release found, fall back to the default branch (usually main or master)
-    echo "WARNING: No release found for $repo_url, using default branch" >&2
-    echo "https://github.com/${owner}/${repo}/archive/refs/heads/main.zip"
+    # No release found, fall back to the repository default branch.
+    repo_api_url="https://api.github.com/repos/${owner}/${repo}"
+    if repo_response=$(curl -fsS "$repo_api_url" 2>/dev/null); then
+        default_branch=$(echo "$repo_response" | jq -r '.default_branch' | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    else
+        echo "WARNING: Failed to resolve default branch from GitHub API for $repo_url, falling back to main" >&2
+        default_branch="main"
+    fi
+
+    if [ -z "$default_branch" ] || [ "$default_branch" = "null" ]; then
+        default_branch="main"
+    fi
+
+    echo "WARNING: No release found for $repo_url, using default branch ${default_branch}" >&2
+    echo "https://github.com/${owner}/${repo}/archive/refs/heads/${default_branch}.zip"
     return 0
 }
 
@@ -295,11 +338,29 @@ install_module_from_url() {
     local name="$1"
     local url="$2"
     local modules_dir="/var/www/html/volume/modules"
-    local tmpdir zip_url existing_dirs new_dir
+    local tmpdir zip_url existing_dirs new_dir cached_zip used_cached_zip
 
-    # Skip if the module directory already exists
+    # Replace partial module directories left by failed downloads or incomplete
+    # composer installs.
+    if [ -d "$modules_dir/$name" ] && \
+       { [ ! -f "$modules_dir/$name/Module.php" ] || \
+         { [ -f "$modules_dir/$name/composer.json" ] && [ ! -f "$modules_dir/$name/vendor/autoload.php" ]; }; }; then
+        echo "Removing incomplete module directory for '$name'."
+        rm -rf "$modules_dir/$name"
+    fi
+
+    # Skip download when files already exist, but still ensure Omeka has it installed.
     if [ -d "$modules_dir/$name" ]; then
-        echo "Module '$name' already exists. Skipping."
+        echo "Module '$name' files already exist. Ensuring module is installed."
+        if [ "$name" = "OIDC" ] && [ -f /usr/local/bin/patch_oidc_module.php ]; then
+            php /usr/local/bin/patch_oidc_module.php "$modules_dir/$name" || \
+                echo "WARNING: Failed to patch existing OIDC module." >&2
+        fi
+        if omeka-s-cli module:install "$name"; then
+            echo "Module installed successfully: $name"
+        else
+            echo "WARNING: Failed to install module '$name'; it may already be installed." >&2
+        fi
         return 0
     fi
 
@@ -310,12 +371,21 @@ install_module_from_url() {
         return 1
     fi
 
-    echo "Downloading module '$name' from $zip_url..."
     tmpdir=$(mktemp -d)
-    if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
-        echo "ERROR: Failed to download module '$name' from $zip_url" >&2
-        rm -rf "$tmpdir"
-        return 1
+    cached_zip="/opt/omeka-module-zips/$name.zip"
+
+    if [ -f "$cached_zip" ]; then
+        echo "Using cached build-time zip for module '$name'."
+        cp "$cached_zip" "$tmpdir/module.zip"
+        used_cached_zip=true
+    else
+        echo "Downloading module '$name' from $zip_url..."
+        if ! curl -sL "$zip_url" -o "$tmpdir/module.zip"; then
+            echo "ERROR: Failed to download module '$name' from $zip_url and no cached zip exists at $cached_zip" >&2
+            rm -rf "$tmpdir"
+            return 1
+        fi
+        used_cached_zip=false
     fi
 
     # Record existing module directories before extraction
@@ -353,12 +423,19 @@ install_module_from_url() {
     fi
 
     # Run composer install if the module has PHP dependencies
-    if [ -f "$modules_dir/$name/composer.json" ]; then
+    if [ -f "$modules_dir/$name/composer.json" ] && \
+       { [ "$used_cached_zip" != "true" ] || [ ! -f "$modules_dir/$name/vendor/autoload.php" ]; }; then
         echo "Running composer install for module '$name'..."
+        export COMPOSER_ALLOW_SUPERUSER=1
         if ! composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$modules_dir/$name"; then
             echo "ERROR: composer install failed for module '$name'" >&2
             return 1
         fi
+    fi
+
+    if [ "$name" = "OIDC" ] && [ -f /usr/local/bin/patch_oidc_module.php ]; then
+        php /usr/local/bin/patch_oidc_module.php "$modules_dir/$name" || \
+            echo "WARNING: Failed to patch OIDC module." >&2
     fi
 
     # Install the module via omeka-s-cli
@@ -366,8 +443,7 @@ install_module_from_url() {
     if omeka-s-cli module:install "$name"; then
         echo "Module installed successfully: $name"
     else
-        echo "ERROR: Failed to install module '$name' via omeka-s-cli" >&2
-        return 1
+        echo "WARNING: Failed to install module '$name' via omeka-s-cli; it may already be installed." >&2
     fi
 }
 
@@ -424,11 +500,15 @@ ensure_module() {
     omeka-s-cli module:download "$name" && omeka-s-cli module:install "$name"
 }
 
-# Automatically download and install modules
-echo "Checking for modules to install..."
-echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
+if [ "${OMEKA_INSTALL_MODULES_ON_STARTUP:-true}" = "true" ]; then
+    # Automatically download and install modules
+    echo "Checking for modules to install..."
+    echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
 
-install_items_from_names "modules" "OMEKA_MODULES"
+    install_items_from_names "modules" "OMEKA_MODULES"
+else
+    echo "Skipping Omeka module installation at startup."
+fi
 
 chown -R www-data:www-data /var/www/html/volume/modules
 
@@ -462,6 +542,16 @@ if [ -n "${OMEKA_ADMIN_EMAIL:-}" ] && [ -n "${OMEKA_ADMIN_NAME:-}" ] && \
   )
 else
   echo "[Entrypoint] Skipping Omeka S install: missing required environment variables (OMEKA_ADMIN_EMAIL, OMEKA_ADMIN_NAME, OMEKA_ADMIN_PASSWORD, OMEKA_SITE_TITLE)"
+fi
+
+if [ -n "${OIDC_DOMAIN:-}" ]; then
+  echo "[Entrypoint] Configuring OIDC discovery URI..."
+  if ! php configure_oidc.php; then
+    echo "WARNING: Failed to configure OIDC discovery URI." >&2
+  fi
+  check_oidc_discovery_availability "$OIDC_DOMAIN"
+else
+  echo "[Entrypoint] OIDC_DOMAIN not set. Skipping OIDC discovery URI configuration."
 fi
 
 # Run the original Docker PHP entrypoint (ref. file https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/docker-php-entrypoint)

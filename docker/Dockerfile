@@ -130,6 +130,8 @@ COPY docker/docker-php-entrypoint /usr/local/bin/
 
 # Copy the automatic installation script
 COPY docker/install_cli.php /var/www/html/
+COPY docker/configure_oidc.php /var/www/html/
+COPY docker/patch_oidc_module.php /usr/local/bin/patch_oidc_module.php
 
 # Replace Omeka S core files with SDS customizations
 COPY ["omeka/SDS Core Code Files to Replace/application/", "/var/www/html/application/"]
@@ -138,5 +140,34 @@ RUN chown -R www-data:www-data /var/www/html/application/
 # Bundle SDS_theme zip for installation at container startup
 RUN mkdir -p /sds-frontend/omeka
 COPY omeka/SDS_theme.zip /sds-frontend/omeka/SDS_theme.zip
+
+# Cache current remote module release zips at image build time. The Kubernetes
+# runtime may not have egress to GitHub release assets, so startup can seed from
+# this cache while still using remote-sourced module packages.
+RUN set -eux; \
+    mkdir -p /opt/omeka-module-zips; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Common/releases/download/3.4.85/Common-3.4.85.zip" -o /opt/omeka-module-zips/Common.zip; \
+    curl -fsSL "https://github.com/arepr/omeka-s-module-pageblocks/releases/download/1.3/PageBlocks.zip" -o /opt/omeka-module-zips/PageBlocks.zip; \
+    curl -fsSL "https://github.com/omeka-s-modules/CSVImport/releases/download/v2.6.2/CSVImport-2.6.2.zip" -o /opt/omeka-module-zips/CSVImport.zip; \
+    curl -fsSL "https://github.com/zerocrates/HideProperties/releases/download/v1.3.1/HideProperties-1.3.1.zip" -o /opt/omeka-module-zips/HideProperties.zip; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Log/releases/download/3.4.38/Log-3.4.38.zip" -o /opt/omeka-module-zips/Log.zip; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-CustomOntology/releases/download/3.4.6/CustomOntology-3.4.6.zip" -o /opt/omeka-module-zips/CustomOntology.zip; \
+    curl -fsSL "https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps/releases/download/v1.1/Sitemaps-1.1.zip" -o /opt/omeka-module-zips/Sitemaps.zip; \
+    curl -fsSL "https://github.com/Daniel-KM/Omeka-S-module-Shortcode/releases/download/3.4.15/Shortcode-3.4.15.zip" -o /opt/omeka-module-zips/Shortcode.zip; \
+    curl -fsSL "https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/tags/0.1.1.zip" -o /opt/omeka-module-zips/OIDC.zip
+
+# OIDC's source archive does not include Composer dependencies. Install them at
+# image build time and replace the cached zip with a vendor-complete package so
+# Kubernetes startup does not need Packagist/GitHub egress.
+RUN set -eux; \
+    tmpdir="$(mktemp -d)"; \
+    unzip -q /opt/omeka-module-zips/OIDC.zip -d "$tmpdir"; \
+    oidc_dir="$(find "$tmpdir" -mindepth 1 -maxdepth 1 -type d | head -n 1)"; \
+    mv "$oidc_dir" "$tmpdir/OIDC"; \
+    COMPOSER_ALLOW_SUPERUSER=1 composer update --no-dev --no-scripts --optimize-autoloader --no-interaction --working-dir="$tmpdir/OIDC"; \
+    php /usr/local/bin/patch_oidc_module.php "$tmpdir/OIDC"; \
+    rm -f /opt/omeka-module-zips/OIDC.zip; \
+    (cd "$tmpdir" && zip -qr /opt/omeka-module-zips/OIDC.zip OIDC); \
+    rm -rf "$tmpdir"
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

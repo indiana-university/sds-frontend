@@ -9,18 +9,20 @@ omekas:
   image:
     repository: registry.docker.iu.edu/rds/omekas-test
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
+  rolloutToken: ""
   imagePullSecrets: []
   modules: |
-    Common
-    PageBlocks
-    CSVImport
-    HideProperties
-    Log
-    CustomOntology
-    Sitemaps
-    Shortcode
-    OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+    Common: https://github.com/Daniel-KM/Omeka-S-module-Common/releases/download/3.4.85/Common-3.4.85.zip
+    PageBlocks: https://github.com/arepr/omeka-s-module-pageblocks/releases/download/1.3/PageBlocks.zip
+    CSVImport: https://github.com/omeka-s-modules/CSVImport/releases/download/v2.6.2/CSVImport-2.6.2.zip
+    HideProperties: https://github.com/zerocrates/HideProperties/releases/download/v1.3.1/HideProperties-1.3.1.zip
+    Log: https://github.com/Daniel-KM/Omeka-S-module-Log/releases/download/3.4.38/Log-3.4.38.zip
+    CustomOntology: https://github.com/Daniel-KM/Omeka-S-module-CustomOntology/releases/download/3.4.6/CustomOntology-3.4.6.zip
+    Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps/releases/download/v1.1/Sitemaps-1.1.zip
+    Shortcode: https://github.com/Daniel-KM/Omeka-S-module-Shortcode/releases/download/3.4.15/Shortcode-3.4.15.zip
+    OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/tags/0.1.1.zip
+  installModulesOnStartup: true
   service:
     type: ClusterIP
     port: 80
@@ -32,6 +34,19 @@ omekas:
     limits:
       cpu: "1"
       memory: 1Gi
+  readinessProbe:
+    tcpSocket:
+      port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 6
+  startupProbe:
+    tcpSocket:
+      port: 80
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 180
   nodeSelector: {}
   tolerations: []
   topologySpreadConstraints: []
@@ -59,8 +74,11 @@ config:
   omekaAdminName: "Jun Wang"
   omekaSiteTitle: SDS Test Site
   omekaTimezone: America/New_York
-  oidcDomain: "https://rdslogin.us.auth0.com"
+  oidcDomain: "https://rdslogin.us.auth0.com/.well-known/openid-configuration"
   oidcClientId: "B4zbiUwAxVsWgBroKiRoCYJQs7O28QH9"
+  httpProxy: "http://156.56.18.228:8080"
+  httpsProxy: "http://156.56.18.228:8443"
+  noProxy: "localhost,127.0.0.1,iu.edu,iupui.edu,indiana.edu"
 
 # Sensitive credentials — override with --set or a secrets file; do NOT commit real values
 secrets:

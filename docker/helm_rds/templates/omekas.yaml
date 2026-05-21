@@ -33,6 +33,10 @@ spec:
     metadata:
       labels:
         {{- include "omekas.selectorLabels" . | nindent 8 }}
+      {{- with .Values.omekas.rolloutToken }}
+      annotations:
+        sds.iu.edu/rollout-token: {{ . | quote }}
+      {{- end }}
     spec:
       {{- with .Values.omekas.imagePullSecrets }}
       imagePullSecrets:
@@ -52,11 +56,21 @@ spec:
           env:
             - name: OMEKA_MODULES
               value: {{ .Values.omekas.modules | quote }}
+            - name: OMEKA_INSTALL_MODULES_ON_STARTUP
+              value: {{ .Values.omekas.installModulesOnStartup | quote }}
           volumeMounts:
             - name: omekas-volume
               mountPath: /var/www/html/volume
           {{ with .Values.omekas.resources }}
           resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.omekas.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.omekas.readinessProbe }}
+          readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       {{- with .Values.omekas.nodeSelector }}

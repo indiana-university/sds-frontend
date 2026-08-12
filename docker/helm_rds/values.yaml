@@ -21,7 +21,7 @@ omekas:
     CustomOntology: https://github.com/Daniel-KM/Omeka-S-module-CustomOntology/releases/download/3.4.6/CustomOntology-3.4.6.zip
     Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps/releases/download/v1.1/Sitemaps-1.1.zip
     Shortcode: https://github.com/Daniel-KM/Omeka-S-module-Shortcode/releases/download/3.4.15/Shortcode-3.4.15.zip
-    OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc/archive/refs/tags/0.1.1.zip
+    OIDC: https://github.com/indiana-university/omeka-s-module-oidc/archive/refs/heads/main.zip
   installModulesOnStartup: true
   service:
     type: ClusterIP

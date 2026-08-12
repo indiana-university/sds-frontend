@@ -19,7 +19,7 @@ omekas:
     CustomOntology
     Sitemaps
     Shortcode
-    OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+    OIDC: https://github.com/indiana-university/omeka-s-module-oidc
   service:
     type: LoadBalancer
     port: 8000

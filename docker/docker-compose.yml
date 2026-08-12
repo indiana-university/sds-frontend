@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:80"
     restart: unless-stopped
-    env_file: ".sdsdb_dev.env"
+    env_file: "${SDSDB_ENV_FILE:-.sdsdb_dev.env}"
     environment:
       OMEKA_MODULES: |
         Common
@@ -18,7 +18,7 @@ services:
         CustomOntology
         Sitemaps
         Shortcode
-        OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+        OIDC: https://github.com/indiana-university/omeka-s-module-oidc
     # environment:
     #   OMEKA_MODULES: |
     #     Common: https://github.com/Daniel-KM/Omeka-S-module-Common
@@ -36,7 +36,7 @@ services:
     #     Sitemaps: https://github.com/ManOnDaMoon/omeka-s-module-Sitemaps
     #     Statistics: https://github.com/Daniel-KM/Omeka-s-module-Statistics
     #     ValueSuggest: https://github.com/omeka-s-modules/ValueSuggest
-    #     OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+    #     OIDC: https://github.com/indiana-university/omeka-s-module-oidc
     volumes:
       - omekas_volume:/var/www/html/volume:Z
 

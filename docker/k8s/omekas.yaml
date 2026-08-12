@@ -49,7 +49,7 @@ spec:
                 CustomOntology
                 Sitemaps
                 Shortcode
-                OIDC: https://github.com/webgisdeveloper/omeka-s-module-oidc
+                OIDC: https://github.com/indiana-university/omeka-s-module-oidc
           volumeMounts:
             - name: omekas-volume
               mountPath: /var/www/html/volume

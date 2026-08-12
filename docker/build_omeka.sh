@@ -5,8 +5,8 @@
 
 set -e  # Exit on error
 
-OMEKA_VERSION="4.1.1"
-#OMEKA_VERSION="4.2.0"
+#OMEKA_VERSION="4.1.1"
+OMEKA_VERSION="4.2.1"
 OMEKA_ZIP="omeka-s-${OMEKA_VERSION}.zip"
 OMEKA_DIR="omeka-s"
 OMEKA_URL="https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ZIP}"

@@ -15,7 +15,6 @@ data:
   OMEKA_SITE_TITLE: {{ .Values.config.omekaSiteTitle | quote }}
   OMEKA_TIMEZONE: {{ .Values.config.omekaTimezone | quote }}
   OIDC_DOMAIN: {{ .Values.config.oidcDomain | quote }}
-  OIDC_CLIENT_ID: {{ .Values.config.oidcClientId | quote }}
   {{- with .Values.config.httpProxy }}
   HTTP_PROXY: {{ . | quote }}
   http_proxy: {{ . | quote }}

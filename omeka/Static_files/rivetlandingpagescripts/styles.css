@@ -2841,6 +2841,13 @@ img {
         border-color: #7a1705
     }
 
+/* Omeka's global a:link/a:visited rule (specificity 0,1,1) would otherwise make the label red on the red button */
+a.rvt-button--link:link,
+a.rvt-button--link:visited,
+a.rvt-button--link:hover {
+    color: #fff
+}
+
 .rvt-button--link-secondary {
     background-color: #ebecee;
     border-color: #ebecee;

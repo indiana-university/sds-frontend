@@ -29,3 +29,6 @@
 
 # Miscellaneous
 .DS_Store
+
+# Output of docker/build_omeka.sh
+omeka-s.zip

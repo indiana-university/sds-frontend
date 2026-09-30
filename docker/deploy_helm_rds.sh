@@ -42,7 +42,14 @@ IMAGE_REGISTRY_EMAIL="${IMAGE_REGISTRY_EMAIL:-$(read_optional_env IMAGE_REGISTRY
 # 1. Create the secret imperatively from the local env file when it is missing.
 #    Credentials are never stored in Helm release history or shell history.
 #    Key names must match what the Deployment's secretRef expects.
+#    An existing secret is left untouched. To refresh it from the env file
+#    (e.g. after adding OIDC_CLIENT_ID), run with RECREATE_SECRET=true.
 # ---------------------------------------------------------------------------
+if [ "${RECREATE_SECRET:-false}" = "true" ]; then
+  echo "RECREATE_SECRET=true: deleting existing omekas-secrets (if any)..."
+  kubectl delete secret omekas-secrets --namespace "$NAMESPACE" --ignore-not-found
+fi
+
 SECRET_OUT=$(kubectl create secret generic omekas-secrets \
   --namespace "$NAMESPACE" \
   --from-literal=MYSQL_PASSWORD="$MYSQL_PASSWORD" \

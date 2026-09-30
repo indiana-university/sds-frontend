@@ -27,13 +27,12 @@ Build docker image from the official Omekas release [Omeka S v4.1.1](https://git
 | ValueSuggest     | https://github.com/omeka-s-modules/ValueSuggest                            |                    |
 
 ## Modifications
-omeka/SDS_2_0/omekaS_v_4_1_1
+omeka/IEEE_SciVis_Contest
 
 * application/asset/css
 * application/view/common
 * application/view/layout
 * application/view/omeka
-* themes/default
 
 ## 1. Package omeka
 Run ./zip_omekas.sh to generate omeka-s.zip 

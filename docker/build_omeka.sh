@@ -10,8 +10,8 @@ OMEKA_VERSION="4.2.1"
 OMEKA_ZIP="omeka-s-${OMEKA_VERSION}.zip"
 OMEKA_DIR="omeka-s"
 OMEKA_URL="https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ZIP}"
-#CUSTOM_SOURCE="../omeka/SDS_2_0/omekaS_v_4_1_1"
-CUSTOM_SOURCE=~/Projects/testing/IEEE_SciVis_Contest
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CUSTOM_SOURCE="${SCRIPT_DIR}/../omeka/IEEE_SciVis_Contest"
 OUTPUT_ZIP="omeka-s.zip"
 
 echo "=== Omeka-S Build Script ==="

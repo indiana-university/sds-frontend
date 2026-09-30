@@ -1,6 +1,6 @@
 # Required files in `omeka/`
 
-Everything else under `omeka/` was removed as unused (unused SDS_2_0 Omeka core/vendor/modules, the
+Everything else under `omeka/` was removed as unused (the old SDS_2_0 overlay and its Omeka core/vendor/modules, the
 `SDS Theme for Omeka S` source folder, which is identical to `SDS_theme.zip`, and `.DS_Store`/`.swp` files).
 
 ## 1. Used by `docker/Dockerfile` (image build)
@@ -22,15 +22,15 @@ Static_files/rivetlandingpagescripts/styles.css
 SDS_theme.zip
 ```
 
-## 2. Used by `docker/build_omeka.sh` (via `CUSTOM_SOURCE`, default `../omeka/SDS_2_0/omekaS_v_4_1_1`)
+## 2. Used by `docker/build_omeka.sh` (via `CUSTOM_SOURCE` = `omeka/IEEE_SciVis_Contest`)
 
 The script replaces these folders in a fresh Omeka S download:
 
-- `SDS_2_0/omekaS_v_4_1_1/application/asset/css`
-- `SDS_2_0/omekaS_v_4_1_1/application/view/common`
-- `SDS_2_0/omekaS_v_4_1_1/application/view/layout`
-- `SDS_2_0/omekaS_v_4_1_1/application/view/omeka`
-- `SDS_2_0/omekaS_v_4_1_1/themes/default`
+- `IEEE_SciVis_Contest/application/asset/css`
+- `IEEE_SciVis_Contest/application/view/common`
+- `IEEE_SciVis_Contest/application/view/layout`
+- `IEEE_SciVis_Contest/application/view/omeka`
+- `themes/default` is also listed in the script, but `IEEE_SciVis_Contest` has no such folder, so it is skipped with a warning.
 
 ## 3. Documentation kept
 

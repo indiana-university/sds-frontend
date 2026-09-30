@@ -1,0 +1,272 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'item resource show');
+$embedMedia = $this->siteSetting('item_media_embed', false);
+$itemMedia = $item->media();
+
+$filterLocale = (bool) $this->siteSetting('filter_locale_values');
+$lang = $this->lang();
+$downloadTerm = 'scivis:downloadURL';	
+$archivesizeTerm = 'scivis:fileSize';	
+$multipartTerm = 'scivis:multipart';
+$download = $downloadTerm ? $item->value($downloadTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$archivesize = $archivesizeTerm ? $item->value($archivesizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+$multipart = $multipartTerm ? $item->value($multipartTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null)); 
+
+$part1DownloadurlTerm ='scivis:part1Downloadurl';
+$part1FileSizeTerm ='scivis:part1FileSize';
+$part2DownloadurlTerm ='scivis:part2Downloadurl';
+$part2FileSizeTerm ='scivis:part2FileSize';
+$part3DownloadurlTerm ='scivis:part3Downloadurl';
+$part3FileSizeTerm ='scivis:part3FileSize';
+$part4DownloadurlTerm ='scivis:part4Downloadurl';
+$part4FileSizeTerm ='scivis:part4FileSize';
+$part5DownloadurlTerm ='scivis:part5Downloadurl';
+$part5FileSizeTerm ='scivis:part5FileSize';
+$part6DownloadurlTerm ='scivis:part6Downloadurl';
+$part6FileSizeTerm ='scivis:part6FileSize';
+$part7DownloadurlTerm ='scivis:part7Downloadurl';
+$part7FileSizeTerm ='scivis:part7FileSize';
+$part8DownloadurlTerm ='scivis:part8Downloadurl';
+$part8FileSizeTerm ='scivis:part8FileSize';
+$part9DownloadurlTerm ='scivis:part9Downloadurl';
+$part9FileSizeTerm ='scivis:part9FileSize';
+$part10DownloadurlTerm ='scivis:part10Downloadurl';
+$part10FileSizeTerm ='scivis:part10FileSize';
+$part11DownloadurlTerm ='scivis:part11Downloadurl';
+$part11FileSizeTerm ='scivis:part11FileSize';
+$part12DownloadurlTerm ='scivis:part12Downloadurl';
+$part12FileSizeTerm ='scivis:part12FileSize';
+$part13DownloadurlTerm ='scivis:part13Downloadurl';
+$part13FileSizeTerm ='scivis:part13FileSize';
+$part14DownloadurlTerm ='scivis:part14Downloadurl';
+$part14FileSizeTerm ='scivis:part14FileSize';
+$part15DownloadurlTerm ='scivis:part15Downloadurl';
+$part15FileSizeTerm ='scivis:part15FileSize';
+$part16DownloadurlTerm ='scivis:part16Downloadurl';
+$part16FileSizeTerm ='scivis:part16FileSize';
+$part17DownloadurlTerm ='scivis:part17Downloadurl';
+$part17FileSizeTerm ='scivis:part17FileSize';
+$part18DownloadurlTerm ='scivis:part18Downloadurl';
+$part18FileSizeTerm ='scivis:part18FileSize';
+$part19DownloadurlTerm ='scivis:part19Downloadurl';
+$part19FileSizeTerm ='scivis:part19FileSize';
+$part20DownloadurlTerm ='scivis:part20Downloadurl';
+$part20FileSizeTerm ='scivis:part20FileSize';
+$part21DownloadurlTerm ='scivis:part21Downloadurl';
+$part21FileSizeTerm ='scivis:part21FileSize';
+$part22DownloadurlTerm ='scivis:part22Downloadurl';
+$part22FileSizeTerm ='scivis:part22FileSize';
+$part23DownloadurlTerm ='scivis:part23Downloadurl';
+$part23FileSizeTerm ='scivis:part23FileSize';
+$part24DownloadurlTerm ='scivis:part24Downloadurl';
+$part24FileSizeTerm ='scivis:part24FileSize';
+
+$part1Downloadurl= $part1DownloadurlTerm ? $item->value($part1DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part1FileSize= $part1FileSizeTerm ? $item->value($part1FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part2Downloadurl= $part2DownloadurlTerm ? $item->value($part2DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part2FileSize= $part2FileSizeTerm ? $item->value($part2FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part3Downloadurl= $part3DownloadurlTerm ? $item->value($part3DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part3FileSize= $part3FileSizeTerm ? $item->value($part3FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part4Downloadurl= $part4DownloadurlTerm ? $item->value($part4DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part4FileSize= $part4FileSizeTerm ? $item->value($part4FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part5Downloadurl= $part5DownloadurlTerm ? $item->value($part5DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part5FileSize= $part5FileSizeTerm ? $item->value($part5FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part6Downloadurl= $part6DownloadurlTerm ? $item->value($part6DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part6FileSize= $part6FileSizeTerm ? $item->value($part6FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part7Downloadurl= $part7DownloadurlTerm ? $item->value($part7DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part7FileSize= $part7FileSizeTerm ? $item->value($part7FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part8Downloadurl= $part8DownloadurlTerm ? $item->value($part8DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part8FileSize= $part8FileSizeTerm ? $item->value($part8FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part9Downloadurl= $part9DownloadurlTerm ? $item->value($part9DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part9FileSize= $part9FileSizeTerm ? $item->value($part9FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part10Downloadurl= $part10DownloadurlTerm ? $item->value($part10DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part10FileSize= $part10FileSizeTerm ? $item->value($part10FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part11Downloadurl= $part11DownloadurlTerm ? $item->value($part11DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part11FileSize= $part11FileSizeTerm ? $item->value($part11FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part12Downloadurl= $part12DownloadurlTerm ? $item->value($part12DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part12FileSize= $part12FileSizeTerm ? $item->value($part12FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part13Downloadurl= $part13DownloadurlTerm ? $item->value($part13DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part13FileSize= $part13FileSizeTerm ? $item->value($part13FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part14Downloadurl= $part14DownloadurlTerm ? $item->value($part14DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part14FileSize= $part14FileSizeTerm ? $item->value($part14FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part15Downloadurl= $part15DownloadurlTerm ? $item->value($part15DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part15FileSize= $part15FileSizeTerm ? $item->value($part15FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part16Downloadurl= $part16DownloadurlTerm ? $item->value($part16DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part16FileSize= $part16FileSizeTerm ? $item->value($part16FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part17Downloadurl= $part17DownloadurlTerm ? $item->value($part17DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part17FileSize= $part17FileSizeTerm ? $item->value($part17FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part18Downloadurl= $part18DownloadurlTerm ? $item->value($part18DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part18FileSize= $part18FileSizeTerm ? $item->value($part18FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part19Downloadurl= $part19DownloadurlTerm ? $item->value($part19DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part19FileSize= $part19FileSizeTerm ? $item->value($part19FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part20Downloadurl= $part20DownloadurlTerm ? $item->value($part20DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part20FileSize= $part20FileSizeTerm ? $item->value($part20FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part21Downloadurl= $part21DownloadurlTerm ? $item->value($part21DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part21FileSize= $part21FileSizeTerm ? $item->value($part21FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part22Downloadurl= $part22DownloadurlTerm ? $item->value($part22DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part22FileSize= $part22FileSizeTerm ? $item->value($part22FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part23Downloadurl= $part23DownloadurlTerm ? $item->value($part23DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part23FileSize= $part23FileSizeTerm ? $item->value($part23FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part24Downloadurl= $part24DownloadurlTerm ? $item->value($part24DownloadurlTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+$part24FileSize= $part24FileSizeTerm ? $item->value($part24FileSizeTerm, ['lang' => ($filterLocale ? [$lang, ''] : null)]) : $item->displayDescription(null, ($filterLocale ? [$lang, ''] : null));
+
+
+?>
+
+<?php echo $this->pageTitle($item->displayTitle(null, ($filterLocale ? $lang : null)), 2); ?>
+<?php $this->trigger('view.show.before'); ?>
+<?php if ($embedMedia && $itemMedia): ?>
+    <div class="media-embeds">
+    <?php foreach ($itemMedia as $media):
+        echo $media->render();
+    endforeach;
+    ?>
+    </div>
+<?php endif; ?>
+
+<!-- URL Creation-->
+<div>
+<?php
+
+$user = $this->identity();
+
+    if ($user != null) {
+    $useremail = $user->getEmail();
+	     }   ?>
+	</div>
+
+
+<!-- Metadata Structure-->
+<div class="property">
+
+
+<?php 
+
+	if ($user == null) { 
+		echo "<div style=\"margin-left:2%;\">";
+		echo "Please <a href=\"https://avl.sds.uits.iu.edu/IEEE_SciVis_Contest/oidc/login\">login</a> to submit a download request.";
+		}
+
+	elseif ($user != null) {
+	
+	if ($multipart == "Yes") {
+	
+		echo "<div style=\"margin-left:2%;\">";
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part1Downloadurl."&uid=".$useremail." target=blank>Dataset Part 1 (".$part1FileSize.")</a><br>";
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part2Downloadurl."&uid=".$useremail." target=blank>Dataset Part 2 (".$part2FileSize.")</a><br>";
+    if ($part3Downloadurl): 	
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part3Downloadurl."&uid=".$useremail." target=blank>Dataset Part 3 (".$part3FileSize.")</a><br>";
+    endif;  
+    if ($part4Downloadurl): 	
+		echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part4Downloadurl."&uid=".$useremail." target=blank>Dataset Part 4 (".$part4FileSize.")</a><br>";
+   endif;  
+    if ($part5Downloadurl): 
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part5Downloadurl."&uid=".$useremail." target=blank>Dataset Part 5 (".$part5FileSize.")</a><br>";
+    endif;  
+    if ($part6Downloadurl):    
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part6Downloadurl."&uid=".$useremail." target=blank>Dataset Part 6 (".$part6FileSize.")</a><br>";
+     endif;  
+    if ($part7Downloadurl):   	
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part7Downloadurl."&uid=".$useremail." target=blank>Dataset Part 7 (".$part7FileSize.")</a><br>";
+     endif;  
+    if ($part8Downloadurl):   
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part8Downloadurl."&uid=".$useremail." target=blank>Dataset Part 8 (".$part8FileSize.")</a><br>";
+     endif;  
+    if ($part9Downloadurl):   
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part9Downloadurl."&uid=".$useremail." target=blank>Dataset Part 9 (".$part9FileSize.")</a><br>";
+     endif;  
+    if ($part10Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part10Downloadurl."&uid=".$useremail." target=blank>Dataset Part 10 (".$part10FileSize.")</a><br>";
+   endif;  
+    if ($part11Downloadurl):  
+        echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part11Downloadurl."&uid=".$useremail." target=blank>Dataset Part 11 (".$part11FileSize.")</a><br>";
+    endif;  
+    if ($part12Downloadurl):     	
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part12Downloadurl."&uid=".$useremail." target=blank>Dataset Part 12 (".$part12FileSize.")</a><br>";
+      endif;  
+    if ($part13Downloadurl):   
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part13Downloadurl."&uid=".$useremail." target=blank>Dataset Part 13 (".$part13FileSize.")</a><br>";
+       endif;  
+    if ($part14Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part14Downloadurl."&uid=".$useremail." target=blank>Dataset Part 14 (".$part14FileSize.")</a><br>";
+       endif;  
+    if ($part15Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part15Downloadurl."&uid=".$useremail." target=blank>Dataset Part 15 (".$part15FileSize.")</a><br>";
+      endif;  
+    if ($part16Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part16Downloadurl."&uid=".$useremail." target=blank>Dataset Part 16 (".$part16FileSize.")</a><br>";
+      endif;  
+    if ($part17Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part17Downloadurl."&uid=".$useremail." target=blank>Dataset Part 17 (".$part17FileSize.")</a><br>";
+      endif;  
+    if ($part18Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part18Downloadurl."&uid=".$useremail." target=blank>Dataset Part 18 (".$part18FileSize.")</a><br>";
+      endif;  
+    if ($part19Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part19Downloadurl."&uid=".$useremail." target=blank>Dataset Part 19 (".$part19FileSize.")</a><br>";
+    endif;  
+    if ($part20Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part20Downloadurl."&uid=".$useremail." target=blank>Dataset Part 20 (".$part20FileSize.")</a><br>";
+    endif;  
+    if ($part21Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part21Downloadurl."&uid=".$useremail." target=blank>Dataset Part 21 (".$part21FileSize.")</a><br>";
+     endif;  
+    if ($part22Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part22Downloadurl."&uid=".$useremail." target=blank>Dataset Part 22 (".$part22FileSize.")</a><br>";
+      endif;  
+    if ($part23Downloadurl):  
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part23Downloadurl."&uid=".$useremail." target=blank>Dataset Part 23 (".$part23FileSize.")</a><br>";
+     endif;  
+    if ($part24Downloadurl):    
+      	echo "<a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$part24Downloadurl."&uid=".$useremail." target=blank>Dataset Part 24 (".$part24FileSize.")</a><br>";
+     endif;  
+
+		echo "</div>";
+	
+	}
+			
+	/*elseif ($user == null) { 
+
+		echo "Please <a href=\"https://avl.sds.uits.iu.edu/oidc/login/\">login</a> to submit a download request.";
+		}
+*/
+ 	elseif ($multipart == "mega") {
+ 		echo $download;
+ 	}
+ 	else
+ 		
+ 	    echo "<div style=\"margin-left:2%;\"> <a href=https://scivis-sds-prod.uits.iu.edu:8080/scivis/pull?p=".$download."&uid=".$useremail." target=blank>Click here to download dataset (".$archivesize.")</a> </div>";
+}
+   
+?>
+
+</div>
+<br/>
+
+
+<?php echo $item->displayValues(); ?>
+<div class="property">
+   
+<?php if (($this->siteSetting('show_attached_pages', true)) && ($sitePages = $item->sitePages($site->id()))): ?>
+<div class="property">
+    <h4><?php echo $translate('Site pages'); ?></h4>
+    <div class="values">
+        <?php foreach ($sitePages as $sitePage): ?>
+        <div class="value"><?php echo $sitePage->link($sitePage->title()); ?></div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+<?php if (!$embedMedia && $itemMedia): ?>
+<div class="media-list">
+    <?php foreach ($itemMedia as $media): ?>
+        <?php echo $media->linkPretty(); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+
+
+<?php $this->trigger('view.show.after'); ?>

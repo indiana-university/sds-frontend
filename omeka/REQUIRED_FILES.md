@@ -1,0 +1,38 @@
+# Required files in `omeka/`
+
+Everything else under `omeka/` was removed as unused (unused SDS_2_0 Omeka core/vendor/modules, the
+`SDS Theme for Omeka S` source folder, which is identical to `SDS_theme.zip`, and `.DS_Store`/`.swp` files).
+
+## 1. Used by `docker/Dockerfile` (image build)
+
+| Path | Used for |
+|------|----------|
+| `SDS_theme.zip` | Copied to `/sds-frontend/omeka/SDS_theme.zip`; installed at startup by `docker-php-entrypoint` |
+| `SDS Core Code Files to Replace/application/**` | Overlaid on Omeka S `application/` |
+| `Static_files/rivetlandingpagescripts/**` | Copied to `/var/www/html/rivetlandingpagescripts/` |
+
+```
+SDS Core Code Files to Replace/application/config/module.config.php
+SDS Core Code Files to Replace/application/src/Service/ViewHelper/MyDatabaseHelperFactory.php
+SDS Core Code Files to Replace/application/src/Site/BlockLayout/MyDownloadsBlock.php
+SDS Core Code Files to Replace/application/src/View/Helper/MyDatabaseHelper.php
+SDS Core Code Files to Replace/application/view/omeka/login/login.phtml
+Static_files/rivetlandingpagescripts/microsite.css
+Static_files/rivetlandingpagescripts/styles.css
+SDS_theme.zip
+```
+
+## 2. Used by `docker/build_omeka.sh` (via `CUSTOM_SOURCE`, default `../omeka/SDS_2_0/omekaS_v_4_1_1`)
+
+The script replaces these folders in a fresh Omeka S download:
+
+- `SDS_2_0/omekaS_v_4_1_1/application/asset/css`
+- `SDS_2_0/omekaS_v_4_1_1/application/view/common`
+- `SDS_2_0/omekaS_v_4_1_1/application/view/layout`
+- `SDS_2_0/omekaS_v_4_1_1/application/view/omeka`
+- `SDS_2_0/omekaS_v_4_1_1/themes/default`
+
+## 3. Documentation kept
+
+- `README.md` (linked from the root README)
+- `Static_files/README.md`

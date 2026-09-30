@@ -30,7 +30,6 @@ The script replaces these folders in a fresh Omeka S download:
 - `IEEE_SciVis_Contest/application/view/common`
 - `IEEE_SciVis_Contest/application/view/layout`
 - `IEEE_SciVis_Contest/application/view/omeka`
-- `themes/default` is also listed in the script, but `IEEE_SciVis_Contest` has no such folder, so it is skipped with a warning.
 
 ## 3. Documentation kept
 

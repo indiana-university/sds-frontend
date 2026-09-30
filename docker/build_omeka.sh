@@ -53,7 +53,6 @@ folders=(
     "application/view/common"
     "application/view/layout"
     "application/view/omeka"
-    "themes/default"
 )
 
 # Replace each folder

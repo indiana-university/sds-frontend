@@ -1,5 +1,8 @@
 # Notes:
 Special package code for nflperim
+1. don't run build_omeka.sh 
+2. use the custom sdstheme 
+3. skip plugin installation  
 
 # Notes:
 The new method is based on [Omeka-S-Cli](https://github.com/GhentCDH/Omeka-S-Cli)

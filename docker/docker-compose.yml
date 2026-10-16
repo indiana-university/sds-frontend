@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:80"
     restart: unless-stopped
-    env_file: "${SDSDB_ENV_FILE:-.sdsdb_dev.env}"
+    env_file: "${SDSDB_ENV_FILE:?SDSDB_ENV_FILE is required}"
     environment:
       OMEKA_MODULES: |
         Common

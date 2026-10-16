@@ -4,7 +4,14 @@
 set -eu
 
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-env_file="$script_dir/.sdsdb.env"
+
+# Required first argument: path to the environment file
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <env-file> [docker compose args...]" >&2
+    exit 1
+fi
+env_file="$1"
+shift
 
 if [ ! -f "$env_file" ]; then
     echo "Environment file not found: $env_file" >&2

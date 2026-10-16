@@ -25,6 +25,8 @@ $app = \Laminas\Mvc\Application::init(
     require 'application/config/application.config.php'
 );
 $services = $app->getServiceManager();
+// The installed flag is only set when the module manager is created.
+$services->get('Omeka\\ModuleManager');
 $status = $services->get('Omeka\\Status');
 
 if (!$status->isInstalled()) {

@@ -47,6 +47,12 @@ RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install \
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+# Site files that must be reachable under /files/ (e.g. downloadable data sheets).
+# Staged outside the volume; the entrypoint copies missing files into volume/files.
+ARG SITE_FILES_DIR=omeka/nflperim/files
+COPY ${SITE_FILES_DIR}/ /opt/omeka-site-files/
+RUN find /opt/omeka-site-files -name .DS_Store -delete
+
 # Install Composer dependencies
 # error: Composer could not find a composer.json file in /var/www/html
 #To initialize a project, please create a composer.json file. See https://getcomposer.org/basic-usage
@@ -131,6 +137,7 @@ COPY docker/docker-php-entrypoint /usr/local/bin/
 # Copy the automatic installation script
 COPY docker/install_cli.php /var/www/html/
 COPY docker/configure_oidc.php /var/www/html/
+COPY docker/upgrade_modules.php /var/www/html/
 COPY docker/patch_oidc_module.php /usr/local/bin/patch_oidc_module.php
 
 # Replace Omeka S core files with SDS customizations

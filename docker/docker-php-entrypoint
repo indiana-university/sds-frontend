@@ -68,6 +68,12 @@ mkdir -p /var/www/html/volume/files
 mkdir -p /var/www/html/volume/modules
 mkdir -p /var/www/html/volume/themes
 mkdir -p /var/www/html/volume/logs
+# Copy bundled site files (downloads under /files/) into the volume without
+# overwriting anything that is already there.
+if [ -d /opt/omeka-site-files ]; then
+  echo "Syncing bundled site files into volume/files..."
+  cp -rn /opt/omeka-site-files/. /var/www/html/volume/files/
+fi
 chown -R www-data:www-data /var/www/html/volume
 
 # If local.config.php does not exist in the mounted volume, copy it from the template
@@ -95,6 +101,16 @@ fi
   else
     echo ";log_path ="
   fi
+
+  # Some servers (e.g. MySQL 8.4 with caching_sha2_password) reject password
+  # logins over a plain connection. Omeka has no SSL setting, so pass PDO options
+  # (1011 = MYSQL_ATTR_SSL_CIPHER, 1014 = MYSQL_ATTR_SSL_VERIFY_SERVER_CERT).
+  case "${MYSQL_USE_SSL:-false}" in
+    true|TRUE|1|yes)
+      echo 'driverOptions[1011] = "DEFAULT"'
+      echo "driverOptions[1014] = ${MYSQL_SSL_VERIFY_SERVER_CERT:-0}"
+      ;;
+  esac
 } > /var/www/html/volume/config/database.ini
 
 # Set permissions
@@ -500,18 +516,7 @@ ensure_module() {
     omeka-s-cli module:download "$name" && omeka-s-cli module:install "$name"
 }
 
-if [ "${OMEKA_INSTALL_MODULES_ON_STARTUP:-true}" = "true" ]; then
-    # Automatically download and install modules
-    echo "Checking for modules to install..."
-    echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
-
-    install_items_from_names "modules" "OMEKA_MODULES"
-else
-    echo "Skipping Omeka module installation at startup."
-fi
-
-chown -R www-data:www-data /var/www/html/volume/modules
-
+# Install Omeka S first (creates the DB schema); modules can only be installed afterwards.
 # Install Omeka S only if required environment variables are set and not empty
 if [ -n "${OMEKA_ADMIN_EMAIL:-}" ] && [ -n "${OMEKA_ADMIN_NAME:-}" ] && \
    [ -n "${OMEKA_ADMIN_PASSWORD:-}" ] && [ -n "${OMEKA_SITE_TITLE:-}" ]; then
@@ -543,6 +548,37 @@ if [ -n "${OMEKA_ADMIN_EMAIL:-}" ] && [ -n "${OMEKA_ADMIN_NAME:-}" ] && \
 else
   echo "[Entrypoint] Skipping Omeka S install: missing required environment variables (OMEKA_ADMIN_EMAIL, OMEKA_ADMIN_NAME, OMEKA_ADMIN_PASSWORD, OMEKA_SITE_TITLE)"
 fi
+
+# Bring an existing database up to date with the installed code: apply pending
+# core migrations (otherwise every page redirects to /maintenance) and upgrade
+# modules whose files are newer than the version recorded in the database.
+# Both are no-ops when nothing is pending.
+upgrade_omeka() {
+  echo "[Entrypoint] Checking for pending Omeka S database migrations..."
+  if ! omeka-s-cli core:migrate; then
+    echo "WARNING: omeka-s-cli core:migrate failed; the site may show the maintenance page." >&2
+  fi
+  if ! php upgrade_modules.php; then
+    echo "WARNING: some modules failed to upgrade." >&2
+  fi
+}
+
+upgrade_omeka
+
+if [ "${OMEKA_INSTALL_MODULES_ON_STARTUP:-true}" = "true" ]; then
+    # Automatically download and install modules
+    echo "Checking for modules to install..."
+    echo "OMEKA_MODULES value: '${OMEKA_MODULES:-<not set>}'"
+
+    install_items_from_names "modules" "OMEKA_MODULES"
+else
+    echo "Skipping Omeka module installation at startup."
+fi
+
+chown -R www-data:www-data /var/www/html/volume/modules
+
+# Modules downloaded above may be newer than what the database records.
+upgrade_omeka
 
 if [ -n "${OIDC_DOMAIN:-}" ]; then
   echo "[Entrypoint] Configuring OIDC discovery URI..."

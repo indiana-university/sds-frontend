@@ -32,9 +32,35 @@ echo "User:     $MYSQL_USER"
 echo "Database: $MYSQL_DATABASE"
 echo
 
-if "$MYSQL_CMD" -h "$MYSQL_HOST" ${MYSQL_PORT:+-P "$MYSQL_PORT"} -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" --connect-timeout=10 -e "USE \`$MYSQL_DATABASE\`; SELECT 1;" 2>/dev/null; then
-    echo "Connection successful!"
-else
+echo "Testing database connection..."
+tables=$("$MYSQL_CMD" -h "$MYSQL_HOST" ${MYSQL_PORT:+-P "$MYSQL_PORT"} -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" --connect-timeout=10 \
+    -N -e "USE \`$MYSQL_DATABASE\`; SHOW TABLES;" 2>/dev/null) || {
     echo "Error: Cannot connect to database" >&2
     exit 1
+}
+echo "Connection successful!"
+echo
+tables_count=$(printf '%s\n' "$tables" | grep -c . || true)
+echo "Number of tables in \`$MYSQL_DATABASE\`: $tables_count"
+
+# If the user table exists, report its row count
+if [ -n "$tables" ] && printf '%s\n' "$tables" | grep -qx 'user'; then
+    echo
+    user_count=$("$MYSQL_CMD" -h "$MYSQL_HOST" ${MYSQL_PORT:+-P "$MYSQL_PORT"} -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" \
+        -N -e "SELECT COUNT(*) FROM \`$MYSQL_DATABASE\`.\`user\`;" 2>/dev/null) || {
+        echo "Error: Failed to count rows in \`user\`" >&2
+        exit 1
+    }
+    echo "Entries in \`user\`: $user_count"
+fi
+
+# If the module table exists, report its row count
+if [ -n "$tables" ] && printf '%s\n' "$tables" | grep -qx 'module'; then
+    echo
+    module_count=$("$MYSQL_CMD" -h "$MYSQL_HOST" ${MYSQL_PORT:+-P "$MYSQL_PORT"} -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" \
+        -N -e "SELECT COUNT(*) FROM \`$MYSQL_DATABASE\`.\`module\`;" 2>/dev/null) || {
+        echo "Error: Failed to count rows in \`module\`" >&2
+        exit 1
+    }
+    echo "Entries in \`module\`: $module_count"
 fi

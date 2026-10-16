@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "omekas.fullname" . }}-env
+  namespace: {{ include "omekas.namespace" . }}
+  labels:
+    {{- include "omekas.labels" . | nindent 4 }}
+data:
+  MYSQL_DATABASE: {{ .Values.config.mysqlDatabase | quote }}
+  MYSQL_USER: {{ .Values.config.mysqlUser | quote }}
+  MYSQL_HOST: {{ .Values.config.mysqlHost | quote }}
+  MYSQL_USE_SSL: {{ .Values.config.mysqlUseSsl | quote }}
+  APPLICATION_ENV: {{ .Values.config.applicationEnv | quote }}
+  OMEKA_ADMIN_EMAIL: {{ .Values.config.omekaAdminEmail | quote }}
+  OMEKA_ADMIN_NAME: {{ .Values.config.omekaAdminName | quote }}
+  OMEKA_SITE_TITLE: {{ .Values.config.omekaSiteTitle | quote }}
+  OMEKA_TIMEZONE: {{ .Values.config.omekaTimezone | quote }}
+  OIDC_DOMAIN: {{ .Values.config.oidcDomain | quote }}
+  {{- with .Values.config.httpProxy }}
+  HTTP_PROXY: {{ . | quote }}
+  http_proxy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.config.httpsProxy }}
+  HTTPS_PROXY: {{ . | quote }}
+  https_proxy: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.config.noProxy }}
+  NO_PROXY: {{ . | quote }}
+  no_proxy: {{ . | quote }}
+  {{- end }}

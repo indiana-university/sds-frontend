@@ -63,16 +63,26 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 
 # Install PHP extensions using the tool
 # It will handle installing/removing temporary build dependencies (like build-essential)
+# (bundled extensions only; imagick is a PECL extension and is installed with PIE below)
 RUN install-php-extensions \
     gd \
     iconv \
     pdo \
     pdo_mysql \
     mysqli \
-    imagick \
     intl \
     xsl \
     zip
+
+# Install PIE (PHP Installer for Extensions, https://www.php.net/manual/en/install.pie.intro.php)
+# and use it instead of pecl.php.net, which resolves extensions through Packagist/GitHub.
+COPY --from=ghcr.io/php/pie:bin /pie /usr/local/bin/pie
+
+# imagick: libmagickwand-dev is installed above; PIE needs the PHP build toolchain.
+RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install $PHPIZE_DEPS libtool git \
+    && pie install imagick/imagick \
+    && php -m | grep -i imagick \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Omeka-S-CLI
 ADD https://github.com/GhentCDH/Omeka-S-Cli/releases/latest/download/omeka-s-cli.phar /usr/local/bin/omeka-s-cli
